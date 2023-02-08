@@ -1,7 +1,7 @@
 # Schiffe versenken
 
 <details>
-    <summary>Frontend</summary>
+    <summary>Click me for a frontend guide</summary>
 
 # frontend
 
