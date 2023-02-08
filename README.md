@@ -2,7 +2,8 @@
 
 <details>
     <summary>Frontend</summary>
-    # frontend
+
+# frontend
 
 This fronend is build with VueJS, Vite and TypeScript
 
