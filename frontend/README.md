@@ -1,6 +1,6 @@
-# vue-project-frontend
+# frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+This fronend is build with VueJS, Vite and TypeScript
 
 ## Recommended IDE Setup
 
