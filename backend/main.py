@@ -1,6 +1,5 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from fastapi.responses import HTMLResponse
-from .connectionManager import ConnectionManager
+from backend.connectionManager import ConnectionManager
 
 app = FastAPI()
 
@@ -9,7 +8,7 @@ manager = ConnectionManager()
 
 @app.get("/")
 async def get():
-    return {'message':'Hello User'}
+    return {'message': 'Hello User'}
 
 
 @app.websocket("/ws/{client_id}")
