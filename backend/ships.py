@@ -1,5 +1,6 @@
 class Ship:
     # Koordinatenaufbau y,x erst Spalte dann Zeile
+
     def __init__(self, start_pos: tuple, end_pos: tuple):
         self.start_pos = start_pos
         self.end_pos = end_pos
