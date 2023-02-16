@@ -1,6 +1,8 @@
 from typing import List
 from fastapi import WebSocket
 
+
+# TODO refactor ConnectionManager
 class ConnectionManager:
 
     def __init__(self):
