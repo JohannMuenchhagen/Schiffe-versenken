@@ -14,14 +14,28 @@ class Ship:
         else:
             return False
 
+    def get_positions(self) -> list:
+        start_y, start_x = self.start_pos
+        end_y, end_x = self.end_pos
+        positions = [self.start_pos]
+        if start_x == end_x:
+            y = start_y
+            while y < end_y:
+                y += 1
+                positions.append((y, start_x))
+            return positions
+        else:
+            x = start_x
+            while x < end_x:
+                x += 1
+                positions.append((start_y, x))
+            return positions
+
 
 class Battleship(Ship):
     def __init__(self, start_pos: tuple, end_pos: tuple):
         super().__init__(start_pos=start_pos, end_pos=end_pos)
         self.length = 5
-
-    def check_length(self) -> bool:
-        return super().check_length(self.length)
 
 
 class Corvettes(Ship):
@@ -29,23 +43,14 @@ class Corvettes(Ship):
         super().__init__(start_pos=start_pos, end_pos=end_pos)
         self.length = 4
 
-    def check_length(self) -> bool:
-        return super().check_length(self.length)
-
 
 class Destroyer(Ship):
     def __init__(self, start_pos: tuple, end_pos: tuple):
         super().__init__(start_pos=start_pos, end_pos=end_pos)
         self.length = 3
 
-    def check_length(self, length: int) -> bool:
-        return super().check_length(self.length)
-
 
 class Submarine(Ship):
     def __init__(self, start_pos: tuple, end_pos: tuple):
         super().__init__(start_pos=start_pos, end_pos=end_pos)
         self.length = 2
-
-    def check_length(self) -> bool:
-        return super().check_length(self.length)
