@@ -6,31 +6,31 @@ class Ship:
         self.end_pos = end_pos
 
     def check_length(self, length: int) -> bool:  # check if the coordinates equals the ship length
-        start_y, start_x = self.start_pos
-        end_y, end_x = self.end_pos
-        if start_x == end_x:
-            return (end_y - start_y) == length - 1  # length -1 because the counter starts at 0
-        elif start_y == end_y:
-            print(end_x - start_x)
-            return (end_x - start_x) == length - 1
+        start_column, start_row = self.start_pos
+        end_column, end_row = self.end_pos
+        if start_row == end_row:
+            return (end_column - start_column) == length - 1  # length -1 because the counter starts at 0
+        elif start_column == end_column:
+            print(end_row - start_row)
+            return (end_row - start_row) == length - 1
         else:
             return False
 
     def get_positions(self) -> list:
-        start_y, start_x = self.start_pos
-        end_y, end_x = self.end_pos
+        start_column, start_row = self.start_pos
+        end_column, end_row = self.end_pos
         positions = [self.start_pos]
-        if start_x == end_x:
-            y = start_y
-            while y < end_y:
-                y += 1
-                positions.append((y, start_x))
+        if start_row == end_row:
+            column = start_column
+            while column < end_column:
+                column += 1
+                positions.append((column, start_row))
             return positions
         else:
-            x = start_x
-            while x < end_x:
-                x += 1
-                positions.append((start_y, x))
+            row = start_row
+            while row < end_row:
+                row += 1
+                positions.append((start_column, row))
             return positions
 
 
