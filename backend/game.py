@@ -7,8 +7,10 @@ class Game:
         self.game_id = game_id
         self.player1 = Player()
         self.player2 = Player()
-        self.player1_ships = []
-        self.player2_ships = []
+        self.player1_ships = {'Battleship': None, 'Corvettes': None, 'Destroyer': None, 'Submarine1': None,
+                              'Submarine2': None}
+        self.player2_ships = {'Battleship': None, 'Corvettes': None, 'Destroyer': None, 'Submarine1': None,
+                              'Submarine2': None}
         self.player1_moves = []
         self.player2_moves = []
         self.current_player = 1
@@ -18,10 +20,27 @@ class Game:
             self.player1.gameID = self.game_id
             self.player1.playerID = 1
             self.player1.websocket = websocket
-            self.current_player = 1
+            self.current_player = 2
             return {'Status': 'Player 1 initialized'}
         else:
             self.player2.gameID = self.game_id
             self.player2.playerID = 2
             self.player2.websocket = websocket
             return {'Status': 'Player 2 initialized'}
+
+    def check_move(self, player_id: int, move: tuple) -> bool:
+        if player_id != self.current_player:  # check if the correct player plays the move
+            return False
+        elif self.current_player == 1:
+            if move in self.player1_moves:  # check if the move is already played
+                return False
+            else:
+                return True
+        else:
+            if move in self.player2_moves:
+                return False
+            else:
+                return True
+
+    def set_ships(self, player_id: int, ship_type: str, ship_start_pos: tuple, ship_end_pos: int) -> str:
+        pass
