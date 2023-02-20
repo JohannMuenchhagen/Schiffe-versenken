@@ -20,9 +20,9 @@ const emit = defineEmits<{
 }>();
 
 function emitTile(x: number, y: number, event: any) {
-  event.target.firstChild.classList.add("mdi");
+  /*   event.target.firstChild.classList.add("mdi");
   event.target.firstChild.classList.add("mdi-waves");
-  event.target.classList.remove("tileWrapper");
+  event.target.classList.remove("tileWrapper"); */
   emit("change", { x: x, y: y });
 }
 </script>
@@ -39,10 +39,10 @@ function emitTile(x: number, y: number, event: any) {
 .v-icon {
   pointer-events: none;
 }
-.tileWrapper {
+/* .tileWrapper {
   cursor: pointer;
-}
-.tileWrapper:hover {
+} */
+/* .tileWrapper:hover {
   background-color: #c0c0c0 !important;
-}
+} */
 </style>
