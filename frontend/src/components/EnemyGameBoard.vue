@@ -15,9 +15,17 @@
 </template>
 
 <script setup lang="ts">
+import { useShipStore } from "@/services/store";
+
+const shipStore = useShipStore();
+
 function clickTile(x: number, y: number, event: any) {
+  if (shipStore.isShipHit({ x: x, y: y })) {
+    event.target.firstChild.classList.add("mdi-ferry");
+  } else {
+    event.target.firstChild.classList.add("mdi-waves");
+  }
   event.target.firstChild.classList.add("mdi");
-  event.target.firstChild.classList.add("mdi-waves");
   event.target.classList.remove("tileWrapper");
 }
 </script>
