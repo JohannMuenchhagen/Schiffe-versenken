@@ -7,10 +7,10 @@ class Game:
         self.game_id = game_id
         self.player1 = Player()
         self.player2 = Player()
-        self.player1_ships = {'Battleship': None, 'Corvettes': None, 'Destroyer': None, 'Submarine1': None,
-                              'Submarine2': None}
-        self.player2_ships = {'Battleship': None, 'Corvettes': None, 'Destroyer': None, 'Submarine1': None,
-                              'Submarine2': None}
+        self.player1_ships = []
+        self.player2_ships = []
+        self.player1_ships_set = {'Battleship': 0, 'Corvettes': 0, 'Destroyer': 0, 'Submarine': 0}
+        self.player2_ships_set = {'Battleship': 0, 'Corvettes': 0, 'Destroyer': 0, 'Submarine': 0}
         self.player1_moves = []
         self.player2_moves = []
         self.current_player = 1
@@ -43,4 +43,7 @@ class Game:
                 return True
 
     def set_ships(self, player_id: int, ship_type: str, ship_start_pos: tuple, ship_end_pos: int) -> str:
-        pass
+        if player_id == 1:
+            pass
+        else:
+            pass
