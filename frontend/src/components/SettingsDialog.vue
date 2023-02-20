@@ -16,7 +16,14 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="tertiary" @click="dialog = false">Schließen</v-btn>
+        <v-btn
+          color="tertiary"
+          @click="
+            dialog = false;
+            reset();
+          "
+          >Schließen</v-btn
+        >
         <v-btn
           color="secondary"
           @click="
@@ -35,16 +42,16 @@ import { ref } from "vue";
 import { useTheme } from "vuetify";
 
 let dialog = ref<boolean>(false);
-
 const theme = useTheme();
+
 let themeTmp = ref(theme.global.name.value);
 
 function toggelTheme() {
-  if (themeTmp.value === "dark") {
-    themeTmp.value = "light";
-  } else {
-    themeTmp.value = "dark";
-  }
+  themeTmp.value = themeTmp.value === "dark" ? "dark" : "light";
+}
+
+function reset() {
+  themeTmp.value = theme.global.name.value;
 }
 
 function save() {

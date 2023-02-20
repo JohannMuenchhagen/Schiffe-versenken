@@ -3,10 +3,10 @@
     <v-container fluid fill-height>
       <v-row>
         <v-col>
-          <GameBoard class="board"></GameBoard>
+          <GameBoard class="board" @change="logTileBoard1"></GameBoard>
         </v-col>
         <v-col>
-          <GameBoard class="board"></GameBoard>
+          <GameBoard class="board" @change="logTileBoard2"></GameBoard>
         </v-col>
         <v-card class="cardWrapper" loading title="Es ist dein Zug!">
           <v-card-text class="cardContent">
@@ -59,13 +59,20 @@
 
 <script setup lang="ts">
 import GameBoard from "@/components/GameBoard.vue";
+
+function logTileBoard1(obj: { x: number; y: number }) {
+  console.log("Board1: ", obj);
+}
+function logTileBoard2(obj: { x: number; y: number }) {
+  console.log("Board2: ", obj);
+}
 </script>
 
 <style scoped>
 .board {
   aspect-ratio: 1 / 1;
   max-width: 500px;
-  min-width: 300px;
+  min-width: 350px;
 }
 
 .cardWrapper {

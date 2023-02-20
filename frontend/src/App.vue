@@ -6,8 +6,9 @@
       </template>
       <v-app-bar-title>Schiffe versenken</v-app-bar-title>
       <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon icon="mdi-magnify"></v-icon>
+      <v-btn>
+        <v-icon icon="mdi-lan-pending"></v-icon>
+        <div class="connectText">Mit Spieler verbinden</div>
       </v-btn>
       <v-btn
         icon
@@ -28,4 +29,13 @@
 import SettingsDialog from "@/components/SettingsDialog.vue";
 </script>
 
-<style scoped></style>
+<style scoped>
+.v-btn__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.connectText {
+  margin-left: 10px;
+}
+</style>
