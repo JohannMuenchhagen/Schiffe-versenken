@@ -7,13 +7,15 @@ class Game:
         self.game_id = game_id
         self.player1 = Player()
         self.player2 = Player()
-        self.player1_ships = [[], [], [], []]
-        self.player2_ships = [[], [], [], []]
+        self.player1_ships = [[], [], [], []]  # An Array that contains all coordinates of all ships
+        self.player2_ships = [[], [], [], []]  # An Array that contains all coordinates of all ships
+        # Number of placed ships
         self.player1_ships_set = {'Battleship': 0, 'Corvettes': 0, 'Destroyer': 0, 'Submarine': 0}
         self.player2_ships_set = {'Battleship': 0, 'Corvettes': 0, 'Destroyer': 0, 'Submarine': 0}
-        self.player1_moves = []
-        self.player2_moves = []
-        self.current_player = 1
+        #######################
+        self.player1_moves = []  # Game history of player 1
+        self.player2_moves = []  # Game history of player 2
+        self.current_player = 1  # ID off the current player
 
     def set_player(self, websocket) -> dict:
         if self.current_player == 1:
@@ -28,7 +30,7 @@ class Game:
             self.player2.websocket = websocket
             return {'Status': 'Player 2 initialized'}
 
-    def check_placed_ship(self, player_id: int, ship_type: str) -> bool:
+    def check_placed_ship(self, player_id: int, ship_type: str) -> bool:  # check if the number of ships is correct
         match ship_type:
             case 'Battleship':
                 if player_id == 1 and self.player1_ships_set[ship_type] == 1:
