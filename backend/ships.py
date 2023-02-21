@@ -11,7 +11,6 @@ class Ship:
         if start_row == end_row:
             return (end_column - start_column) == length - 1  # length -1 because the counter starts at 0
         elif start_column == end_column:
-            print(end_row - start_row)
             return (end_row - start_row) == length - 1
         else:
             return False
