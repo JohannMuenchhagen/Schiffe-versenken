@@ -28,6 +28,37 @@ class Game:
             self.player2.websocket = websocket
             return {'Status': 'Player 2 initialized'}
 
+    def check_placed_ship(self, player_id: int, ship_type: str) -> bool:
+        match ship_type:
+            case 'Battleship':
+                if player_id == 1 and self.player1_ships_set[ship_type] == 1:
+                    return False
+                elif player_id == 2 and self.player2_ships_set[ship_type] == 1:
+                    return False
+                else:
+                    return True
+            case 'Corvettes':
+                if player_id == 1 and self.player1_ships_set[ship_type] == 2:
+                    return False
+                elif player_id == 2 and self.player2_ships_set[ship_type] == 2:
+                    return False
+                else:
+                    return True
+            case 'Destroyer':
+                if player_id == 1 and self.player1_ships_set[ship_type] == 3:
+                    return False
+                elif player_id == 2 and self.player2_ships_set[ship_type] == 3:
+                    return False
+                else:
+                    return True
+            case 'Submarine':
+                if player_id == 1 and self.player1_ships_set[ship_type] == 4:
+                    return False
+                elif player_id == 2 and self.player2_ships_set[ship_type] == 4:
+                    return False
+                else:
+                    return True
+
     def check_move(self, player_id: int, move: tuple) -> bool:
         if player_id != self.current_player:  # check if the correct player plays the move
             return False
@@ -43,6 +74,9 @@ class Game:
                 return True
 
     def set_ships(self, player_id: int, ship_type: str, ship_start_pos: tuple, ship_end_pos: tuple) -> dict:
+        if not self.check_placed_ship(player_id=player_id, ship_type=ship_type):
+            return {'Error': 'Max amount already placed'}
+
         match ship_type:
             case 'Battleship':
                 ship = Battleship(start_pos=ship_start_pos, end_pos=ship_end_pos)
