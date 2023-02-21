@@ -38,6 +38,9 @@ function placeShip(event: any, x: number, y: number) {
 }
 
 function addClassesToTiles(x: number, y: number) {
+  if (isTakenByAnotherShip(x, y)) {
+    return;
+  }
   for (let i = x - 1; i < selectedShipLength! + x - 1; i++) {
     document
       .getElementById("myBoard")
@@ -53,6 +56,24 @@ function addClassesToTiles(x: number, y: number) {
       [y - 1]?.getElementsByClassName("v-col")
       [i]?.firstElementChild?.classList.remove("tileWrapper");
   }
+}
+
+function isTakenByAnotherShip(x: number, y: number): boolean {
+  for (let i = x - 1; i < selectedShipLength! + x - 1; i++) {
+    if (
+      document
+        .getElementById("myBoard")
+        ?.getElementsByClassName("v-row")
+        [y - 1]?.getElementsByClassName("v-col")
+        [i]?.firstElementChild?.firstElementChild?.classList.contains(
+          "mdi-ferry"
+        ) === true
+    ) {
+      snackbarStore.callSnackbar("Dort befindet sich bereits ein Schiff!");
+      return true;
+    }
+  }
+  return false;
 }
 </script>
 
