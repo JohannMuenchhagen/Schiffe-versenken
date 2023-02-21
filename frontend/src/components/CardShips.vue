@@ -102,4 +102,8 @@ watch(ship2length, () => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+v-snackbar {
+  font-size: large;
+}
+</style>
