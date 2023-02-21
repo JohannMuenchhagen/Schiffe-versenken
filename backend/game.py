@@ -145,3 +145,7 @@ class Game:
             self.player2_ships_set[mapper[index]] -= 1
         else:
             self.player1_ships_set[mapper[index]] -= 1
+
+    def check_win(self, player_id: int) -> dict:
+        #TODO fill this method
+        return {'Message': 'under construction'}
