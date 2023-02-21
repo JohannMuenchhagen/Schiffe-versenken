@@ -44,6 +44,15 @@
       </v-list>
     </v-card-text>
   </v-card>
+  <v-snackbar v-model="snackbar" timeout="2000">
+    {{ text }}
+
+    <template v-slot:actions>
+      <v-btn color="blue" variant="text" @click="snackbar = false">
+        Close
+      </v-btn>
+    </template>
+  </v-snackbar>
 </template>
 
 <script setup lang="ts">
@@ -58,6 +67,9 @@ let ship3length = ref();
 let ship2length = ref();
 getShipLength();
 
+let snackbar = ref(false);
+let text = ref("");
+
 watch(shipStore.getSunkenShips, () => {
   getShipLength();
 });
@@ -68,6 +80,26 @@ function getShipLength() {
   ship3length.value = shipStore.getAmountOfShipsOnBoard(3);
   ship2length.value = shipStore.getAmountOfShipsOnBoard(2);
 }
+
+watch(ship5length, () => {
+  text.value = "Du hast ein Schlachtschiff versenkt!";
+  snackbar.value = true;
+});
+
+watch(ship4length, () => {
+  text.value = "Du hast ein Kreuzer versenkt!";
+  snackbar.value = true;
+});
+
+watch(ship3length, () => {
+  text.value = "Du hast ein Zerstörer versenkt!";
+  snackbar.value = true;
+});
+
+watch(ship2length, () => {
+  text.value = "Du hast ein U-Boot versenkt!";
+  snackbar.value = true;
+});
 </script>
 
 <style scoped></style>
