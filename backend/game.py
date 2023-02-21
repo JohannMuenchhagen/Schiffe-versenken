@@ -75,6 +75,31 @@ class Game:
             else:
                 return True
 
+    # TODO find a opportunity to remove the duplicate
+    def check_shot(self, player_id: int, shooting_coordinate: tuple) -> dict:  # check if a ship gets a hit
+        if player_id == 1:
+            for index, ship in enumerate(self.player2_ships):
+                for ships in ship:
+                    if shooting_coordinate in ships:
+                        ships.remove(shooting_coordinate)
+                        if len(ships) == 0:
+                            self.remove_ship(player_id, index)
+                            return {'Message': 'Destroyed'}
+                        else:
+                            return {'Message': 'Hit'}
+            return {'Message': 'Miss'}
+        else:
+            for index, ship in enumerate(self.player1_ships):
+                for ships in ship:
+                    if shooting_coordinate in ships:
+                        ships.remove(shooting_coordinate)
+                        if len(ships) == 0:
+                            self.remove_ship(player_id, index)
+                            return {'Message': 'Destroyed'}
+                        else:
+                            return {'Message': 'Hit'}
+            return {'Message': 'Miss'}
+
     def set_ships(self, player_id: int, ship_type: str, ship_start_pos: tuple, ship_end_pos: tuple) -> dict:
         if not self.check_placed_ship(player_id=player_id, ship_type=ship_type):
             return {'Error': 'Max amount already placed'}
@@ -113,3 +138,10 @@ class Game:
             return {'Message': f'Ship: {ship_type} successfully placed'}
         else:
             return {'Error': 'Wrong player id'}
+
+    def remove_ship(self, player_id: int, index: int):  # Remove destroyed ships from the Dict
+        mapper = ['Battleship', 'Corvettes', 'Destroyer', 'Submarine']
+        if player_id == 1:
+            self.player2_ships_set[mapper[index]] -= 1
+        else:
+            self.player1_ships_set[mapper[index]] -= 1
