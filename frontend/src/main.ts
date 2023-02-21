@@ -40,7 +40,7 @@ app.use(pinia);
 app.mount("#app");
 
 // LOADING DUMMY DADA, REMOVE LATER!
-import { useShipStore } from "./services/store";
+import { useShipStore } from "./services/shipStore";
 
 const shipStore = useShipStore();
 shipStore.loadDummyData();

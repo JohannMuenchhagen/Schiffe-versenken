@@ -22,11 +22,27 @@
     <v-main>
       <RouterView />
     </v-main>
+    <v-snackbar v-model="snackbarStore.getActive.value" timeout="2000">
+      {{ snackbarStore.getText.value }}
+
+      <template v-slot:actions>
+        <v-btn
+          color="blue"
+          variant="text"
+          @click="snackbarStore.deactiveSnackbar"
+        >
+          Schließen
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-app>
 </template>
 
 <script setup lang="ts">
 import SettingsDialog from "@/components/SettingsDialog.vue";
+import { useSnackbarStore } from "./services/snackbarStore";
+
+let snackbarStore = useSnackbarStore();
 </script>
 
 <style scoped>
@@ -37,5 +53,9 @@ import SettingsDialog from "@/components/SettingsDialog.vue";
 
 .connectText {
   margin-left: 10px;
+}
+
+v-snackbar {
+  font-size: large;
 }
 </style>

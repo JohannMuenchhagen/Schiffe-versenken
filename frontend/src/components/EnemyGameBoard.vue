@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { useShipStore } from "@/services/store";
+import { useShipStore } from "@/services/shipStore";
 
 const shipStore = useShipStore();
 

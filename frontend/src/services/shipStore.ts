@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { computed, reactive } from "vue";
+import { computed, reactive, ref } from "vue";
 
 interface IShip {
   startPos: { x: number; y: number };
@@ -11,10 +11,12 @@ export const useShipStore = defineStore("ship", () => {
   // state
   const ships = reactive([] as IShip[]);
   const sunkenShips = reactive([] as IShip[]);
+  const selectedShipLength = ref<number>();
 
   // getters
   const getShips = computed(() => ships);
   const getSunkenShips = computed(() => sunkenShips);
+  const getSelectedShipLength = computed(() => selectedShipLength);
 
   // actions
   function loadDummyData() {
@@ -88,13 +90,20 @@ export const useShipStore = defineStore("ship", () => {
     }
   }
 
+  function updateSelectedShip(length: number): void {
+    selectedShipLength.value = length;
+  }
+
   return {
     ships,
     sunkenShips,
+    selectedShipLength,
     getShips,
     getSunkenShips,
+    getSelectedShipLength,
     getAmountOfShipsOnBoard,
     loadDummyData,
     isShipHit,
+    updateSelectedShip,
   };
 });

@@ -5,7 +5,7 @@
         <v-sheet
           color="grey-lighten-2"
           class="tileWrapper"
-          @click="emitTile(x, y, $event)"
+          @click="placeShip($event)"
         >
           <v-icon icon=""></v-icon>
         </v-sheet>
@@ -15,16 +15,28 @@
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits<{
-  (e: "change", id: { x: number; y: number }): void;
-}>();
+import { useShipStore } from "@/services/shipStore";
+import { useSnackbarStore } from "@/services/snackbarStore";
+import { watch } from "vue";
 
-function emitTile(x: number, y: number, event: any) {
-  /*   event.target.firstChild.classList.add("mdi");
-  event.target.firstChild.classList.add("mdi-waves");
-  event.target.classList.remove("tileWrapper"); */
-  emit("change", { x: x, y: y });
+const shipStore = useShipStore();
+const snackbarStore = useSnackbarStore();
+
+let selectedShipLength: undefined | number = undefined;
+
+function placeShip(event: any) {
+  if (selectedShipLength === undefined) {
+    snackbarStore.callSnackbar("Es wurde noch kein Schiff ausgewählt!");
+    return;
+  }
+  event.target.firstChild.classList.add("mdi-ferry");
+  event.target.firstChild.classList.add("mdi");
+  event.target.classList.remove("tileWrapper");
 }
+
+watch(shipStore.getSelectedShipLength, () => {
+  selectedShipLength = shipStore.getSelectedShipLength.value;
+});
 </script>
 
 <style scoped>
@@ -39,10 +51,10 @@ function emitTile(x: number, y: number, event: any) {
 .v-icon {
   pointer-events: none;
 }
-/* .tileWrapper {
+.tileWrapper {
   cursor: pointer;
-} */
-/* .tileWrapper:hover {
+}
+.tileWrapper:hover {
   background-color: #c0c0c0 !important;
-} */
+}
 </style>

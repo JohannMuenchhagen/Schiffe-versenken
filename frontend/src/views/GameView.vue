@@ -3,12 +3,13 @@
     <v-container fluid fill-height>
       <v-row>
         <v-col>
-          <OwnGameBoard class="board" @change="logTileBoard1"></OwnGameBoard>
+          <OwnGameBoard class="board"></OwnGameBoard>
         </v-col>
         <v-col>
           <EnemyGameBoard class="board"></EnemyGameBoard>
         </v-col>
         <div class="cardWrapper">
+          <CardPlacement></CardPlacement>
           <CardShips></CardShips>
         </div>
       </v-row>
@@ -20,13 +21,7 @@
 import CardShips from "@/components/CardShips.vue";
 import OwnGameBoard from "@/components/OwnGameBoard.vue";
 import EnemyGameBoard from "@/components/EnemyGameBoard.vue";
-
-function logTileBoard1(obj: { x: number; y: number }) {
-  console.log("Board1: ", obj);
-}
-function logTileBoard2(obj: { x: number; y: number }) {
-  console.log("Board2: ", obj);
-}
+import CardPlacement from "@/components/CardPlacement.vue";
 </script>
 
 <style scoped>
