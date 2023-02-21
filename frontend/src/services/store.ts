@@ -15,8 +15,16 @@ export const useShipStore = defineStore("ship", () => {
 
   // actions
   function loadDummyData() {
-    ships.push({ startPos: { x: 1, y: 1 }, endPos: { x: 1, y: 5 } });
-    ships.push({ startPos: { x: 3, y: 1 }, endPos: { x: 6, y: 1 } });
+    ships.push({ startPos: { x: 1, y: 1 }, endPos: { x: 1, y: 5 } }); // 5 length
+    ships.push({ startPos: { x: 3, y: 1 }, endPos: { x: 6, y: 1 } }); // 4 length
+    ships.push({ startPos: { x: 3, y: 4 }, endPos: { x: 6, y: 4 } }); // 4 length
+    ships.push({ startPos: { x: 4, y: 7 }, endPos: { x: 6, y: 7 } }); // 3 length
+    ships.push({ startPos: { x: 9, y: 6 }, endPos: { x: 9, y: 8 } }); // 3 length
+    ships.push({ startPos: { x: 8, y: 10 }, endPos: { x: 10, y: 10 } }); // 3 length
+    ships.push({ startPos: { x: 2, y: 9 }, endPos: { x: 2, y: 10 } }); // 2 length
+    ships.push({ startPos: { x: 5, y: 10 }, endPos: { x: 6, y: 10 } }); // 2 length
+    ships.push({ startPos: { x: 9, y: 2 }, endPos: { x: 9, y: 3 } }); // 2 length
+    ships.push({ startPos: { x: 7, y: 5 }, endPos: { x: 7, y: 6 } }); // 2 length
   }
 
   function isShipHit(pos: { x: number; y: number }): boolean {
@@ -31,6 +39,10 @@ export const useShipStore = defineStore("ship", () => {
       }
     }
     return false;
+  }
+
+  function isShipSunk() {
+    
   }
 
   return { ships, getShips, loadDummyData, isShipHit };
