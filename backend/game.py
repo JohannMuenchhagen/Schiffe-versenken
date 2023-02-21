@@ -75,7 +75,7 @@ class Game:
             else:
                 return True
 
-    # TODO find a opportunity to remove the duplicate
+    # TODO find an opportunity to remove the duplicate
     def check_shot(self, player_id: int, shooting_coordinate: tuple) -> dict:  # check if a ship gets a hit
         if player_id == 1:
             for index, ship in enumerate(self.player2_ships):
