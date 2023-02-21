@@ -27,10 +27,6 @@
 
 <script setup lang="ts">
 import SettingsDialog from "@/components/SettingsDialog.vue";
-import { useShipStore } from "./services/store";
-
-const shipStore = useShipStore();
-shipStore.loadDummyData();
 </script>
 
 <style scoped>
