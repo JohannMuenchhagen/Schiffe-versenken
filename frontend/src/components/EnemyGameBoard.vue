@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid fill-height>
+  <v-container fluid fill-height id="enemyBoard">
     <v-row dense v-for="y in 10" :key="y">
       <v-col v-for="x in 10" :key="x">
         <v-sheet
