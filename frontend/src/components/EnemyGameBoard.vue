@@ -20,7 +20,7 @@ import { useShipStore } from "@/services/store";
 const shipStore = useShipStore();
 
 function clickTile(x: number, y: number, event: any) {
-  if (shipStore.isShipHit({ x: x, y: y })) {
+  if (shipStore.isShipHit({ x: x, y: y }) !== false) {
     event.target.firstChild.classList.add("mdi-ferry");
   } else {
     event.target.firstChild.classList.add("mdi-waves");

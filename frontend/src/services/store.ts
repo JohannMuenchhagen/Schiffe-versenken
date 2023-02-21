@@ -4,27 +4,42 @@ import { computed, reactive } from "vue";
 interface IShip {
   startPos: { x: number; y: number };
   endPos: { x: number; y: number };
+  length: number;
 }
 
 export const useShipStore = defineStore("ship", () => {
   // state
   const ships = reactive([] as IShip[]);
+  const sunkenShips = reactive([] as IShip[]);
 
   // getters
   const getShips = computed(() => ships);
+  const getSunkenShips = computed(() => sunkenShips);
 
   // actions
   function loadDummyData() {
-    ships.push({ startPos: { x: 1, y: 1 }, endPos: { x: 1, y: 5 } }); // 5 length
-    ships.push({ startPos: { x: 3, y: 1 }, endPos: { x: 6, y: 1 } }); // 4 length
-    ships.push({ startPos: { x: 3, y: 4 }, endPos: { x: 6, y: 4 } }); // 4 length
-    ships.push({ startPos: { x: 4, y: 7 }, endPos: { x: 6, y: 7 } }); // 3 length
-    ships.push({ startPos: { x: 9, y: 6 }, endPos: { x: 9, y: 8 } }); // 3 length
-    ships.push({ startPos: { x: 8, y: 10 }, endPos: { x: 10, y: 10 } }); // 3 length
-    ships.push({ startPos: { x: 2, y: 9 }, endPos: { x: 2, y: 10 } }); // 2 length
-    ships.push({ startPos: { x: 5, y: 10 }, endPos: { x: 6, y: 10 } }); // 2 length
-    ships.push({ startPos: { x: 9, y: 2 }, endPos: { x: 9, y: 3 } }); // 2 length
-    ships.push({ startPos: { x: 7, y: 5 }, endPos: { x: 7, y: 6 } }); // 2 length
+    ships.push({ startPos: { x: 1, y: 1 }, endPos: { x: 1, y: 5 }, length: 5 }); // 5 length
+    ships.push({ startPos: { x: 3, y: 1 }, endPos: { x: 6, y: 1 }, length: 4 }); // 4 length
+    ships.push({ startPos: { x: 3, y: 4 }, endPos: { x: 6, y: 4 }, length: 4 }); // 4 length
+    ships.push({ startPos: { x: 4, y: 7 }, endPos: { x: 6, y: 7 }, length: 3 }); // 3 length
+    ships.push({ startPos: { x: 9, y: 6 }, endPos: { x: 9, y: 8 }, length: 3 }); // 3 length
+    ships.push({
+      startPos: { x: 8, y: 10 },
+      endPos: { x: 10, y: 10 },
+      length: 3,
+    }); // 3 length
+    ships.push({
+      startPos: { x: 2, y: 9 },
+      endPos: { x: 2, y: 10 },
+      length: 2,
+    }); // 2 length
+    ships.push({
+      startPos: { x: 5, y: 10 },
+      endPos: { x: 6, y: 10 },
+      length: 2,
+    }); // 2 length
+    ships.push({ startPos: { x: 9, y: 2 }, endPos: { x: 9, y: 3 }, length: 2 }); // 2 length
+    ships.push({ startPos: { x: 7, y: 5 }, endPos: { x: 7, y: 6 }, length: 2 }); // 2 length
   }
 
   function isShipHit(pos: { x: number; y: number }): boolean {
@@ -35,15 +50,51 @@ export const useShipStore = defineStore("ship", () => {
         pos.y >= ships[i].startPos.y &&
         pos.y <= ships[i].endPos.y
       ) {
+        ships[i].length--;
+        isShipSunk(ships[i]);
         return true;
       }
     }
     return false;
   }
 
-  function isShipSunk() {
-    
+  function getShipLength(ship: IShip): number {
+    if (ship.endPos.x - ship.startPos.x === 0) {
+      return ship.endPos.y - ship.startPos.y + 1;
+    } else {
+      return ship.endPos.x - ship.startPos.x + 1;
+    }
   }
 
-  return { ships, getShips, loadDummyData, isShipHit };
+  function getAmountOfShipsOnBoard(length: number): number {
+    let result = 0;
+    for (let i = 0; i < ships.length; i++) {
+      if (ships[i].length === length) {
+        result++;
+      }
+    }
+    for (let j = 0; j < sunkenShips.length; j++) {
+      if (sunkenShips[j].length === length) {
+        result--;
+      }
+    }
+    return result;
+  }
+
+  function isShipSunk(ship: IShip): void {
+    if (ship.length === 0) {
+      ship.length = getShipLength(ship);
+      sunkenShips.push(ship);
+    }
+  }
+
+  return {
+    ships,
+    sunkenShips,
+    getShips,
+    getSunkenShips,
+    getAmountOfShipsOnBoard,
+    loadDummyData,
+    isShipHit,
+  };
 });
