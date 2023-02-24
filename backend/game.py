@@ -147,10 +147,7 @@ class Game:
             self.player1_ships_set[mapper[index]] -= 1
 
     def check_win(self, ship_set: dict) -> dict:
-        for key,value in ship_set.items():
+        for key, value in ship_set.items():
             if value >= 1:
                 return {'Message': 'No win'}
         return {'Message': 'Win'}
-
-
-
