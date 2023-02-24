@@ -146,6 +146,11 @@ class Game:
         else:
             self.player1_ships_set[mapper[index]] -= 1
 
-    def check_win(self, player_id: int) -> dict:
-        # TODO fill this method
-        return {'Message': 'under construction'}
+    def check_win(self, ship_set: dict) -> dict:
+        for key,value in ship_set.items():
+            if value >= 1:
+                return {'Message': 'No win'}
+        return {'Message': 'Win'}
+
+
+
