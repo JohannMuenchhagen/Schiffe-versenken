@@ -57,5 +57,11 @@ npm run lint
 
 # backend
 
-under construction
+This backend is build with python 3.11.0.
+
+## Recommended IDE setup
+[VSCode](https://code.visualstudio.com/) + [Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
+
+## Required modules
+Latest version of [FastAPI](https://fastapi.tiangolo.com)
 </details>
