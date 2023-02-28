@@ -16,18 +16,23 @@ class Game:
         self.player1_moves = []  # Game history of player 1
         self.player2_moves = []  # Game history of player 2
         self.current_player = 1  # ID off the current player
+        self.player_counter = 0
 
     def set_player(self, websocket) -> dict:
-        if self.current_player == 1:
+        if self.player_counter == 2:
+            return {'Error': 'Unable to Join', 'Description': 'Maximum amount of players already reached'}
+        elif self.current_player == 1:
             self.player1.gameID = self.game_id
             self.player1.playerID = 1
             self.player1.websocket = websocket
             self.current_player = 2
+            self.player_counter += 1
             return {'Status': 'Player 1 initialized'}
         else:
             self.player2.gameID = self.game_id
             self.player2.playerID = 2
             self.player2.websocket = websocket
+            self.player_counter += 1
             return {'Status': 'Player 2 initialized'}
 
     def check_placed_ship(self, player_id: int, ship_type: str) -> bool:  # check if the number of ships is correct
