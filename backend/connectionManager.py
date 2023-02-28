@@ -5,7 +5,6 @@ import json
 from game import Game
 
 
-# TODO refactor ConnectionManager
 class ConnectionManager:
 
     def __init__(self):
@@ -40,6 +39,8 @@ class ConnectionManager:
                 if data['GameID'] not in self.current_games:
                     return json.dumps({'Error': 'Unable to Join', 'Description': 'Game doesnt exist'})
                 return self.join(data, websocket)
+            case 'Set':
+                return self.set(data)
 
     def initialize_game(self, websocket: WebSocket):
         self.active_games += 1
@@ -58,3 +59,30 @@ class ConnectionManager:
             return json.dumps(msg)
         self.active_player += 1
         return json.dumps({'Message': 'Join successful', 'PlayerID': game.player2.playerID})
+
+    def set(self, data: dict):
+        game_id = data['GameID']
+        player_id = data['PlayerID']
+        game = self.current_games[game_id]
+        ships = data['Ships']
+        success = {}
+        error = {}
+        for item in ships.keys():
+            i = 1
+            ship = ships[item]
+            for element in ship:
+                x_start = element[0][1]
+                y_start = element[0][0]
+                x_end = element[1][1]
+                y_end = element[1][0]
+                res = game.set_ships(player_id=player_id, ship_type=item, ship_start_pos=(y_start, x_start),
+                                     ship_end_pos=(y_end, x_end))
+                if 'Error' in res:
+                    error[item + str(i)] = res['Error']
+                    i += 1
+                else:
+                    success[item + str(i)] = res['Message']
+                    i += 1
+        return json.dumps({'GameID': game_id, 'Success': success, 'Error': error})
+
+
