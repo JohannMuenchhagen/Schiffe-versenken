@@ -41,6 +41,8 @@ class ConnectionManager:
                 return self.join(data, websocket)
             case 'Set':
                 return self.set(data)
+            case 'Move':
+                return self.move(data)
 
     def initialize_game(self, websocket: WebSocket):
         self.active_games += 1
@@ -85,4 +87,19 @@ class ConnectionManager:
                     i += 1
         return json.dumps({'GameID': game_id, 'Success': success, 'Error': error})
 
-
+    def move(self, data: dict):
+        game_id = data['GameID']
+        game = self.current_games[game_id]
+        player_id = data['PlayerID']
+        y = data['Coordinates'][0]
+        x = data['Coordinates'][1]
+        res = game.check_move(player_id=player_id, move=(y, x))
+        if not res:
+            return json.dumps(res)
+        res = json.dumps(game.check_shot(player_id=player_id, shooting_coordinate=(y, x)))
+        if 'Win' in game.check_win(game.player2_ships_set).values() and player_id == 1:
+            return json.dumps({'Message': 'Player 1 wins'})
+        elif 'Win' in game.check_win(game.player1_ships_set).values() and player_id == 2:
+            return json.dumps({'Message': 'Player 2 wins'})
+        else:
+            return res
