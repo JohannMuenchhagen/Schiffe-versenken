@@ -136,11 +136,11 @@ class Game:
         if player_id == 1:
             self.player1_ships_set[ship_type] += 1
             self.player1_ships[index].append(ship.get_positions())
-            return {'Message': f'Ship: {ship_type} successfully placed'}
+            return {'Message': f'{ship_type} successfully placed'}
         elif player_id == 2:
             self.player2_ships_set[ship_type] += 1
             self.player2_ships[index].append(ship.get_positions())
-            return {'Message': f'Ship: {ship_type} successfully placed'}
+            return {'Message': f'{ship_type} successfully placed'}
         else:
             return {'Error': 'Wrong player id'}
 
