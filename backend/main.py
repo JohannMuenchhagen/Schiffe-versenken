@@ -1,5 +1,5 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from backend.connectionManager import ConnectionManager
+from connectionManager import ConnectionManager
 
 app = FastAPI()
 
@@ -10,8 +10,9 @@ manager = ConnectionManager()
 async def get():
     return {'message': 'Hello User'}
 
+
 # TODO refactor websocket
-@app.websocket("/ws/{client_id}")
+@app.websocket("/game")
 async def websocket_endpoint(websocket: WebSocket, client_id: int):
     await manager.connect(websocket)
     try:
