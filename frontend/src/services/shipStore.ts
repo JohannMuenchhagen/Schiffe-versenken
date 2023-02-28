@@ -12,11 +12,13 @@ export const useShipStore = defineStore("ship", () => {
   const ships = reactive([] as IShip[]);
   const sunkenShips = reactive([] as IShip[]);
   const selectedShipLength = ref<number>();
+  const placedShips = reactive([] as IShip[]);
 
   // getters
   const getShips = computed(() => ships);
   const getSunkenShips = computed(() => sunkenShips);
   const getSelectedShipLength = computed(() => selectedShipLength);
+  const getPlacedShips = computed(() => placedShips);
 
   // actions
   function loadDummyData() {
@@ -94,16 +96,23 @@ export const useShipStore = defineStore("ship", () => {
     selectedShipLength.value = length;
   }
 
+  function addPlacedShip(ship: IShip) {
+    placedShips.push(ship);
+  }
+
   return {
     ships,
     sunkenShips,
     selectedShipLength,
+    placedShips,
     getShips,
     getSunkenShips,
     getSelectedShipLength,
+    getPlacedShips,
     getAmountOfShipsOnBoard,
     loadDummyData,
     isShipHit,
     updateSelectedShip,
+    addPlacedShip,
   };
 });
