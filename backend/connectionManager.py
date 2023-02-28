@@ -2,7 +2,7 @@ from typing import List
 from fastapi import WebSocket
 import json
 
-from backend.game import Game
+from game import Game
 
 
 # TODO refactor ConnectionManager

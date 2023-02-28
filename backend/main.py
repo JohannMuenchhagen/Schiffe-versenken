@@ -1,5 +1,5 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from backend.connectionManager import ConnectionManager
+from connectionManager import ConnectionManager
 
 app = FastAPI()
 
