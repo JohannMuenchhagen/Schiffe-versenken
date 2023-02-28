@@ -18,12 +18,18 @@
 <script setup lang="ts">
 import { useShipStore } from "@/services/shipStore";
 import { useSnackbarStore } from "@/services/snackbarStore";
-import { watch } from "vue";
+import { toRaw, watch } from "vue";
 
 const shipStore = useShipStore();
 const snackbarStore = useSnackbarStore();
 
 let selectedShipLength: undefined | number = undefined;
+let endPosition: undefined | { x: number; y: number } = undefined;
+
+let remaining5LengthShip = 1;
+let remaining4LengthShip = 2;
+let remaining3LengthShip = 3;
+let remaining2LengthShip = 4;
 
 watch(shipStore.getSelectedShipLength, () => {
   selectedShipLength = shipStore.getSelectedShipLength.value;
@@ -34,13 +40,24 @@ function placeShip(event: any, x: number, y: number) {
     snackbarStore.callSnackbar("Es wurde noch kein Schiff ausgewählt!");
     return;
   }
-  addClassesToTiles(x, y);
-}
-
-function addClassesToTiles(x: number, y: number) {
+  if (isShipAlreadyPlaced()) {
+    snackbarStore.callSnackbar("Dieses Schiff wurde bereits platziert!");
+    return;
+  }
   if (isTakenByAnotherShip(x, y)) {
     return;
   }
+  endPosition = { x: x + selectedShipLength! - 1, y: y };
+  shipStore.addPlacedShip({
+    startPos: { x: x, y: y },
+    endPos: endPosition,
+    length: selectedShipLength!,
+  });
+  addClassesToTiles(x, y);
+  console.log(toRaw(shipStore.getPlacedShips));
+}
+
+function addClassesToTiles(x: number, y: number) {
   for (let i = x - 1; i < selectedShipLength! + x - 1; i++) {
     document
       .getElementById("myBoard")
@@ -72,6 +89,45 @@ function isTakenByAnotherShip(x: number, y: number): boolean {
       snackbarStore.callSnackbar("Dort befindet sich bereits ein Schiff!");
       return true;
     }
+  }
+  return false;
+}
+
+watch(shipStore.getPlacedShips, () => {
+  calcRemainingShipsToPlace();
+});
+
+function calcRemainingShipsToPlace() {
+  remaining5LengthShip = 1;
+  remaining4LengthShip = 2;
+  remaining3LengthShip = 3;
+  remaining2LengthShip = 4;
+
+  for (let i = 0; i < toRaw(shipStore.getPlacedShips).length; i++) {
+    if (shipStore.getPlacedShips[i].length === 5) {
+      remaining5LengthShip--;
+    } else if (shipStore.getPlacedShips[i].length === 4) {
+      remaining4LengthShip--;
+    } else if (shipStore.getPlacedShips[i].length === 3) {
+      remaining3LengthShip--;
+    } else if (shipStore.getPlacedShips[i].length === 2) {
+      remaining2LengthShip--;
+    }
+  }
+}
+
+function isShipAlreadyPlaced(): boolean {
+  if (selectedShipLength === 5) {
+    if (remaining5LengthShip === 0) return true;
+  }
+  if (selectedShipLength === 4) {
+    if (remaining4LengthShip === 0) return true;
+  }
+  if (selectedShipLength === 3) {
+    if (remaining3LengthShip === 0) return true;
+  }
+  if (selectedShipLength === 2) {
+    if (remaining2LengthShip === 0) return true;
   }
   return false;
 }

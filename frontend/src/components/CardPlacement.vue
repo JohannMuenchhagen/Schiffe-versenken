@@ -9,8 +9,9 @@
             <v-icon icon="mdi-ferry" @click="selectShip($event, 5)"></v-icon>
           </template>
 
-          <v-list-item-title
-            >1x 5er-Schiff - das Schlachtschiff</v-list-item-title
+          <v-list-item-title>
+            {{ remaining5LengthShip }}x 5er-Schiff - das
+            Schlachtschiff</v-list-item-title
           >
         </v-list-item>
         <v-list-item active-color="primary">
@@ -18,21 +19,30 @@
             <v-icon icon="mdi-ferry" @click="selectShip($event, 4)"></v-icon>
           </template>
 
-          <v-list-item-title>2x 4er-Schiffe - die Kreuzer</v-list-item-title>
+          <v-list-item-title
+            >{{ remaining4LengthShip }}x 4er-Schiffe - die
+            Kreuzer</v-list-item-title
+          >
         </v-list-item>
         <v-list-item active-color="primary">
           <template v-slot:prepend>
             <v-icon icon="mdi-ferry" @click="selectShip($event, 3)"></v-icon>
           </template>
 
-          <v-list-item-title>3x 3er-Schiffe - die Zerstörer</v-list-item-title>
+          <v-list-item-title
+            >{{ remaining3LengthShip }}x 3er-Schiffe - die
+            Zerstörer</v-list-item-title
+          >
         </v-list-item>
         <v-list-item active-color="primary">
           <template v-slot:prepend>
             <v-icon icon="mdi-ferry" @click="selectShip($event, 2)"></v-icon>
           </template>
 
-          <v-list-item-title>4x 2er-Schiffe - die U-Boote</v-list-item-title>
+          <v-list-item-title
+            >{{ remaining2LengthShip }}x 2er-Schiffe - die
+            U-Boote</v-list-item-title
+          >
         </v-list-item>
       </v-list>
       <div class="hintTitle">Hinweis:</div>
@@ -47,8 +57,17 @@
 
 <script setup lang="ts">
 import { useShipStore } from "@/services/shipStore";
+import { toRaw, watch } from "vue";
+import { ref } from "vue";
+
+const remaining5LengthShip = ref<number>(0);
+const remaining4LengthShip = ref<number>(0);
+const remaining3LengthShip = ref<number>(0);
+const remaining2LengthShip = ref<number>(0);
 
 const shipStore = useShipStore();
+
+calcRemainingShipsToPlace();
 
 function selectShip(event: any, shipLength: number): void {
   Array.from(document.querySelectorAll(".v-icon")).forEach((el) =>
@@ -56,6 +75,29 @@ function selectShip(event: any, shipLength: number): void {
   );
   event.target.classList.add("selectedShip");
   shipStore.updateSelectedShip(shipLength);
+}
+
+watch(shipStore.getPlacedShips, () => {
+  calcRemainingShipsToPlace();
+});
+
+function calcRemainingShipsToPlace() {
+  remaining5LengthShip.value = 1;
+  remaining4LengthShip.value = 2;
+  remaining3LengthShip.value = 3;
+  remaining2LengthShip.value = 4;
+
+  for (let i = 0; i < toRaw(shipStore.getPlacedShips).length; i++) {
+    if (shipStore.getPlacedShips[i].length === 5) {
+      remaining5LengthShip.value--;
+    } else if (shipStore.getPlacedShips[i].length === 4) {
+      remaining4LengthShip.value--;
+    } else if (shipStore.getPlacedShips[i].length === 3) {
+      remaining3LengthShip.value--;
+    } else if (shipStore.getPlacedShips[i].length === 2) {
+      remaining2LengthShip.value--;
+    }
+  }
 }
 </script>
 
