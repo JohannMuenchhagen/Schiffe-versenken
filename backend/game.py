@@ -66,17 +66,17 @@ class Game:
                 else:
                     return True
 
-    def check_move(self, player_id: int, move: tuple) -> bool:
+    def check_move(self, player_id: int, move: tuple):
         if player_id != self.current_player:  # check if the correct player plays the move
-            return False
+            return {'Error': 'Wrong player'}
         elif self.current_player == 1:
             if move in self.player1_moves:  # check if the move is already played
-                return False
+                return {'Error': 'Move already played'}
             else:
                 return True
         else:
             if move in self.player2_moves:
-                return False
+                return {'Error': 'Move already played'}
             else:
                 return True
 
@@ -136,11 +136,11 @@ class Game:
         if player_id == 1:
             self.player1_ships_set[ship_type] += 1
             self.player1_ships[index].append(ship.get_positions())
-            return {'Message': f'Ship: {ship_type} successfully placed'}
+            return {'Message': f'{ship_type} successfully placed'}
         elif player_id == 2:
             self.player2_ships_set[ship_type] += 1
             self.player2_ships[index].append(ship.get_positions())
-            return {'Message': f'Ship: {ship_type} successfully placed'}
+            return {'Message': f'{ship_type} successfully placed'}
         else:
             return {'Error': 'Wrong player id'}
 
