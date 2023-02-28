@@ -6,10 +6,7 @@
       </template>
       <v-app-bar-title>Schiffe versenken</v-app-bar-title>
       <v-spacer></v-spacer>
-      <v-btn>
-        <v-icon icon="mdi-lan-pending"></v-icon>
-        <div class="connectText">Mit Spieler verbinden</div>
-      </v-btn>
+      <ConnectDialog></ConnectDialog>
       <v-btn
         icon
         href="https://github.com/JohannMuenchhagen/Schiffe-versenken"
@@ -40,6 +37,7 @@
 
 <script setup lang="ts">
 import SettingsDialog from "@/components/SettingsDialog.vue";
+import ConnectDialog from "./components/ConnectDialog.vue";
 import { useSnackbarStore } from "./services/snackbarStore";
 
 let snackbarStore = useSnackbarStore();
