@@ -33,6 +33,7 @@ class Game:
             self.player2.playerID = 2
             self.player2.websocket = websocket
             self.player_counter += 1
+            self.current_player = 1
             return {'Status': 'Player 2 initialized'}
 
     def check_placed_ship(self, player_id: int, ship_type: str) -> bool:  # check if the number of ships is correct
@@ -92,6 +93,7 @@ class Game:
                             return {'Message': 'Destroyed'}
                         else:
                             return {'Message': 'Hit'}
+            self.current_player = 2
             return {'Message': 'Miss'}
         else:
             for index, ship in enumerate(self.player1_ships):
@@ -103,6 +105,7 @@ class Game:
                             return {'Message': 'Destroyed'}
                         else:
                             return {'Message': 'Hit'}
+            self.current_player = 1
             return {'Message': 'Miss'}
 
     def set_ships(self, player_id: int, ship_type: str, ship_start_pos: tuple, ship_end_pos: tuple) -> dict:
