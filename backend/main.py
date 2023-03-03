@@ -1,5 +1,6 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from connectionManager import ConnectionManager
+from .connectionManager import ConnectionManager
+
 
 app = FastAPI()
 
@@ -11,15 +12,14 @@ async def get():
     return {'message': 'Hello User'}
 
 
-# TODO refactor websocket
 @app.websocket("/game")
-async def websocket_endpoint(websocket: WebSocket, client_id: int):
+async def websocket_endpoint(websocket: WebSocket):
     await manager.connect(websocket)
     try:
         while True:
-            data = await websocket.receive_text()
-            await manager.send_personal_message(f'You wrote: {data}', websocket)
-            await manager.broadcast(f'Client: {client_id} says: {data}')
+            data = await websocket.receive_json()
+            res, player1, player2 = manager.check_type(data, websocket)
+            await manager.broadcast(message=res, player1=player1, player2=player2)
     except WebSocketDisconnect:
         manager.disconnect(websocket)
-        await manager.broadcast(f'Client: {client_id} left the chat')
+        await manager.broadcast('Client: left the chat')
