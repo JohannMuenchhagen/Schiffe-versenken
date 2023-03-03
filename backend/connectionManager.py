@@ -2,7 +2,7 @@ from typing import List
 from fastapi import WebSocket
 import json
 
-from .game import Game
+from backend.game import Game
 
 
 class ConnectionManager:
@@ -32,7 +32,7 @@ class ConnectionManager:
             await player2.send_json(message)
 
     def check_type(self, data: json, websocket: WebSocket):
-        #data: dict = json.loads(data)
+        # data: dict = json.loads(data)
         match data['Type']:
             case 'initialize Game':
                 return self.initialize_game(websocket)
@@ -52,7 +52,7 @@ class ConnectionManager:
         self.current_games[self.active_games] = game
         game.set_player(websocket)
         return {'Message': 'Game successfully initialized', 'GameID': game.game_id,
-                           'PlayerID': game.player1.playerID}, \
+                'PlayerID': game.player1.playerID}, \
             game.player1.websocket, game.player2.websocket
 
     def join(self, data: dict, websocket: WebSocket):
@@ -107,3 +107,4 @@ class ConnectionManager:
             return {'Message': 'Player 2 wins'}, game.player1.websocket, game.player2.websocket
         else:
             return res, game.player1.websocket, game.player2.websocket
+
