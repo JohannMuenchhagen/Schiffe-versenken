@@ -1,7 +1,6 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from .connectionManager import ConnectionManager
 
-
 app = FastAPI()
 
 manager = ConnectionManager()
@@ -22,4 +21,6 @@ async def websocket_endpoint(websocket: WebSocket):
             await manager.broadcast(message=res, player1=player1, player2=player2)
     except WebSocketDisconnect:
         manager.disconnect(websocket)
-        await manager.broadcast('Client: left the chat')
+        # await manager.broadcast('Client: left the chat')#change
+
+# @TODO Add Method to get a single WebSocket to one game
