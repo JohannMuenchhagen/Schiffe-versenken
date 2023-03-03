@@ -26,9 +26,10 @@ class ConnectionManager:
     async def send_personal_message(self, message: str, websocket: WebSocket):
         await websocket.send_json(message)
 
-    async def broadcast(self, message: str):
-        for connection in self.active_connections:
-            await connection.send_json(message)
+    async def broadcast(self, message: json, player1: WebSocket, player2: WebSocket = None):
+        await player1.send_json(message)
+        if player2 is not None:
+            await player2.send_json(message)
 
     def check_type(self, data: json, websocket: WebSocket):
         data: dict = json.loads(data)
@@ -37,7 +38,7 @@ class ConnectionManager:
                 return self.initialize_game(websocket)
             case 'Join':
                 if data['GameID'] not in self.current_games:
-                    return json.dumps({'Error': 'Unable to Join', 'Description': 'Game doesnt exist'})
+                    return {'Error': 'Unable to Join', 'Description': 'Game doesnt exist'}
                 return self.join(data, websocket)
             case 'Set':
                 return self.set(data)
@@ -50,17 +51,18 @@ class ConnectionManager:
         game = Game(self.active_games)
         self.current_games[self.active_games] = game
         game.set_player(websocket)
-        return json.dumps({'Message': 'Game successfully initialized', 'GameID': game.game_id,
-                           'PlayerID': game.player1.playerID})
+        return {'Message': 'Game successfully initialized', 'GameID': game.game_id,
+                           'PlayerID': game.player1.playerID}
 
     def join(self, data: dict, websocket: WebSocket):
         game_id = data['GameID']
         game = self.current_games[game_id]
         msg = game.set_player(websocket)
         if 'Error' in msg:
-            return json.dumps(msg)
+            return msg, game.player1.websocket, game.player2.websocket
         self.active_player += 1
-        return json.dumps({'Message': 'Join successful', 'PlayerID': game.player2.playerID})
+        return {'Message': 'Join successful', 'PlayerID': game.player2.playerID}, \
+            game.player1.websocket, game.player2.websocket
 
     def set(self, data: dict):
         game_id = data['GameID']
@@ -85,7 +87,8 @@ class ConnectionManager:
                 else:
                     success[item + str(i)] = res['Message']
                     i += 1
-        return json.dumps({'GameID': game_id, 'Success': success, 'Error': error})
+        return {'GameID': game_id, 'Success': success, 'Error': error}, \
+            game.player1.websocket, game.player2.websocket
 
     def move(self, data: dict):
         game_id = data['GameID']
@@ -95,11 +98,11 @@ class ConnectionManager:
         x = data['Coordinates'][1]
         res = game.check_move(player_id=player_id, move=(y, x))
         if not res:
-            return json.dumps(res)
-        res = json.dumps(game.check_shot(player_id=player_id, shooting_coordinate=(y, x)))
+            return res, game.player1.websocket, game.player2.websocket
+        res = game.check_shot(player_id=player_id, shooting_coordinate=(y, x))
         if 'Win' in game.check_win(game.player2_ships_set).values() and player_id == 1:
-            return json.dumps({'Message': 'Player 1 wins'})
+            return {'Message': 'Player 1 wins'}, game.player1.websocket, game.player2.websocket
         elif 'Win' in game.check_win(game.player1_ships_set).values() and player_id == 2:
-            return json.dumps({'Message': 'Player 2 wins'})
+            return {'Message': 'Player 2 wins'}, game.player1.websocket, game.player2.websocket
         else:
-            return res
+            return res, game.player1.websocket, game.player2.websocket
