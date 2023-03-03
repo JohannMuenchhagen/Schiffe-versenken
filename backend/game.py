@@ -1,5 +1,5 @@
-from player import Player
-from ships import *
+from .player import Player
+from .ships import *
 
 
 class Game:
