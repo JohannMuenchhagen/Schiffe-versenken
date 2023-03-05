@@ -5,6 +5,7 @@ interface IShip {
   startPos: { x: number; y: number };
   endPos: { x: number; y: number };
   length: number;
+  isHorizontal: boolean;
 }
 
 export const useShipStore = defineStore("ship", () => {
@@ -22,28 +23,31 @@ export const useShipStore = defineStore("ship", () => {
 
   // actions
   function loadDummyData() {
-    ships.push({ startPos: { x: 1, y: 1 }, endPos: { x: 1, y: 5 }, length: 5 }); // 5 length
-    ships.push({ startPos: { x: 3, y: 1 }, endPos: { x: 6, y: 1 }, length: 4 }); // 4 length
-    ships.push({ startPos: { x: 3, y: 4 }, endPos: { x: 6, y: 4 }, length: 4 }); // 4 length
-    ships.push({ startPos: { x: 4, y: 7 }, endPos: { x: 6, y: 7 }, length: 3 }); // 3 length
-    ships.push({ startPos: { x: 9, y: 6 }, endPos: { x: 9, y: 8 }, length: 3 }); // 3 length
+    ships.push({ startPos: { x: 1, y: 1 }, endPos: { x: 1, y: 5 }, length: 5, isHorizontal: true }); // 5 length
+    ships.push({ startPos: { x: 3, y: 1 }, endPos: { x: 6, y: 1 }, length: 4, isHorizontal: true }); // 4 length
+    ships.push({ startPos: { x: 3, y: 4 }, endPos: { x: 6, y: 4 }, length: 4, isHorizontal: true }); // 4 length
+    ships.push({ startPos: { x: 4, y: 7 }, endPos: { x: 6, y: 7 }, length: 3, isHorizontal: true }); // 3 length
+    ships.push({ startPos: { x: 9, y: 6 }, endPos: { x: 9, y: 8 }, length: 3, isHorizontal: true }); // 3 length
     ships.push({
       startPos: { x: 8, y: 10 },
       endPos: { x: 10, y: 10 },
       length: 3,
+      isHorizontal: true,
     }); // 3 length
     ships.push({
       startPos: { x: 2, y: 9 },
       endPos: { x: 2, y: 10 },
       length: 2,
+      isHorizontal: true,
     }); // 2 length
     ships.push({
       startPos: { x: 5, y: 10 },
       endPos: { x: 6, y: 10 },
       length: 2,
+      isHorizontal: true,
     }); // 2 length
-    ships.push({ startPos: { x: 9, y: 2 }, endPos: { x: 9, y: 3 }, length: 2 }); // 2 length
-    ships.push({ startPos: { x: 7, y: 5 }, endPos: { x: 7, y: 6 }, length: 2 }); // 2 length
+    ships.push({ startPos: { x: 9, y: 2 }, endPos: { x: 9, y: 3 }, length: 2, isHorizontal: true }); // 2 length
+    ships.push({ startPos: { x: 7, y: 5 }, endPos: { x: 7, y: 6 }, length: 2, isHorizontal: true }); // 2 length
   }
 
   function isShipHit(pos: { x: number; y: number }): boolean {

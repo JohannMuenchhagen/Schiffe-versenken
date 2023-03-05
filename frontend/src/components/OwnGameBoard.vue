@@ -52,6 +52,7 @@ function placeShip(event: any, x: number, y: number) {
     startPos: { x: x, y: y },
     endPos: endPosition,
     length: selectedShipLength!,
+    isHorizontal: true, //ändern true, Wahl
   });
   addClassesToTiles(x, y);
   console.log(toRaw(shipStore.getPlacedShips));

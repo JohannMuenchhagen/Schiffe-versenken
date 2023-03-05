@@ -14,6 +14,15 @@
             Schlachtschiff</v-list-item-title
           >
         </v-list-item>
+          <v-switch 
+            v-model="direction"
+            hide-details
+            true-value="horizontal"
+            false-value="senkrecht"
+            :label="`Richtung: ${direction}`"
+            inset>
+        </v-switch>
+        
         <v-list-item active-color="primary">
           <template v-slot:prepend>
             <v-icon icon="mdi-ferry" @click="selectShip($event, 4)"></v-icon>
@@ -66,6 +75,8 @@ const remaining3LengthShip = ref<number>(0);
 const remaining2LengthShip = ref<number>(0);
 
 const shipStore = useShipStore();
+
+let direction = ref<boolean>(true);
 
 calcRemainingShipsToPlace();
 
