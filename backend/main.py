@@ -20,7 +20,9 @@ async def websocket_endpoint(websocket: WebSocket):
             res, player1, player2 = manager.check_type(data, websocket)
             await manager.broadcast(message=res, player1=player1, player2=player2)
     except WebSocketDisconnect:
-        manager.disconnect(websocket)
-        # await manager.broadcast('Client: left the chat')#change
+        opposite = manager.disconnect(websocket)
+        if opposite is not None:
+            await manager.send_personal_message({'Message': 'Player left'}, opposite)
+            manager.remove_websocket(opposite)
 
-# @TODO Add Method to get a single WebSocket to one game
+

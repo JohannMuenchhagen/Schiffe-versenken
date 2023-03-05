@@ -12,17 +12,29 @@ class ConnectionManager:
         self.active_games: int = 0  # counter of active player
         self.active_player: int = 0  # counter of active games
         self.current_games = {}  # active dict of active games
+        self.map_websocket_game = {}  # a mapper from websockets to games
 
     async def connect(self, websocket: WebSocket):
         await websocket.accept()
         self.active_connections.append(websocket)
 
     def disconnect(self, websocket: WebSocket):
-        self.active_connections.remove(websocket)
-        self.active_player -= 1
-        if self.active_player % 2 == 0:  # if the number of players is equal, after 1 is leaving, remove 1 game
-            self.active_games -= 1
+        game = self.map_websocket_game[websocket]
+        gameID = game.game_id
+        player1 = game.player1.websocket
+        player2 = game.player2.websocket
+        self.current_games.pop(gameID)  # remove game
+        if player1 is not websocket:
+            self.remove_websocket(websocket)
+            return player1
+        else:
+            self.remove_websocket(websocket)
+            return player2
 
+    def remove_websocket(self, websocket: WebSocket):
+        self.active_player -= 1  # remove 1 player
+        self.map_websocket_game.pop(websocket)
+        self.active_connections.remove(websocket)
     async def send_personal_message(self, message: str, websocket: WebSocket):
         await websocket.send_json(message)
 
@@ -50,6 +62,7 @@ class ConnectionManager:
         self.active_player += 1
         game = Game(self.active_games)
         self.current_games[self.active_games] = game
+        self.map_websocket_game[websocket] = game
         game.set_player(websocket)
         return {'Message': 'Game successfully initialized', 'GameID': game.game_id,
                 'PlayerID': game.player1.playerID}, \
@@ -58,6 +71,7 @@ class ConnectionManager:
     def join(self, data: dict, websocket: WebSocket):
         game_id = data['GameID']
         game = self.current_games[game_id]
+        self.map_websocket_game[websocket] = game
         msg = game.set_player(websocket)
         if 'Error' in msg:
             return msg, game.player1.websocket, game.player2.websocket
@@ -107,4 +121,3 @@ class ConnectionManager:
             return {'Message': 'Player 2 wins'}, game.player1.websocket, game.player2.websocket
         else:
             return res, game.player1.websocket, game.player2.websocket
-
