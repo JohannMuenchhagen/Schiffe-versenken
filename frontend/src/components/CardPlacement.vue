@@ -15,11 +15,11 @@
           >
         </v-list-item>
           <v-switch 
-            v-model="direction"
+            v-model="directionSchlachtschiff"
             hide-details
             true-value="horizontal"
             false-value="senkrecht"
-            :label="`Richtung: ${direction}`"
+            :label="`Richtung: ${directionSchlachtschiff}`"
             inset>
         </v-switch>
         
@@ -32,6 +32,14 @@
             >{{ remaining4LengthShip }}x 4er-Schiffe - die
             Kreuzer</v-list-item-title
           >
+          <v-switch 
+            v-model="directionKreuzer"
+            hide-details
+            true-value="horizontal"
+            false-value="senkrecht"
+            :label="`Richtung: ${directionKreuzer}`"
+            inset>
+        </v-switch>
         </v-list-item>
         <v-list-item active-color="primary">
           <template v-slot:prepend>
@@ -43,6 +51,14 @@
             Zerstörer</v-list-item-title
           >
         </v-list-item>
+        <v-switch 
+            v-model="directionZerstoerer"
+            hide-details
+            true-value="horizontal"
+            false-value="senkrecht"
+            :label="`Richtung: ${directionZerstoerer}`"
+            inset>
+        </v-switch>
         <v-list-item active-color="primary">
           <template v-slot:prepend>
             <v-icon icon="mdi-ferry" @click="selectShip($event, 2)"></v-icon>
@@ -53,6 +69,14 @@
             U-Boote</v-list-item-title
           >
         </v-list-item>
+        <v-switch 
+            v-model="directionUBoote"
+            hide-details
+            true-value="horizontal"
+            false-value="senkrecht"
+            :label="`Richtung: ${directionUBoote}`"
+            inset>
+        </v-switch>
       </v-list>
       <div class="hintTitle">Hinweis:</div>
       <div>
@@ -76,7 +100,11 @@ const remaining2LengthShip = ref<number>(0);
 
 const shipStore = useShipStore();
 
-let direction = ref<boolean>(true);
+let directionSchlachtschiff = ref<boolean>(true);
+let directionKreuzer        = ref<boolean>(true);
+let directionZerstoerer     = ref<boolean>(true);
+let directionUBoote         = ref<boolean>(true);
+  
 
 calcRemainingShipsToPlace();
 
