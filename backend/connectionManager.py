@@ -6,6 +6,11 @@ import requests
 from backend.game import Game
 
 
+def load_game(gameID: int):
+    url = "http://localhost:8080/game/get"
+    return requests.get(url, params={"gameId": gameID})
+
+
 class ConnectionManager:
 
     def __init__(self):
@@ -132,6 +137,3 @@ class ConnectionManager:
         message = {'spielId': gameID, 'json': {player1, player2}}
         requests.post(url, json=message)  # Post data to database
 
-    def load_game(self, gameID: int):
-        url = "http://localhost:8080/game/get"
-        return requests.get(url, params={"gameId": gameID})
