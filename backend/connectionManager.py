@@ -29,7 +29,7 @@ class ConnectionManager:
         gameID = game.game_id
         player1 = game.player1.websocket
         player2 = game.player2.websocket
-        self.save_game(gameID)  # save game
+        # self.save_game(gameID)  # save game
         self.current_games.pop(gameID)  # remove game
         if player1 is not websocket:
             self.remove_websocket(websocket)
@@ -129,12 +129,13 @@ class ConnectionManager:
         else:
             return res, game.player1.websocket, game.player2.websocket
 
+    # @TODO fix bug
     def save_game(self, gameID: int):
         url = "http://localhost:8080/game/save"
         game = self.current_games[gameID]
-        player1 = {'Player 1': {'Moves': game.player1_moves, 'Ships': game.player1_ships}}
-        player2 = {'Player 2': {'Moves': game.player2_moves, 'Ships': game.player2_ships}}
-        message = {'spielId': gameID, 'json': {player1, player2}}
+        player1 = {'Moves': game.player1_moves, 'Ships': game.player1_ships}
+        player2 = {'Moves': game.player2_moves, 'Ships': game.player2_ships}
+        message = {'spielId': gameID, 'json': {'player1': player1, 'player2': player2}}
         requests.post(url, json=message)  # Post data to database
 
     # @TODO Fill
