@@ -74,11 +74,13 @@ class Game:
             if move in self.player1_moves:  # check if the move is already played
                 return {'Error': 'Move already played'}
             else:
+                self.player1_moves.append(move)  # add a move to an array
                 return True
         else:
             if move in self.player2_moves:
                 return {'Error': 'Move already played'}
             else:
+                self.player2_moves.append(move)
                 return True
 
     # TODO find an opportunity to remove the duplicate
