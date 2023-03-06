@@ -6,7 +6,7 @@ import requests
 from backend.game import Game
 
 
-def load_game(gameID: int):
+def load_game(gameID: int):  # load a game from database
     url = "http://localhost:8080/game/get"
     return requests.get(url, params={"gameId": gameID})
 
@@ -137,3 +137,6 @@ class ConnectionManager:
         message = {'spielId': gameID, 'json': {player1, player2}}
         requests.post(url, json=message)  # Post data to database
 
+    # @TODO Fill
+    def initialize_previous_game(self, data):
+        pass
