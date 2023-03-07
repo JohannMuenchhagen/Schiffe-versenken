@@ -84,8 +84,9 @@ class ConnectionManager:
 
     def join(self, data: dict, websocket: WebSocket):
         game_id = data['GameID']  # read the game id from json
-        if game_id in self.saved_games:
+        if game_id in self.saved_games:  # join a saved game
             return self.initialize_previous_game(data, websocket)
+
         game = self.current_games[game_id]  # load the game out of the dict
         self.map_websocket_game[websocket] = game  # map the game with the websocket key = websocket, value game
         msg = game.set_player(websocket)  # save the websocket of player 2 into the game object
@@ -153,9 +154,13 @@ class ConnectionManager:
 
     def initialize_previous_game(self, data: dict, websocket: WebSocket):
         game_id = data['gameID']
-        game = Game(game_id)
+        game = Game(game_id)  # create game object
         game.set_player(websocket)
         self.saved_games.remove(game_id)
+        self.current_games[game_id] = game
+        self.map_websocket_game[websocket] = game
+        self.active_games += 1
+        self.active_player += 1
         game.player1_moves = data['player1']['Moves']
         game.player2_moves = data['player2']['Moves']
         self.set(data={'GameID': game_id, 'PlayerID': 1, 'Ships': data['player1']['Ships']})
