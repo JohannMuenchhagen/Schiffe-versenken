@@ -47,6 +47,9 @@ function placeShip(event: any, x: number, y: number) {
   if (isTakenByAnotherShip(x, y)) {
     return;
   }
+  if (isCrossedBorder(x, y)) {
+    return;
+  }
   endPosition = { x: x + selectedShipLength! - 1, y: y };
   shipStore.addPlacedShip({
     startPos: { x: x, y: y },
@@ -73,6 +76,18 @@ function addClassesToTiles(x: number, y: number) {
       [y - 1]?.getElementsByClassName("v-col")
       [i]?.firstElementChild?.classList.remove("tileWrapper");
   }
+}
+
+function isCrossedBorder(x: number, y: number): boolean{
+
+  if ((10 - (x - 1) - selectedShipLength!) < 0
+      // y - Grenze hinzufügen
+        )
+    {
+      snackbarStore.callSnackbar("Das Schiff überschreitet eine Grenze!");
+      return true;
+    }
+  return false;
 }
 
 function isTakenByAnotherShip(x: number, y: number): boolean {
