@@ -20,8 +20,7 @@ public class DatenbankController {
 	
 	private final GameRepository gameRepo;
 	private final GameNumbersRepository numberRepo;
-	private final NumberService numberService;
-	  
+	private final NumberService numberService; 
 
 	@GetMapping("/get")
     public ResponseEntity<String> getGame(@RequestHeader("gameId") String gameId){
