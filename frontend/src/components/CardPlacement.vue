@@ -6,7 +6,7 @@
 
         <v-list-item active-color="primary">
           <template v-slot:prepend>
-            <v-icon icon="mdi-ferry" @click="selectShip($event, 5)"></v-icon>
+            <v-icon icon="mdi-ferry" size="50" @click="selectShip($event, 5)"></v-icon>
           </template>
 
           <v-list-item-title>
@@ -14,11 +14,13 @@
             Schlachtschiff</v-list-item-title
           >
           <v-switch 
+            class = "switchDesign" 
             v-model="direction5LengthShip"
             hide-details
             true-value="horizontal"
             false-value="senkrecht"
             :label="`Richtung: ${direction5LengthShip}`"
+            
             @change="onChangeDirShip"
             inset>
         </v-switch>
@@ -26,7 +28,7 @@
           
         <v-list-item active-color="primary">
           <template v-slot:prepend>
-            <v-icon icon="mdi-ferry" @click="selectShip($event, 4)"></v-icon>
+            <v-icon icon="mdi-ferry" size="50" @click="selectShip($event, 4)"></v-icon>
           </template>
 
           <v-list-item-title
@@ -34,6 +36,7 @@
             Kreuzer</v-list-item-title
           >
           <v-switch 
+            class = "switchDesign" 
             v-model="direction4LengthShip"
             hide-details
             true-value="horizontal"
@@ -44,7 +47,7 @@
         </v-list-item>
         <v-list-item active-color="primary">
           <template v-slot:prepend>
-            <v-icon icon="mdi-ferry" @click="selectShip($event, 3)"></v-icon>
+            <v-icon icon="mdi-ferry" size="50" @click="selectShip($event, 3)"></v-icon>
           </template>
 
           <v-list-item-title
@@ -52,6 +55,7 @@
             Zerstörer</v-list-item-title
           >
           <v-switch 
+            class = "switchDesign" 
             v-model="direction3LengthShip"
             hide-details
             true-value="horizontal"
@@ -63,7 +67,7 @@
         
         <v-list-item active-color="primary">
           <template v-slot:prepend>
-            <v-icon icon="mdi-ferry" @click="selectShip($event, 2)"></v-icon>
+            <v-icon icon="mdi-ferry" size="50" @click="selectShip($event, 2)"></v-icon>
           </template>
 
           <v-list-item-title
@@ -71,6 +75,7 @@
             U-Boote</v-list-item-title
           >
           <v-switch 
+            class = "switchDesign" 
             v-model="direction2LengthShip"
             hide-details
             true-value="horizontal"
@@ -168,5 +173,12 @@ i.v-icon:hover {
   border-spacing: 10px;
   filter: brightness(85%);
   cursor: pointer;
+}
+
+.switchDesign {
+  size:10cm;
+  border-radius: 5rem;
+  cursor: pointer;
+  position: relative;
 }
 </style>
