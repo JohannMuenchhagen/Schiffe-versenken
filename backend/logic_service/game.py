@@ -71,7 +71,7 @@ class Game:
     def check_move(self, player_id: int, move: tuple):
         if player_id != self.current_player:  # check if the correct player plays the move
             return {'Error': 'Wrong player'}
-        elif self.current_player == 1:
+        elif self.player1.playerID == player_id:
             if move in self.player1_moves:  # check if the move is already played
                 return {'Error': 'Move already played'}
             else:
@@ -86,7 +86,7 @@ class Game:
 
     # TODO find an opportunity to remove the duplicate
     def check_shot(self, player_id: int, shooting_coordinate: tuple) -> dict:  # check if a ship gets a hit
-        if player_id == 1:
+        if player_id == self.player1.playerID:
             for index, ship in enumerate(self.player2_ships):
                 for ships in ship:
                     if shooting_coordinate in ships:
@@ -139,11 +139,11 @@ class Game:
             case _:
                 return {'Error': 'No ship provided'}
 
-        if player_id == 1:
+        if player_id == self.player1.playerID:
             self.player1_ships_set[ship_type] += 1
             self.player1_ships[index].append(ship.get_positions())
             return {'Message': f'{ship_type} successfully placed'}
-        elif player_id == 2:
+        elif player_id == self.player2.playerID:
             self.player2_ships_set[ship_type] += 1
             self.player2_ships[index].append(ship.get_positions())
             return {'Message': f'{ship_type} successfully placed'}
@@ -152,7 +152,7 @@ class Game:
 
     def remove_ship(self, player_id: int, index: int):  # Remove destroyed ships from the Dict
         mapper = ['Battleship', 'Corvettes', 'Destroyer', 'Submarine']
-        if player_id == 1:
+        if player_id == self.player1.playerID:
             self.player2_ships_set[mapper[index]] -= 1
         else:
             self.player1_ships_set[mapper[index]] -= 1
