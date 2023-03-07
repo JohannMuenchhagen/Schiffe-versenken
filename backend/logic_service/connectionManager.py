@@ -47,7 +47,7 @@ class ConnectionManager:
         self.active_connections.remove(websocket)  # remove an active connection
 
     async def send_personal_message(self, message: str, websocket: WebSocket):
-        await websocket.send_json(message)
+        await websocket.send_json({'Message':message})
 
     async def broadcast(self, message: json, player1: WebSocket, player2: WebSocket = None):
         # send a broadcast to both players
