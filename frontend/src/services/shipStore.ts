@@ -14,12 +14,14 @@ export const useShipStore = defineStore("ship", () => {
   const sunkenShips = reactive([] as IShip[]);
   const selectedShipLength = ref<number>();
   const placedShips = reactive([] as IShip[]);
+  const selectedShipDirectionHorizontal = ref<boolean>(true);
 
   // getters
   const getShips = computed(() => ships);
   const getSunkenShips = computed(() => sunkenShips);
   const getSelectedShipLength = computed(() => selectedShipLength);
   const getPlacedShips = computed(() => placedShips);
+  const getSelectedShipDirectionHorizontal = computed(() => selectedShipDirectionHorizontal);
 
   // actions
   function loadDummyData() {
@@ -66,6 +68,10 @@ export const useShipStore = defineStore("ship", () => {
     return false;
   }
 
+  function changeDirection(): void {
+    !selectedShipDirectionHorizontal;
+  }
+
   function getShipLength(ship: IShip): number {
     if (ship.endPos.x - ship.startPos.x === 0) {
       return ship.endPos.y - ship.startPos.y + 1;
@@ -96,8 +102,9 @@ export const useShipStore = defineStore("ship", () => {
     }
   }
 
-  function updateSelectedShip(length: number): void {
+  function updateSelectedShip(length: number, diectionHorizontal: boolean): void {
     selectedShipLength.value = length;
+    
   }
 
   function addPlacedShip(ship: IShip) {
@@ -109,6 +116,8 @@ export const useShipStore = defineStore("ship", () => {
     sunkenShips,
     selectedShipLength,
     placedShips,
+    selectedShipDirectionHorizontal,
+    getSelectedShipDirectionHorizontal,
     getShips,
     getSunkenShips,
     getSelectedShipLength,
@@ -118,5 +127,6 @@ export const useShipStore = defineStore("ship", () => {
     isShipHit,
     updateSelectedShip,
     addPlacedShip,
+    changeDirection,
   };
 });

@@ -24,6 +24,7 @@ const shipStore = useShipStore();
 const snackbarStore = useSnackbarStore();
 
 let selectedShipLength: undefined | number = undefined;
+let selectedShipDirection: undefined | boolean = undefined;
 let endPosition: undefined | { x: number; y: number } = undefined;
 
 let remaining5LengthShip = 1;
@@ -33,6 +34,10 @@ let remaining2LengthShip = 4;
 
 watch(shipStore.getSelectedShipLength, () => {
   selectedShipLength = shipStore.getSelectedShipLength.value;
+});
+
+watch(shipStore.getSelectedShipDirectionHorizontal, () => {
+  selectedShipDirection = shipStore.getSelectedShipDirectionHorizontal.value;
 });
 
 function placeShip(event: any, x: number, y: number) {
@@ -52,7 +57,7 @@ function placeShip(event: any, x: number, y: number) {
     startPos: { x: x, y: y },
     endPos: endPosition,
     length: selectedShipLength!,
-    isHorizontal: true, //ändern true, Wahl
+    isHorizontal: selectedShipDirection!, 
   });
   addClassesToTiles(x, y);
   console.log(toRaw(shipStore.getPlacedShips));

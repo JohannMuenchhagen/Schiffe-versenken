@@ -15,11 +15,12 @@
           >
         </v-list-item>
           <v-switch 
-            v-model="directionSchlachtschiff"
+            v-model="direction5LengthShip"
             hide-details
             true-value="horizontal"
             false-value="senkrecht"
-            :label="`Richtung: ${directionSchlachtschiff}`"
+            :label="`Richtung: ${direction5LengthShip}`"
+            @change="onChangeDirShip"
             inset>
         </v-switch>
         
@@ -33,11 +34,11 @@
             Kreuzer</v-list-item-title
           >
           <v-switch 
-            v-model="directionKreuzer"
+            v-model="direction4LengthShip"
             hide-details
             true-value="horizontal"
             false-value="senkrecht"
-            :label="`Richtung: ${directionKreuzer}`"
+            :label="`Richtung: ${direction4LengthShip}`"
             inset>
         </v-switch>
         </v-list-item>
@@ -52,11 +53,11 @@
           >
         </v-list-item>
         <v-switch 
-            v-model="directionZerstoerer"
+            v-model="direction3LengthShip"
             hide-details
             true-value="horizontal"
             false-value="senkrecht"
-            :label="`Richtung: ${directionZerstoerer}`"
+            :label="`Richtung: ${direction3LengthShip}`"
             inset>
         </v-switch>
         <v-list-item active-color="primary">
@@ -70,11 +71,11 @@
           >
         </v-list-item>
         <v-switch 
-            v-model="directionUBoote"
+            v-model="direction2LengthShip"
             hide-details
             true-value="horizontal"
             false-value="senkrecht"
-            :label="`Richtung: ${directionUBoote}`"
+            :label="`Richtung: ${direction2LengthShip}`"
             inset>
         </v-switch>
       </v-list>
@@ -100,11 +101,14 @@ const remaining2LengthShip = ref<number>(0);
 
 const shipStore = useShipStore();
 
-let directionSchlachtschiff = ref<boolean>(true);
-let directionKreuzer        = ref<boolean>(true);
-let directionZerstoerer     = ref<boolean>(true);
-let directionUBoote         = ref<boolean>(true);
-  
+let direction5LengthShip = ref<boolean>(true);
+let direction4LengthShip = ref<boolean>(true);
+let direction3LengthShip = ref<boolean>(true);
+let direction2LengthShip = ref<boolean>(true);
+
+const onChangeDirShip = (x:number, y:number) => {
+  shipStore.changeDirection();
+};
 
 calcRemainingShipsToPlace();
 
