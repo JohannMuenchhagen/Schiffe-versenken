@@ -1,6 +1,6 @@
 from player import Player
 from ships import *
-
+import uuid
 
 class Game:
     # @TODO generate UUID
@@ -24,14 +24,14 @@ class Game:
             return {'Error': 'Unable to Join', 'Description': 'Maximum amount of players already reached'}
         elif self.current_player == 1:
             self.player1.gameID = self.game_id
-            self.player1.playerID = 1
+            self.player1.playerID = uuid.uuid4().hex
             self.player1.websocket = websocket
             self.current_player = 2
             self.player_counter += 1
             return {'Status': 'Player 1 initialized'}
         else:
             self.player2.gameID = self.game_id
-            self.player2.playerID = 2
+            self.player2.playerID = uuid.uuid4().hex
             self.player2.websocket = websocket
             self.player_counter += 1
             self.current_player = 1
