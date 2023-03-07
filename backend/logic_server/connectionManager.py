@@ -3,7 +3,7 @@ from fastapi import WebSocket
 from pydantic import json
 import requests
 
-from backend.logic_server.game import Game
+from game import Game
 
 
 def load_game(gameID: int):  # load a game from database

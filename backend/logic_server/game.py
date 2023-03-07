@@ -1,5 +1,5 @@
-from backend.logic_server.player import Player
-from backend.logic_server.ships import *
+from player import Player
+from ships import *
 
 
 class Game:
