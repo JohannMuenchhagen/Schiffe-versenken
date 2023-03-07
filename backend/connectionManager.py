@@ -43,7 +43,7 @@ class ConnectionManager:
     def remove_websocket(self, websocket: WebSocket):
         self.active_player -= 1  # remove 1 player
         self.map_websocket_game.pop(websocket)  # remove the websocket
-        self.active_connections.remove(websocket)  # remove a active connection
+        self.active_connections.remove(websocket)  # remove an active connection
 
     async def send_personal_message(self, message: str, websocket: WebSocket):
         await websocket.send_json(message)
@@ -84,6 +84,8 @@ class ConnectionManager:
 
     def join(self, data: dict, websocket: WebSocket):
         game_id = data['GameID']  # read the game id from json
+        if game_id in self.saved_games:
+            return self.initialize_previous_game(data, websocket)
         game = self.current_games[game_id]  # load the game out of the dict
         self.map_websocket_game[websocket] = game  # map the game with the websocket key = websocket, value game
         msg = game.set_player(websocket)  # save the websocket of player 2 into the game object
@@ -141,7 +143,6 @@ class ConnectionManager:
         else:
             return res, game.player1.websocket, game.player2.websocket
 
-    # @TODO fix bug
     def save_game(self, gameID: int):
         url = "http://localhost:8080/game/save"
         game = self.current_games[gameID]
@@ -150,6 +151,13 @@ class ConnectionManager:
         message = {'spielId': gameID, 'json': {'player1': player1, 'player2': player2}}
         requests.post(url, json=message)  # Post data to database
 
-    # @TODO Fill
-    def initialize_previous_game(self, data):
-        pass
+    def initialize_previous_game(self, data: dict, websocket: WebSocket):
+        game_id = data['gameID']
+        game = Game(game_id)
+        game.set_player(websocket)
+        self.saved_games.remove(game_id)
+        game.player1_moves = data['player1']['Moves']
+        game.player2_moves = data['player2']['Moves']
+        self.set(data={'GameID': game_id, 'PlayerID': 1, 'Ships': data['player1']['Ships']})
+        self.set(data={'GameID': game_id, 'PlayerID': 2, 'Ships': data['player2']['Ships']})
+        return {'Message': 'Game successfully loaded', 'PlayerID': game.player1.playerID}
