@@ -1,9 +1,16 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from .connectionManager import ConnectionManager
+import requests
 
 app = FastAPI()
 
 manager = ConnectionManager()
+
+
+@app.on_event("startup")
+async def startup_event():
+    url = "http://localhost:8080/"
+    res = requests.get(url=url, params={}).json()
 
 
 @app.get("/")
