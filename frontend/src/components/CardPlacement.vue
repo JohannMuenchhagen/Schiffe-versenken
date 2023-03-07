@@ -13,7 +13,6 @@
             {{ remaining5LengthShip }}x 5er-Schiff - das
             Schlachtschiff</v-list-item-title
           >
-        </v-list-item>
           <v-switch 
             v-model="direction5LengthShip"
             hide-details
@@ -23,7 +22,8 @@
             @change="onChangeDirShip"
             inset>
         </v-switch>
-        
+        </v-list-item>
+          
         <v-list-item active-color="primary">
           <template v-slot:prepend>
             <v-icon icon="mdi-ferry" @click="selectShip($event, 4)"></v-icon>
@@ -51,8 +51,7 @@
             >{{ remaining3LengthShip }}x 3er-Schiffe - die
             Zerstörer</v-list-item-title
           >
-        </v-list-item>
-        <v-switch 
+          <v-switch 
             v-model="direction3LengthShip"
             hide-details
             true-value="horizontal"
@@ -60,6 +59,8 @@
             :label="`Richtung: ${direction3LengthShip}`"
             inset>
         </v-switch>
+        </v-list-item>
+        
         <v-list-item active-color="primary">
           <template v-slot:prepend>
             <v-icon icon="mdi-ferry" @click="selectShip($event, 2)"></v-icon>
@@ -69,8 +70,7 @@
             >{{ remaining2LengthShip }}x 2er-Schiffe - die
             U-Boote</v-list-item-title
           >
-        </v-list-item>
-        <v-switch 
+          <v-switch 
             v-model="direction2LengthShip"
             hide-details
             true-value="horizontal"
@@ -78,6 +78,8 @@
             :label="`Richtung: ${direction2LengthShip}`"
             inset>
         </v-switch>
+        </v-list-item>
+        
       </v-list>
       <div class="hintTitle">Hinweis:</div>
       <div>
