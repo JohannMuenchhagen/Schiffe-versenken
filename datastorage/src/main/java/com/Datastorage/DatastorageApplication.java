@@ -8,6 +8,7 @@ public class DatastorageApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(DatastorageApplication.class, args);
+		 
 	}
 
 }

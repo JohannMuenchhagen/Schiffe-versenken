@@ -1,5 +1,7 @@
 package com.Datastorage.web;
 
+import java.util.ArrayList;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,20 +13,20 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Document
-public class Game {
+public class StoredGameIds {
 
 	@Id
 	private String id;
 	
 	@Indexed
-    @Field
-    private String gameId;
-
 	@Field
-	private String json;
+	private int documentId;
 	
-	public Game(String spielId, String json) {
-		this.gameId=spielId;
-		this.json=json;
+	@Field
+	private ArrayList<String> gameIds;
+	
+	public StoredGameIds(int documentId, ArrayList<String> gameIds) {
+		this.documentId=documentId;
+		this.gameIds=gameIds;
 	}
 }
