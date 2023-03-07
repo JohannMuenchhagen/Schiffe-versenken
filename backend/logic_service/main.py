@@ -1,6 +1,6 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from .connectionManager import ConnectionManager
 import requests
+from connectionManager import ConnectionManager
 
 app = FastAPI()
 
@@ -9,8 +9,11 @@ manager = ConnectionManager()
 
 @app.on_event("startup")
 async def startup_event():
-    url = "http://localhost:8080/"
+    url = "http://localhost:8080/game/getgamenumbers"
     res = requests.get(url=url, params={}).json()
+    for item in res:
+        manager.saved_games.append(int(item))
+    print('Server started')
 
 
 @app.get("/")
@@ -29,7 +32,5 @@ async def websocket_endpoint(websocket: WebSocket):
     except WebSocketDisconnect:
         opposite = manager.disconnect(websocket)
         if opposite is not None:
-            await manager.send_personal_message({'Message': 'Player left'}, opposite)
+            await manager.send_personal_message('Player left', opposite)
             manager.remove_websocket(opposite)
-
-

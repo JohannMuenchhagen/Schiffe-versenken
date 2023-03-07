@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
-from backend.main import app
+
+from backend.logic_service.main import app
 
 
 class TestMain:
