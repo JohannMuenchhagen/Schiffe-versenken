@@ -1,7 +1,8 @@
 from typing import List
+
+import requests
 from fastapi import WebSocket
 from pydantic import json
-import requests
 
 from game import Game
 

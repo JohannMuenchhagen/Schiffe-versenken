@@ -1,6 +1,6 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+
 from connectionManager import ConnectionManager
-import requests
 
 app = FastAPI()
 
