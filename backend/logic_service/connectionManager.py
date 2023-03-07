@@ -148,6 +148,7 @@ class ConnectionManager:
     def save_game(self, gameID: int):
         url = "http://localhost:8080/game/save"
         game = self.current_games[gameID]
+        self.saved_games.append(gameID)
         player1 = {'Moves': game.player1_moves, 'Ships': game.player1_ships}
         player2 = {'Moves': game.player2_moves, 'Ships': game.player2_ships}
         message = {'spielId': gameID, 'json': {'player1': player1, 'player2': player2}}
