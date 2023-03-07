@@ -40,30 +40,30 @@ class Game:
     def check_placed_ship(self, player_id: int, ship_type: str) -> bool:  # check if the number of ships is correct
         match ship_type:
             case 'Battleship':
-                if player_id == 1 and self.player1_ships_set[ship_type] == 1:
+                if player_id == self.player1.playerID and self.player1_ships_set[ship_type] == 1:
                     return False
-                elif player_id == 2 and self.player2_ships_set[ship_type] == 1:
+                elif player_id == self.player2.playerID and self.player2_ships_set[ship_type] == 1:
                     return False
                 else:
                     return True
             case 'Corvettes':
-                if player_id == 1 and self.player1_ships_set[ship_type] == 2:
+                if player_id == self.player1.playerID and self.player1_ships_set[ship_type] == 2:
                     return False
-                elif player_id == 2 and self.player2_ships_set[ship_type] == 2:
+                elif player_id == self.player2.playerID and self.player2_ships_set[ship_type] == 2:
                     return False
                 else:
                     return True
             case 'Destroyer':
-                if player_id == 1 and self.player1_ships_set[ship_type] == 3:
+                if player_id == self.player1.playerID and self.player1_ships_set[ship_type] == 3:
                     return False
-                elif player_id == 2 and self.player2_ships_set[ship_type] == 3:
+                elif player_id == self.player2.playerID and self.player2_ships_set[ship_type] == 3:
                     return False
                 else:
                     return True
             case 'Submarine':
-                if player_id == 1 and self.player1_ships_set[ship_type] == 4:
+                if player_id == self.player1.playerID and self.player1_ships_set[ship_type] == 4:
                     return False
-                elif player_id == 2 and self.player2_ships_set[ship_type] == 4:
+                elif player_id == self.player2.playerID and self.player2_ships_set[ship_type] == 4:
                     return False
                 else:
                     return True
