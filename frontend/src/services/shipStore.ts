@@ -14,7 +14,7 @@ export const useShipStore = defineStore("ship", () => {
   const sunkenShips = reactive([] as IShip[]);
   const selectedShipLength = ref<number>();
   const placedShips = reactive([] as IShip[]);
-  const selectedShipDirectionHorizontal = ref<boolean>(true);
+  let selectedShipDirectionHorizontal = true;
 
   // getters
   const getShips = computed(() => ships);
@@ -69,7 +69,8 @@ export const useShipStore = defineStore("ship", () => {
   }
 
   function changeDirection(): void {
-    !selectedShipDirectionHorizontal;
+    selectedShipDirectionHorizontal = !selectedShipDirectionHorizontal;
+    console.log(selectedShipDirectionHorizontal);
   }
 
   function getShipLength(ship: IShip): number {
@@ -102,7 +103,7 @@ export const useShipStore = defineStore("ship", () => {
     }
   }
 
-  function updateSelectedShip(length: number, diectionHorizontal: boolean): void {
+  function updateSelectedShip(length: number): void {
     selectedShipLength.value = length;
     
   }
