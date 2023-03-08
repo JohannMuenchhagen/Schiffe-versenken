@@ -32,8 +32,6 @@ let remaining4LengthShip = 2;
 let remaining3LengthShip = 3;
 let remaining2LengthShip = 4;
 
-let direchtionsForShips = [true, true, true, true];
-
 watch(shipStore.getSelectedShipLength, () => {
   selectedShipLength = shipStore.getSelectedShipLength.value;
 });
@@ -106,19 +104,28 @@ function addClassesToTilesVertikal(x: number, y: number) {
 
 function isTakenByAnotherShip(x: number, y: number): boolean {
   for (let i = x - 1; i < selectedShipLength! + x - 1; i++) {
-    if (
-      document
-        .getElementById("myBoard")
-        ?.getElementsByClassName("v-row")
-        [y - 1]?.getElementsByClassName("v-col")
-        [i]?.firstElementChild?.firstElementChild?.classList.contains(
-          "mdi-ferry"
-        ) === true
-    ) {
-      snackbarStore.callSnackbar("Dort befindet sich bereits ein Schiff!");
-      return true;
+    for (let j = y - 1; j < selectedShipLength! + y - 1; j++){
+      if ((document
+            .getElementById("myBoard")
+            ?.getElementsByClassName("v-row")
+            [y - 1]?.getElementsByClassName("v-col")
+            [i]?.firstElementChild?.firstElementChild?.classList.contains(
+              "mdi-ferry"
+            ) === true) 
+            || (document
+                .getElementById("myBoard")
+                ?.getElementsByClassName("v-row")
+                [j]?.getElementsByClassName("v-col")
+                [x-1]?.firstElementChild?.firstElementChild?.classList.contains(
+                  "mdi-ferry"
+                ) === true)
+                )
+                {
+                  snackbarStore.callSnackbar("Dort befindet sich bereits ein Schiff!");
+                  return true;
+                }
+      }
     }
-  }
   return false;
 }
 
