@@ -52,7 +52,6 @@ function placeShip(event: any, x: number, y: number) {
     return;
   }
   selectedShipDirectionHorizontal = shipStore.getDirechtionsForShips[selectedShipLength - 2];
-  console.log("ship ", selectedShipDirectionHorizontal);
   if(selectedShipDirectionHorizontal) {
     endPosition = { x: x + selectedShipLength! - 1, y: y };
     addClassesToTiles(x, y);
@@ -86,9 +85,6 @@ function addClassesToTiles(x: number, y: number) {
       [y - 1]?.getElementsByClassName("v-col")
       [i]?.firstElementChild?.classList.remove("tileWrapper");
   }
-  //console.log("dir ", direchtionsForShips[1]);
-  //direchtionsForShips[1] = true;
-  //console.log("dir changed ", direchtionsForShips[1]);
 }
 
 function addClassesToTilesVertikal(x: number, y: number) {

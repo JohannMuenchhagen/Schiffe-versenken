@@ -68,8 +68,6 @@ export const useShipStore = defineStore("ship", () => {
 
   function changeDirection(length: number): void {
     direchtionsForShips[length - 2] = !direchtionsForShips[length - 2];
-    //selectedShipDirectionHorizontal = !selectedShipDirectionHorizontal;
-    console.log(direchtionsForShips[length - 2]);
   }
 
   function getShipLength(ship: IShip): number {
