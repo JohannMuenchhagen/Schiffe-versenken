@@ -21,7 +21,7 @@ export const useShipStore = defineStore("ship", () => {
   const getSunkenShips = computed(() => sunkenShips);
   const getSelectedShipLength = computed(() => selectedShipLength);
   const getPlacedShips = computed(() => placedShips);
-  const getSelectedShipDirectionHorizontal = computed(() => selectedShipDirectionHorizontal);
+  let getSelectedShipDirectionHorizontal = computed(() => selectedShipDirectionHorizontal);
 
   // actions
   function loadDummyData() {
@@ -70,7 +70,7 @@ export const useShipStore = defineStore("ship", () => {
 
   function changeDirection(): void {
     selectedShipDirectionHorizontal = !selectedShipDirectionHorizontal;
-    console.log(selectedShipDirectionHorizontal);
+    //console.log(selectedShipDirectionHorizontal);  //works with let
   }
 
   function getShipLength(ship: IShip): number {

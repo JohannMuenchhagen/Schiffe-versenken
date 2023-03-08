@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import { useShipStore } from "@/services/shipStore";
 import { useSnackbarStore } from "@/services/snackbarStore";
-import { toRaw, watch } from "vue";
+import { computed, toRaw, watch } from "vue";
 
 const shipStore = useShipStore();
 const snackbarStore = useSnackbarStore();
@@ -36,9 +36,7 @@ watch(shipStore.getSelectedShipLength, () => {
   selectedShipLength = shipStore.getSelectedShipLength.value;
 });
 
-watch(shipStore.getSelectedShipDirectionHorizontal, () => {
-  selectedShipDirection = shipStore.getSelectedShipDirectionHorizontal.value;
-});
+
 
 function placeShip(event: any, x: number, y: number) {
   if (selectedShipLength === undefined) {
@@ -52,6 +50,8 @@ function placeShip(event: any, x: number, y: number) {
   if (isTakenByAnotherShip(x, y)) {
     return;
   }
+  selectedShipDirection = shipStore.getSelectedShipDirectionHorizontal;
+  console.log(selectedShipDirection);
   endPosition = { x: x + selectedShipLength! - 1, y: y };
   shipStore.addPlacedShip({
     startPos: { x: x, y: y },
@@ -61,6 +61,7 @@ function placeShip(event: any, x: number, y: number) {
   });
   addClassesToTiles(x, y);
   console.log(toRaw(shipStore.getPlacedShips));
+  
 }
 
 function addClassesToTiles(x: number, y: number) {
