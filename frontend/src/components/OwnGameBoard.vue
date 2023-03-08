@@ -24,7 +24,7 @@ const shipStore = useShipStore();
 const snackbarStore = useSnackbarStore();
 
 let selectedShipLength: undefined | number = undefined;
-let selectedShipDirection: undefined | boolean = undefined;
+let selectedShipDirectionHorizontal: undefined | boolean = undefined;
 let endPosition: undefined | { x: number; y: number } = undefined;
 
 let remaining5LengthShip = 1;
@@ -50,18 +50,22 @@ function placeShip(event: any, x: number, y: number) {
   if (isTakenByAnotherShip(x, y)) {
     return;
   }
-  selectedShipDirection = shipStore.getSelectedShipDirectionHorizontal;
-  console.log(selectedShipDirection);
-  endPosition = { x: x + selectedShipLength! - 1, y: y };
+  selectedShipDirectionHorizontal = shipStore.getSelectedShipDirectionHorizontal;
+  if(selectedShipDirectionHorizontal) {
+    endPosition = { x: x + selectedShipLength! - 1, y: y };
+    addClassesToTiles(x, y);
+  }
+  else {
+    endPosition = { x: x, y: y + selectedShipLength! - 1 };
+    addClassesToTilesVertikal(x, y);
+  } 
   shipStore.addPlacedShip({
     startPos: { x: x, y: y },
     endPos: endPosition,
     length: selectedShipLength!,
-    isHorizontal: selectedShipDirection!, 
   });
-  addClassesToTiles(x, y);
-  console.log(toRaw(shipStore.getPlacedShips));
   
+  console.log(toRaw(shipStore.getPlacedShips));
 }
 
 function addClassesToTiles(x: number, y: number) {
@@ -71,6 +75,23 @@ function addClassesToTiles(x: number, y: number) {
       ?.getElementsByClassName("v-row")
       [y - 1]?.getElementsByClassName("v-col")
       [i]?.firstElementChild?.firstElementChild?.classList.add(
+        "mdi-ferry",
+        "mdi"
+      );
+    document
+      .getElementById("myBoard")
+      ?.getElementsByClassName("v-row")
+      [y - 1]?.getElementsByClassName("v-col")
+      [i]?.firstElementChild?.classList.remove("tileWrapper");
+  }
+}
+
+function addClassesToTilesVertikal(x: number, y: number) {
+  for (let i = y - 1; i < selectedShipLength! + y - 1; i++) {
+    document.getElementById("myBoard")?.getElementsByClassName("v-row")[i]?.getElementsByClassName("v-col")[x-1]
+        ?.firstElementChild
+        ?.firstElementChild
+        ?.classList.add(
         "mdi-ferry",
         "mdi"
       );
