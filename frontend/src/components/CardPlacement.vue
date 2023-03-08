@@ -18,7 +18,7 @@
             true-value="horizontal"
             false-value="senkrecht"
             :label="`Richtung: ${direction5LengthShip}`"
-            @change="onChangeDirShip"
+            @change="onChangeDirShip (5)"
             inset>
         </v-switch>
         </v-list-item>
@@ -38,6 +38,7 @@
             true-value="horizontal"
             false-value="senkrecht"
             :label="`Richtung: ${direction4LengthShip}`"
+            @change="onChangeDirShip (4)"
             inset>
         </v-switch>
         </v-list-item>
@@ -56,6 +57,7 @@
             true-value="horizontal"
             false-value="senkrecht"
             :label="`Richtung: ${direction3LengthShip}`"
+            @change="onChangeDirShip (3)"
             inset>
         </v-switch>
         </v-list-item>
@@ -75,6 +77,7 @@
             true-value="horizontal"
             false-value="senkrecht"
             :label="`Richtung: ${direction2LengthShip}`"
+            @change="onChangeDirShip (2)"
             inset>
         </v-switch>
         </v-list-item>
@@ -107,8 +110,9 @@ let direction4LengthShip = ref<string>("horizontal");
 let direction3LengthShip = ref<string>("horizontal");
 let direction2LengthShip = ref<string>("horizontal");
 
-const onChangeDirShip = () => {
-  shipStore.changeDirection();
+const onChangeDirShip = (length: number) => {
+
+  shipStore.changeDirection(length);
 };
 
 calcRemainingShipsToPlace();

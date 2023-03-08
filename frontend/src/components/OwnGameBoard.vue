@@ -32,10 +32,11 @@ let remaining4LengthShip = 2;
 let remaining3LengthShip = 3;
 let remaining2LengthShip = 4;
 
+let direchtionsForShips = [true, true, true, true];
+
 watch(shipStore.getSelectedShipLength, () => {
   selectedShipLength = shipStore.getSelectedShipLength.value;
 });
-
 
 
 function placeShip(event: any, x: number, y: number) {
@@ -50,7 +51,8 @@ function placeShip(event: any, x: number, y: number) {
   if (isTakenByAnotherShip(x, y)) {
     return;
   }
-  selectedShipDirectionHorizontal = shipStore.getSelectedShipDirectionHorizontal;
+  selectedShipDirectionHorizontal = shipStore.getDirechtionsForShips[selectedShipLength - 2];
+  console.log("ship ", selectedShipDirectionHorizontal);
   if(selectedShipDirectionHorizontal) {
     endPosition = { x: x + selectedShipLength! - 1, y: y };
     addClassesToTiles(x, y);
@@ -84,6 +86,9 @@ function addClassesToTiles(x: number, y: number) {
       [y - 1]?.getElementsByClassName("v-col")
       [i]?.firstElementChild?.classList.remove("tileWrapper");
   }
+  //console.log("dir ", direchtionsForShips[1]);
+  //direchtionsForShips[1] = true;
+  //console.log("dir changed ", direchtionsForShips[1]);
 }
 
 function addClassesToTilesVertikal(x: number, y: number) {

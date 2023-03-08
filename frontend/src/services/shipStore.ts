@@ -14,6 +14,7 @@ export const useShipStore = defineStore("ship", () => {
   const selectedShipLength = ref<number>();
   const placedShips = reactive([] as IShip[]);
   let selectedShipDirectionHorizontal = true;
+  let direchtionsForShips = [true, true, true, true];  // 0 - len 2; 1 - len 3; 2 - len 4; 3 - len 5 
 
   // getters
   const getShips = computed(() => ships);
@@ -21,6 +22,7 @@ export const useShipStore = defineStore("ship", () => {
   const getSelectedShipLength = computed(() => selectedShipLength);
   const getPlacedShips = computed(() => placedShips);
   let getSelectedShipDirectionHorizontal = computed(() => selectedShipDirectionHorizontal);
+  let getDirechtionsForShips = computed(() => direchtionsForShips);
 
   // actions
   function loadDummyData() {
@@ -64,9 +66,10 @@ export const useShipStore = defineStore("ship", () => {
     return false;
   }
 
-  function changeDirection(): void {
-    selectedShipDirectionHorizontal = !selectedShipDirectionHorizontal;
-    //console.log(selectedShipDirectionHorizontal);  //works with let
+  function changeDirection(length: number): void {
+    direchtionsForShips[length - 2] = !direchtionsForShips[length - 2];
+    //selectedShipDirectionHorizontal = !selectedShipDirectionHorizontal;
+    console.log(direchtionsForShips[length - 2]);
   }
 
   function getShipLength(ship: IShip): number {
@@ -125,5 +128,7 @@ export const useShipStore = defineStore("ship", () => {
     updateSelectedShip,
     addPlacedShip,
     changeDirection,
+    getDirechtionsForShips,
+    direchtionsForShips,
   };
 });
