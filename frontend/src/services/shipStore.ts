@@ -13,7 +13,6 @@ export const useShipStore = defineStore("ship", () => {
   const sunkenShips = reactive([] as IShip[]);
   const selectedShipLength = ref<number>();
   const placedShips = reactive([] as IShip[]);
-  let selectedShipDirectionHorizontal = true;
   let direchtionsForShips = [true, true, true, true];  // 0 - len 2; 1 - len 3; 2 - len 4; 3 - len 5 
 
   // getters
@@ -21,7 +20,6 @@ export const useShipStore = defineStore("ship", () => {
   const getSunkenShips = computed(() => sunkenShips);
   const getSelectedShipLength = computed(() => selectedShipLength);
   const getPlacedShips = computed(() => placedShips);
-  let getSelectedShipDirectionHorizontal = computed(() => selectedShipDirectionHorizontal);
   let getDirechtionsForShips = computed(() => direchtionsForShips);
 
   // actions
@@ -114,8 +112,6 @@ export const useShipStore = defineStore("ship", () => {
     sunkenShips,
     selectedShipLength,
     placedShips,
-    selectedShipDirectionHorizontal,
-    getSelectedShipDirectionHorizontal,
     getShips,
     getSunkenShips,
     getSelectedShipLength,
