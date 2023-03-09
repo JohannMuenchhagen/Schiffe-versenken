@@ -13,20 +13,22 @@ export const useShipStore = defineStore("ship", () => {
   const sunkenShips = reactive([] as IShip[]);
   const selectedShipLength = ref<number>();
   const placedShips = reactive([] as IShip[]);
+  let direchtionsForShips = [true, true, true, true];  // 0 - len 2; 1 - len 3; 2 - len 4; 3 - len 5 
 
   // getters
   const getShips = computed(() => ships);
   const getSunkenShips = computed(() => sunkenShips);
   const getSelectedShipLength = computed(() => selectedShipLength);
   const getPlacedShips = computed(() => placedShips);
+  let getDirechtionsForShips = computed(() => direchtionsForShips);
 
   // actions
   function loadDummyData() {
-    ships.push({ startPos: { x: 1, y: 1 }, endPos: { x: 1, y: 5 }, length: 5 }); // 5 length
-    ships.push({ startPos: { x: 3, y: 1 }, endPos: { x: 6, y: 1 }, length: 4 }); // 4 length
-    ships.push({ startPos: { x: 3, y: 4 }, endPos: { x: 6, y: 4 }, length: 4 }); // 4 length
-    ships.push({ startPos: { x: 4, y: 7 }, endPos: { x: 6, y: 7 }, length: 3 }); // 3 length
-    ships.push({ startPos: { x: 9, y: 6 }, endPos: { x: 9, y: 8 }, length: 3 }); // 3 length
+    ships.push({ startPos: { x: 1, y: 1 }, endPos: { x: 1, y: 5 }, length: 5}); // 5 length
+    ships.push({ startPos: { x: 3, y: 1 }, endPos: { x: 6, y: 1 }, length: 4}); // 4 length
+    ships.push({ startPos: { x: 3, y: 4 }, endPos: { x: 6, y: 4 }, length: 4}); // 4 length
+    ships.push({ startPos: { x: 4, y: 7 }, endPos: { x: 6, y: 7 }, length: 3}); // 3 length
+    ships.push({ startPos: { x: 9, y: 6 }, endPos: { x: 9, y: 8 }, length: 3}); // 3 length
     ships.push({
       startPos: { x: 8, y: 10 },
       endPos: { x: 10, y: 10 },
@@ -62,6 +64,10 @@ export const useShipStore = defineStore("ship", () => {
     return false;
   }
 
+  function changeDirection(length: number): void {
+    direchtionsForShips[length - 2] = !direchtionsForShips[length - 2];
+  }
+
   function getShipLength(ship: IShip): number {
     if (ship.endPos.x - ship.startPos.x === 0) {
       return ship.endPos.y - ship.startPos.y + 1;
@@ -94,6 +100,7 @@ export const useShipStore = defineStore("ship", () => {
 
   function updateSelectedShip(length: number): void {
     selectedShipLength.value = length;
+    
   }
 
   function addPlacedShip(ship: IShip) {
@@ -114,5 +121,8 @@ export const useShipStore = defineStore("ship", () => {
     isShipHit,
     updateSelectedShip,
     addPlacedShip,
+    changeDirection,
+    getDirechtionsForShips,
+    direchtionsForShips,
   };
 });

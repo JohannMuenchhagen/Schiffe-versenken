@@ -18,12 +18,13 @@
 <script setup lang="ts">
 import { useShipStore } from "@/services/shipStore";
 import { useSnackbarStore } from "@/services/snackbarStore";
-import { toRaw, watch } from "vue";
+import { computed, toRaw, watch } from "vue";
 
 const shipStore = useShipStore();
 const snackbarStore = useSnackbarStore();
 
 let selectedShipLength: undefined | number = undefined;
+let selectedShipDirectionHorizontal: undefined | boolean = undefined;
 let endPosition: undefined | { x: number; y: number } = undefined;
 
 let remaining5LengthShip = 1;
@@ -35,6 +36,7 @@ watch(shipStore.getSelectedShipLength, () => {
   selectedShipLength = shipStore.getSelectedShipLength.value;
 });
 
+
 function placeShip(event: any, x: number, y: number) {
   if (selectedShipLength === undefined) {
     snackbarStore.callSnackbar("Es wurde noch kein Schiff ausgewählt!");
@@ -44,29 +46,77 @@ function placeShip(event: any, x: number, y: number) {
     snackbarStore.callSnackbar("Dieses Schiff wurde bereits platziert!");
     return;
   }
+
   if (isTakenByAnotherShip(x, y)) {
     return;
   }
+/*
   if (isCrossedBorder(x, y)) {
     return;
   }
   endPosition = { x: x + selectedShipLength! - 1, y: y };
+*/
+  let xEnd = x;
+  let yEnd = y;
+
+  selectedShipDirectionHorizontal = shipStore.getDirechtionsForShips[selectedShipLength - 2];
+  
+  if(selectedShipDirectionHorizontal) {
+    xEnd = x + selectedShipLength! - 1;
+    if (isTangentToAnotherShip(x, y, xEnd, yEnd)) {
+      return;
+    }
+  } else {
+    yEnd = y + selectedShipLength! - 1;
+    if (isTangentToAnotherShip(x, y, xEnd, yEnd)) {
+      return;
+    }
+  }
+  
+  if(selectedShipDirectionHorizontal) {
+    endPosition = { x: x + selectedShipLength! - 1, y: y};
+    addClassesToTilesHorizontal(x, y);
+  } else {
+          endPosition = { x: x, y: y + selectedShipLength! - 1 };
+          addClassesToTilesVertikal(x, y);
+        } 
+        
   shipStore.addPlacedShip({
     startPos: { x: x, y: y },
     endPos: endPosition,
     length: selectedShipLength!,
   });
-  addClassesToTiles(x, y);
+  
   console.log(toRaw(shipStore.getPlacedShips));
 }
 
-function addClassesToTiles(x: number, y: number) {
+function addClassesToTilesHorizontal(x: number, y: number) {
   for (let i = x - 1; i < selectedShipLength! + x - 1; i++) {
     document
       .getElementById("myBoard")
       ?.getElementsByClassName("v-row")
       [y - 1]?.getElementsByClassName("v-col")
       [i]?.firstElementChild?.firstElementChild?.classList.add(
+        "mdi-ferry",
+        "mdi"
+      );
+    document
+      .getElementById("myBoard")
+      ?.getElementsByClassName("v-row")
+      [y - 1]?.getElementsByClassName("v-col")
+      [i]?.firstElementChild?.classList.remove("tileWrapper");
+  }
+}
+
+function addClassesToTilesVertikal(x: number, y: number) {
+  for (let i = y - 1; i < selectedShipLength! + y - 1; i++) {
+    document
+        .getElementById("myBoard")
+        ?.getElementsByClassName("v-row")
+        [i]?.getElementsByClassName("v-col")
+        [x-1]?.firstElementChild
+        ?.firstElementChild
+        ?.classList.add(
         "mdi-ferry",
         "mdi"
       );
@@ -90,21 +140,51 @@ function isCrossedBorder(x: number, y: number): boolean{
   return false;
 }
 
-function isTakenByAnotherShip(x: number, y: number): boolean {
-  for (let i = x - 1; i < selectedShipLength! + x - 1; i++) {
-    if (
-      document
-        .getElementById("myBoard")
-        ?.getElementsByClassName("v-row")
-        [y - 1]?.getElementsByClassName("v-col")
-        [i]?.firstElementChild?.firstElementChild?.classList.contains(
-          "mdi-ferry"
-        ) === true
-    ) {
-      snackbarStore.callSnackbar("Dort befindet sich bereits ein Schiff!");
-      return true;
+function isTangentToAnotherShip(xStart: number, yStart: number, xEnd: number, yEnd: number): boolean {
+
+for (let i = xStart - 2; i <= xEnd; i++) {
+  for (let j = yStart - 2; j <= yEnd; j++){    
+          if (i < 0 || j < 0) { continue; } 
+          if (document
+          .getElementById("myBoard")
+          ?.getElementsByClassName("v-row")
+          [j]?.getElementsByClassName("v-col")
+          [i]?.firstElementChild?.firstElementChild?.classList.contains(
+            "mdi-ferry"
+          ) === true) 
+          {
+            snackbarStore.callSnackbar("not tangent!");
+            return true;
+          }
     }
   }
+return false;
+}
+
+function isTakenByAnotherShip(x: number, y: number): boolean {
+  for (let i = x - 1; i < selectedShipLength! + x - 1; i++) {
+    for (let j = y - 1; j < selectedShipLength! + y - 1; j++){
+      if ((document
+            .getElementById("myBoard")
+            ?.getElementsByClassName("v-row")
+            [y - 1]?.getElementsByClassName("v-col")
+            [i]?.firstElementChild?.firstElementChild?.classList.contains(
+              "mdi-ferry"
+            ) === true) 
+            || (document
+                .getElementById("myBoard")
+                ?.getElementsByClassName("v-row")
+                [j]?.getElementsByClassName("v-col")
+                [x-1]?.firstElementChild?.firstElementChild?.classList.contains(
+                  "mdi-ferry"
+                ) === true)
+                )
+                {
+                  snackbarStore.callSnackbar("Dort befindet sich bereits ein Schiff!");
+                  return true;
+                }
+      }
+    }
   return false;
 }
 

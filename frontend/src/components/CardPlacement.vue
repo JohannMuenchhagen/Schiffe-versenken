@@ -6,44 +6,82 @@
 
         <v-list-item active-color="primary">
           <template v-slot:prepend>
-            <v-icon icon="mdi-ferry" @click="selectShip($event, 5)"></v-icon>
+            <v-icon icon="mdi-ferry" size="30" @click="selectShip($event, 5)"></v-icon>
           </template>
 
           <v-list-item-title>
-            {{ remaining5LengthShip }}x 5er-Schiff - das
-            Schlachtschiff</v-list-item-title
-          >
+            {{ remaining5LengthShip }}x 5er-Schiff - das Schlachtschiff
+          </v-list-item-title>
+          <v-switch 
+            v-model="direction5LengthShip"
+            hide-details
+            true-value="horizontal"
+            false-value="senkrecht"
+            :label="`Richtung: ${direction5LengthShip}`"
+            @change="onChangeDirShip (5)"
+            inset>
+        </v-switch>
         </v-list-item>
+          
         <v-list-item active-color="primary">
           <template v-slot:prepend>
-            <v-icon icon="mdi-ferry" @click="selectShip($event, 4)"></v-icon>
+            <v-icon icon="mdi-ferry" size="30" @click="selectShip($event, 4)"></v-icon>
           </template>
 
           <v-list-item-title
-            >{{ remaining4LengthShip }}x 4er-Schiffe - die
-            Kreuzer</v-list-item-title
+            >{{ remaining4LengthShip }}x 4er-Schiffe - die Kreuzer
+          </v-list-item-title
           >
+          <v-switch 
+            v-model="direction4LengthShip"
+            hide-details
+            true-value="horizontal"
+            false-value="senkrecht"
+            :label="`Richtung: ${direction4LengthShip}`"
+            @change="onChangeDirShip (4)"
+            inset>
+        </v-switch>
         </v-list-item>
         <v-list-item active-color="primary">
           <template v-slot:prepend>
-            <v-icon icon="mdi-ferry" @click="selectShip($event, 3)"></v-icon>
+            <v-icon icon="mdi-ferry" size="30" @click="selectShip($event, 3)"></v-icon>
           </template>
 
           <v-list-item-title
             >{{ remaining3LengthShip }}x 3er-Schiffe - die
             Zerstörer</v-list-item-title
           >
+          <v-switch 
+            v-model="direction3LengthShip"
+            hide-details
+            true-value="horizontal"
+            false-value="senkrecht"
+            :label="`Richtung: ${direction3LengthShip}`"
+            @change="onChangeDirShip (3)"
+            inset>
+        </v-switch>
         </v-list-item>
+        
         <v-list-item active-color="primary">
           <template v-slot:prepend>
-            <v-icon icon="mdi-ferry" @click="selectShip($event, 2)"></v-icon>
+            <v-icon icon="mdi-ferry" size="30" @click="selectShip($event, 2)"></v-icon>
           </template>
 
           <v-list-item-title
             >{{ remaining2LengthShip }}x 2er-Schiffe - die
             U-Boote</v-list-item-title
           >
+          <v-switch 
+            v-model="direction2LengthShip"
+            hide-details
+            true-value="horizontal"
+            false-value="senkrecht"
+            :label="`Richtung: ${direction2LengthShip}`"
+            @change="onChangeDirShip (2)"
+            inset>
+        </v-switch>
         </v-list-item>
+        
       </v-list>
       <div class="hintTitle">Hinweis:</div>
       <div>
@@ -66,6 +104,16 @@ const remaining3LengthShip = ref<number>(0);
 const remaining2LengthShip = ref<number>(0);
 
 const shipStore = useShipStore();
+
+let direction5LengthShip = ref<string>("horizontal");
+let direction4LengthShip = ref<string>("horizontal");
+let direction3LengthShip = ref<string>("horizontal");
+let direction2LengthShip = ref<string>("horizontal");
+
+const onChangeDirShip = (length: number) => {
+
+  shipStore.changeDirection(length);
+};
 
 calcRemainingShipsToPlace();
 
