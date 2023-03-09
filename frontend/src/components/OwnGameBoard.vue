@@ -50,16 +50,16 @@ function placeShip(event: any, x: number, y: number) {
   if (isTakenByAnotherShip(x, y)) {
     return;
   }
-/*
-  if (isCrossedBorder(x, y)) {
+
+  selectedShipDirectionHorizontal = shipStore.getDirechtionsForShips[selectedShipLength - 2];
+
+  if (isCrossedBorder(x, y, selectedShipDirectionHorizontal)) {
     return;
   }
-  endPosition = { x: x + selectedShipLength! - 1, y: y };
-*/
+
   let xEnd = x;
   let yEnd = y;
 
-  selectedShipDirectionHorizontal = shipStore.getDirechtionsForShips[selectedShipLength - 2];
   
   if(selectedShipDirectionHorizontal) {
     xEnd = x + selectedShipLength! - 1;
@@ -128,11 +128,10 @@ function addClassesToTilesVertikal(x: number, y: number) {
   }
 }
 
-function isCrossedBorder(x: number, y: number): boolean{
+function isCrossedBorder(x: number, y: number, directionHorizontal: boolean): boolean{
 
-  if ((10 - (x - 1) - selectedShipLength!) < 0
-      // y - Grenze hinzufügen
-        )
+  if (((10 - (x - 1) - selectedShipLength!) < 0 && directionHorizontal) 
+    || ((10 - (y - 1) - selectedShipLength!) < 0 && !directionHorizontal))
     {
       snackbarStore.callSnackbar("Das Schiff überschreitet eine Grenze!");
       return true;
@@ -153,7 +152,7 @@ for (let i = xStart - 2; i <= xEnd; i++) {
             "mdi-ferry"
           ) === true) 
           {
-            snackbarStore.callSnackbar("not tangent!");
+            snackbarStore.callSnackbar("Die Schiffe dürfen nicht über Eck gebaut sein oder Ausbuchtungen besitzen!");
             return true;
           }
     }
