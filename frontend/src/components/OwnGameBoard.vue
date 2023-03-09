@@ -49,15 +49,31 @@ function placeShip(event: any, x: number, y: number) {
   if (isTakenByAnotherShip(x, y)) {
     return;
   }
+
+  let xEnd = x;
+  let yEnd = y;
+
   selectedShipDirectionHorizontal = shipStore.getDirechtionsForShips[selectedShipLength - 2];
   if(selectedShipDirectionHorizontal) {
-    endPosition = { x: x + selectedShipLength! - 1, y: y };
-    addClassesToTiles(x, y);
+    xEnd = x + selectedShipLength! - 1;
+    if (isTangentToAnotherShip(x, y, xEnd, y)) {
+      return;
+    }
+  } else {
+    yEnd = y + selectedShipLength! - 1;
+    if (isTangentToAnotherShip(x, y, x, yEnd)) {
+      return;
+    }
   }
-  else {
-    endPosition = { x: x, y: y + selectedShipLength! - 1 };
-    addClassesToTilesVertikal(x, y);
-  } 
+  
+  if(selectedShipDirectionHorizontal) {
+    endPosition = { x: xEnd, y: yEnd};
+    addClassesToTilesHorizontal(x, y);
+  } else {
+          endPosition = { x: xEnd, y: yEnd };
+          addClassesToTilesVertikal(x, y);
+        } 
+  
   shipStore.addPlacedShip({
     startPos: { x: x, y: y },
     endPos: endPosition,
@@ -67,7 +83,7 @@ function placeShip(event: any, x: number, y: number) {
   console.log(toRaw(shipStore.getPlacedShips));
 }
 
-function addClassesToTiles(x: number, y: number) {
+function addClassesToTilesHorizontal(x: number, y: number) {
   for (let i = x - 1; i < selectedShipLength! + x - 1; i++) {
     document
       .getElementById("myBoard")
@@ -87,8 +103,11 @@ function addClassesToTiles(x: number, y: number) {
 
 function addClassesToTilesVertikal(x: number, y: number) {
   for (let i = y - 1; i < selectedShipLength! + y - 1; i++) {
-    document.getElementById("myBoard")?.getElementsByClassName("v-row")[i]?.getElementsByClassName("v-col")[x-1]
-        ?.firstElementChild
+    document
+        .getElementById("myBoard")
+        ?.getElementsByClassName("v-row")
+        [i]?.getElementsByClassName("v-col")
+        [x-1]?.firstElementChild
         ?.firstElementChild
         ?.classList.add(
         "mdi-ferry",
@@ -100,6 +119,34 @@ function addClassesToTilesVertikal(x: number, y: number) {
       [y - 1]?.getElementsByClassName("v-col")
       [i]?.firstElementChild?.classList.remove("tileWrapper");
   }
+}
+
+function isTangentToAnotherShip(xStart: number, yStart: number, xEnd: number, yEnd: number): boolean {
+
+  let lenX = xEnd - xStart + 1;
+  let lenY = yEnd - yStart + 1;
+  //console.log("len", lenX, lenY);
+  for (let i = xStart - 1; i <= lenX + 2; i++) {
+    for (let j = yStart - 1; j <= lenY + 2; j++){
+        for(let k = xStart; k <= xEnd; k++){
+          for(let m = yStart; m <= yEnd; m++){
+            if(i === k && j === m) { continue; }
+            if (document
+            .getElementById("myBoard")
+            ?.getElementsByClassName("v-row")
+            [j]?.getElementsByClassName("v-col")
+            [i]?.firstElementChild?.firstElementChild?.classList.contains(
+              "mdi-ferry"
+            ) === true) 
+              {
+                snackbarStore.callSnackbar("not tangent!");
+                return true;
+              }
+          }
+        }
+      }
+    }
+  return false;
 }
 
 function isTakenByAnotherShip(x: number, y: number): boolean {
