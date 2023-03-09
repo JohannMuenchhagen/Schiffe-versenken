@@ -1,7 +1,7 @@
 <template>
   <v-container fluid fill-height id="myBoard">
-    <v-row class="Row" dense v-for="y in 10" :key="y">
-      <v-col class="Col" v-for="x in 10" :key="x">
+    <v-row dense v-for="y in 10" :key="y">
+      <v-col v-for="x in 10" :key="x">
         <v-sheet
           color="grey-lighten-2"
           class="tileWrapper"
@@ -57,12 +57,12 @@ function placeShip(event: any, x: number, y: number) {
   
   if(selectedShipDirectionHorizontal) {
     xEnd = x + selectedShipLength! - 1;
-    if (isTangentToAnotherShip(x-1, y-1, xEnd-1, y-1)) {
+    if (isTangentToAnotherShip(x, y, xEnd, y)) {
       return;
     }
   } else {
     yEnd = y + selectedShipLength! - 1;
-    if (isTangentToAnotherShip(x-1, y-1, x-1, yEnd-1)) {
+    if (isTangentToAnotherShip(x, y, x, yEnd)) {
       return;
     }
   }
@@ -74,7 +74,7 @@ function placeShip(event: any, x: number, y: number) {
           endPosition = { x: x, y: y + selectedShipLength! - 1 };
           addClassesToTilesVertikal(x, y);
         } 
-  //console.log(x, y, endPosition.x,  endPosition.y);
+        
   shipStore.addPlacedShip({
     startPos: { x: x, y: y },
     endPos: endPosition,
@@ -124,8 +124,8 @@ function addClassesToTilesVertikal(x: number, y: number) {
 
 function isTangentToAnotherShip(xStart: number, yStart: number, xEnd: number, yEnd: number): boolean {
 
-  for (let i = xStart - 1; i <= xEnd + 1; i++) {
-    for (let j = yStart - 1; j <= yEnd + 1; j++){
+  for (let i = xStart - 2; i <= xEnd; i++) {
+    for (let j = yStart - 2; j <= yEnd; j++){
             
             /*console.log("i", i, "j", j, document
             .getElementById("myBoard")
@@ -149,7 +149,6 @@ function isTangentToAnotherShip(xStart: number, yStart: number, xEnd: number, yE
               "mdi-ferry"
             ) === true) 
             {
-              console.log("tangent");
               snackbarStore.callSnackbar("not tangent!");
               return true;
             }
