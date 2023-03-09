@@ -46,6 +46,7 @@ function placeShip(event: any, x: number, y: number) {
     snackbarStore.callSnackbar("Dieses Schiff wurde bereits platziert!");
     return;
   }
+
   if (isTakenByAnotherShip(x, y)) {
     return;
   }
@@ -57,12 +58,12 @@ function placeShip(event: any, x: number, y: number) {
   
   if(selectedShipDirectionHorizontal) {
     xEnd = x + selectedShipLength! - 1;
-    if (isTangentToAnotherShip(x, y, xEnd, y)) {
+    if (isTangentToAnotherShip(x, y, xEnd, yEnd)) {
       return;
     }
   } else {
     yEnd = y + selectedShipLength! - 1;
-    if (isTangentToAnotherShip(x, y, x, yEnd)) {
+    if (isTangentToAnotherShip(x, y, xEnd, yEnd)) {
       return;
     }
   }
@@ -125,22 +126,9 @@ function addClassesToTilesVertikal(x: number, y: number) {
 function isTangentToAnotherShip(xStart: number, yStart: number, xEnd: number, yEnd: number): boolean {
 
   for (let i = xStart - 2; i <= xEnd; i++) {
-    for (let j = yStart - 2; j <= yEnd; j++){
-            
-            /*console.log("i", i, "j", j, document
-            .getElementById("myBoard")
-            ?.getElementsByClassName("v-row")
-            [j]?.getElementsByClassName("v-col")
-            [i]?.firstElementChild?.firstElementChild);
-
-            console.log(document
-            .getElementById("myBoard")
-            ?.getElementsByClassName("v-row")
-            [j]?.getElementsByClassName("v-col")
-            [i]?.firstElementChild?.firstElementChild?.classList.contains(
-              "mdi-ferry"
-            ) === true); */
-            
+    for (let j = yStart - 2; j <= yEnd; j++){    
+            console.log (i,j); 
+            if (i < 0 || j < 0) { continue; } 
             if (document
             .getElementById("myBoard")
             ?.getElementsByClassName("v-row")
