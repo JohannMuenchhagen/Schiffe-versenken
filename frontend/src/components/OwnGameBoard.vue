@@ -127,7 +127,6 @@ function isTangentToAnotherShip(xStart: number, yStart: number, xEnd: number, yE
 
   for (let i = xStart - 2; i <= xEnd; i++) {
     for (let j = yStart - 2; j <= yEnd; j++){    
-            console.log (i,j); 
             if (i < 0 || j < 0) { continue; } 
             if (document
             .getElementById("myBoard")
