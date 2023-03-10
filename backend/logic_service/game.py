@@ -16,7 +16,7 @@ class Game:
         #######################
         self.player1_moves = []  # Game history of player 1
         self.player2_moves = []  # Game history of player 2
-        self.current_player = 1  # ID off the current player
+        self.current_player = 0  # ID off the current player
         self.player_counter = 0  # counter of player used for error detection
 
     def set_player(self, websocket) -> dict:
