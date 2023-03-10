@@ -12,6 +12,7 @@ let ws: WebSocket;
 let gameStore: any;
 
 export function connect(): void {
+  gameStore = useGameStore();
   ws = new WebSocket(baseUrl);
 
   ws.onopen = onOpen;
@@ -21,7 +22,6 @@ export function connect(): void {
 }
 
 function onOpen(): void {
-  gameStore = useGameStore();
   console.log("[websocket] connected.");
 }
 
