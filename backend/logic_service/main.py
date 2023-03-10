@@ -9,11 +9,14 @@ manager = ConnectionManager()
 
 @app.on_event("startup")
 async def startup_event():
-    url = "http://localhost:8080/game/getgamenumbers"
-    res = requests.get(url=url, params={}).json()
-    for item in res:
-        manager.saved_games.append(int(item))
-    print('Server started')
+    try:
+        url = "http://localhost:8080/game/getgamenumbers"
+        res = requests.get(url=url, params={}).json()
+        for item in res:
+            manager.saved_games.append(int(item))
+        print('Server started')
+    except:
+        print('Database not reachable. Server started')
 
 
 @app.get("/")
