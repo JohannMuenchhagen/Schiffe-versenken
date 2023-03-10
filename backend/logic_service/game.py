@@ -2,8 +2,8 @@ from player import Player
 from ships import *
 import uuid
 
+
 class Game:
-    # @TODO generate UUID
     def __init__(self, game_id):
         self.game_id = game_id
         self.player1 = Player()
@@ -17,72 +17,72 @@ class Game:
         self.player1_moves = []  # Game history of player 1
         self.player2_moves = []  # Game history of player 2
         self.current_player = 1  # ID off the current player
-        self.player_counter = 0
+        self.player_counter = 0  # counter of player used for error detection
 
     def set_player(self, websocket) -> dict:
         if self.player_counter == 2:
             return {'Error': 'Unable to Join', 'Description': 'Maximum amount of players already reached'}
-        elif self.current_player == 0:
-            self.player1.gameID = self.game_id
-            self.player1.playerID = uuid.uuid4().hex
-            self.player1.websocket = websocket
-            self.current_player = self.player1.playerID
-            self.player_counter += 1
+        elif self.current_player == 0:  # 0 is a dummy
+            self.player1.gameID = self.game_id  # match player with game
+            self.player1.playerID = uuid.uuid4().hex  # create a random unique id
+            self.player1.websocket = websocket  # save websocket
+            self.current_player = self.player1.playerID  # replace dummy with player id
+            self.player_counter += 1  # increase counter
             return {'Status': 'Player 1 initialized'}
         else:
-            self.player2.gameID = self.game_id
-            self.player2.playerID = uuid.uuid4().hex
-            self.player2.websocket = websocket
-            self.player_counter += 1
-            self.current_player = self.player1.playerID
+            self.player2.gameID = self.game_id  # match player with game
+            self.player2.playerID = uuid.uuid4().hex  # create a random unique id
+            self.player2.websocket = websocket  # save websocket
+            self.player_counter += 1  # increase counter
             return {'Status': 'Player 2 initialized'}
 
-    def check_placed_ship(self, player_id: int, ship_type: str) -> bool:  # check if the number of ships is correct
+    def check_placed_ship(self, player_id: int, ship_type: str) -> bool:
+        # check if a ship can be placed or the maximum amount is already reached
         match ship_type:
             case 'Battleship':
                 if player_id == self.player1.playerID and self.player1_ships_set[ship_type] == 1:
-                    return False
+                    return False  # maximum amount reached
                 elif player_id == self.player2.playerID and self.player2_ships_set[ship_type] == 1:
-                    return False
+                    return False  # maximum amount reached
                 else:
-                    return True
+                    return True  # ship can be placed
             case 'Corvettes':
                 if player_id == self.player1.playerID and self.player1_ships_set[ship_type] == 2:
-                    return False
+                    return False  # maximum amount reached
                 elif player_id == self.player2.playerID and self.player2_ships_set[ship_type] == 2:
-                    return False
+                    return False  # maximum amount reached
                 else:
-                    return True
+                    return True  # ship can be placed
             case 'Destroyer':
                 if player_id == self.player1.playerID and self.player1_ships_set[ship_type] == 3:
-                    return False
+                    return False  # maximum amount reached
                 elif player_id == self.player2.playerID and self.player2_ships_set[ship_type] == 3:
-                    return False
+                    return False  # maximum amount reached
                 else:
-                    return True
+                    return True  # ship can be placed
             case 'Submarine':
                 if player_id == self.player1.playerID and self.player1_ships_set[ship_type] == 4:
-                    return False
+                    return False  # maximum amount reached
                 elif player_id == self.player2.playerID and self.player2_ships_set[ship_type] == 4:
-                    return False
+                    return False  # maximum amount reached
                 else:
-                    return True
+                    return True  # ship can be placed
 
     def check_move(self, player_id: int, move: tuple):
-        if player_id != self.current_player:  # check if the correct player plays the move
-            return {'Error': 'Wrong player'}
-        elif self.player1.playerID == player_id:
+        if self.player1.playerID == player_id:
             if move in self.player1_moves:  # check if the move is already played
                 return {'Error': 'Move already played'}
             else:
                 self.player1_moves.append(move)  # add a move to an array
                 return True
-        else:
-            if move in self.player2_moves:
+        elif self.player2.playerID == player_id:
+            if move in self.player2_moves:  # check if the move is already played
                 return {'Error': 'Move already played'}
             else:
-                self.player2_moves.append(move)
+                self.player2_moves.append(move)  # add a move to an array
                 return True
+        else:
+            return {'Error': 'Wrong player'}  # if a move joins the else statement, it means there is a wrong playerID
 
     # TODO find an opportunity to remove the duplicate
     def check_shot(self, player_id: int, shooting_coordinate: tuple) -> dict:  # check if a ship gets a hit
@@ -112,10 +112,11 @@ class Game:
             return {'Message': 'Miss'}
 
     def set_ships(self, player_id: int, ship_type: str, ship_start_pos: tuple, ship_end_pos: tuple) -> dict:
-        if not self.check_placed_ship(player_id=player_id, ship_type=ship_type):
+        if not self.check_placed_ship(player_id=player_id,
+                                      ship_type=ship_type):  # check if the maximum amount is placed
             return {'Error': 'Max amount already placed'}
 
-        match ship_type:
+        match ship_type:  # initialize a ship
             case 'Battleship':
                 ship = Battleship(start_pos=ship_start_pos, end_pos=ship_end_pos)
                 index = 0
@@ -140,8 +141,8 @@ class Game:
                 return {'Error': 'No ship provided'}
 
         if player_id == self.player1.playerID:
-            self.player1_ships_set[ship_type] += 1
-            self.player1_ships[index].append(ship.get_positions())
+            self.player1_ships_set[ship_type] += 1  # increase the number of a specific ship type
+            self.player1_ships[index].append(ship.get_positions())  # get coordinates of a ship and save it
             return {'Message': f'{ship_type} successfully placed'}
         elif player_id == self.player2.playerID:
             self.player2_ships_set[ship_type] += 1
