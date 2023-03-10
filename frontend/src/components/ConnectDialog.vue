@@ -13,14 +13,14 @@
                 Nach dem Erstellen kann die Nummer geteilt werden.
               </v-card-text>
               <v-card-text>
-                <v-form @submit.prevent="submit">
+                <v-form>
                   <v-text-field
                     :readonly="true"
                     :model-value="createGameID"
                   ></v-text-field>
                   <v-btn
                     :loading="loading"
-                    :disabled="loading"
+                    :disabled="gameStore.getActive.value"
                     @click="createGame()"
                     block
                     class="mt-2"
@@ -34,7 +34,7 @@
             <v-card title="Spiel beitreten">
               <v-card-text>Spiel ID des Spielerstellers eingeben. </v-card-text>
               <v-card-text>
-                <v-form @submit.prevent="submit">
+                <v-form>
                   <v-text-field
                     v-model="gameID"
                     :rules="rules"
@@ -44,7 +44,7 @@
                   <v-btn
                     :loading="loading"
                     :disabled="loading"
-                    type="submit"
+                    @click="joinGame()"
                     block
                     class="mt-2"
                     >Beitreten</v-btn
@@ -86,8 +86,8 @@ import { ref } from "vue";
 let gameStore = useGameStore();
 
 let dialog = ref<boolean>(false);
-let gameID = ref<string>();
-let createGameID = ref<string>();
+let gameID = ref<number>();
+let createGameID = ref(gameStore.getGameId);
 let loading = ref<boolean>(false);
 
 let rules = [
@@ -97,22 +97,12 @@ let rules = [
   },
 ];
 
-async function submit(event: any) {
-  const result = await event;
-  if (result.valid === true) {
-    loading.value = true;
-    console.log(gameID);
-    setTimeout(() => {
-      alert("Es konnte nicht zu dem Spiel verbunden werden!");
-      loading.value = false;
-      return;
-    }, 3000);
-  }
+function createGame() {
+  gameStore.startGame();
 }
 
-function createGame() {
-  gameStore.startGame("Test123");
-  createGameID.value = "Test123";
+function joinGame() {
+  gameStore.joinGame(gameID.value);
 }
 </script>
 

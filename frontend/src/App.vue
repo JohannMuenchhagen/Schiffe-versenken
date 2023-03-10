@@ -39,8 +39,14 @@
 import SettingsDialog from "@/components/SettingsDialog.vue";
 import ConnectDialog from "./components/ConnectDialog.vue";
 import { useSnackbarStore } from "./services/snackbarStore";
+import webSocketService from "@/services/websocket.service";
+import { onMounted } from "vue";
 
 let snackbarStore = useSnackbarStore();
+
+onMounted(() => {
+  webSocketService.connect();
+});
 </script>
 
 <style scoped>
