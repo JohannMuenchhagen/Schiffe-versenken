@@ -69,13 +69,13 @@ class Game:
                     return True  # ship can be placed
 
     def check_move(self, player_id: int, move: tuple):
-        if self.player1.playerID == player_id:
+        if self.player1.playerID == player_id and player_id == self.current_player:
             if move in self.player1_moves:  # check if the move is already played
                 return {'Error': 'Move already played'}
             else:
                 self.player1_moves.append(move)  # add a move to an array
                 return True
-        elif self.player2.playerID == player_id:
+        elif self.player2.playerID == player_id and player_id == self.current_player:
             if move in self.player2_moves:  # check if the move is already played
                 return {'Error': 'Move already played'}
             else:
