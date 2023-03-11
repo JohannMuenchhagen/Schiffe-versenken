@@ -19,9 +19,11 @@
 import { useShipStore } from "@/services/shipStore";
 import { useSnackbarStore } from "@/services/snackbarStore";
 import { computed, toRaw, watch } from "vue";
+import { usePopUpLayer } from "../services/popupLayer";
 
 const shipStore = useShipStore();
 const snackbarStore = useSnackbarStore();
+const popupLayer = usePopUpLayer();
 
 let selectedShipLength: undefined | number = undefined;
 let selectedShipDirectionHorizontal: undefined | boolean = undefined;
@@ -39,7 +41,7 @@ watch(shipStore.getSelectedShipLength, () => {
 
 function placeShip(event: any, x: number, y: number) {
   if (isShip (x, y)){
-    snackbarStore.callSnackbar("Soll ein Schiff entfernt werden?");
+    popupLayer.callPopUp("Soll ein Schiff entfernt werden?");
     return;
   }
   if (selectedShipLength === undefined) {
