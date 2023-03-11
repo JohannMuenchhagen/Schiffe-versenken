@@ -39,12 +39,31 @@
       {{ popupLayer.getText.value }}
 
     <template v-slot:actions>
-        <v-btn
+        <v-card
+          persistent
           color="red"
           variant="text"
+          height="50" 
+          width="150"
           @click="popupLayer.callPopUp"
-        >
-        </v-btn>
+          >
+          <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green-darken-1"
+            variant="text"
+          >
+            Nein
+          </v-btn>
+          <v-btn
+            color="red"
+            variant="text"
+          >
+            Ja
+          </v-btn>
+        </v-card-actions>
+        </v-card>
+        
 
       </template>
     </v-snackbar>
