@@ -31,13 +31,9 @@
         </v-btn>
       </template>
     </v-snackbar>
-    <v-snackbar v-model="snackbarStore.getActive.value">
-      {{ snackbarStore.getText.value }}
-    </v-snackbar>
 
     <v-snackbar v-model="popupLayer.getActive.value">
       {{ popupLayer.getText.value }}
-
     <template v-slot:actions>
         <v-card
           persistent
@@ -52,12 +48,14 @@
           <v-btn
             color="green-darken-1"
             variant="text"
+            @click="popupLayer.deactivePopUp"
           >
             Nein
           </v-btn>
           <v-btn
             color="red"
             variant="text"
+            @click="popupLayer.startAction; popupLayer.deactivePopUp"
           >
             Ja
           </v-btn>

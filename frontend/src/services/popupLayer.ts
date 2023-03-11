@@ -5,17 +5,22 @@ export const usePopUpLayer = defineStore("popupLayer", () => {
   // state
   const text = ref<string>("");
   const active = ref<boolean>(false);
+  const action = ref<boolean>(false);
 
   // getters
   const getText = computed(() => text);
   const getActive = computed(() => active);
+  const getAction = computed(() => action);
 
   //actions
-  function callPopUp(inputText: string):boolean {
+  function callPopUp(inputText: string){
     text.value = inputText;
     active.value = true;
+  }
 
-    return false;
+  function startAction(){
+    console.log ("action true")
+    action.value = true;
   }
 
   function deactivePopUp() {
@@ -26,7 +31,9 @@ export const usePopUpLayer = defineStore("popupLayer", () => {
     text,
     active,
     getText,
-    getActive,callPopUp,
+    getActive,
+    callPopUp,
+    startAction,
     deactivePopUp,
   };
 });
