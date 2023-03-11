@@ -43,7 +43,8 @@ function placeShip(event: any, x: number, y: number) {
   if (isShip (x, y)){
     popupLayer.callPopUp("Soll ein Schiff entfernt werden?");
     if (popupLayer.getAction) {
-      deleteShip(x, y);
+      if (selectedShipDirectionHorizontal) { deleteShipHorizontal(x, y);}  
+      else { deleteShipVertikal(x,y);}
     }
     return;
   }
@@ -232,7 +233,11 @@ function calcRemainingShipsToPlace() {
   }
 }
 
-function deleteShip(x: number, y: number){
+function deleteShipHorizontal(x: number, y: number){
+  
+}
+
+function deleteShipVertikal(x: number, y: number){
   
 }
 
