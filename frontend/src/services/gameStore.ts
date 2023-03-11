@@ -22,7 +22,9 @@ export const useGameStore = defineStore("game", () => {
     if (inputId !== undefined) {
       gameId.value = inputId;
     }
-    playerID.value = inputPlayer;
+    if (gameId.value !== "") {
+      playerID.value = inputPlayer; // TODO Muss geändert werden!
+    }
     active.value = true;
     console.log(gameId.value, active.value, playerID.value);
   }
