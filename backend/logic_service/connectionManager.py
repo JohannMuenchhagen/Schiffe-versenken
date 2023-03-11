@@ -94,7 +94,6 @@ class ConnectionManager:
         if 'Error' in msg:
             return msg, game.player1.websocket, game.player2.websocket
         self.active_player += 1  # increase the number of active players
-        print(game.player1.websocket, game.player2.websocket)
         return {'Message': 'Join successful', 'PlayerID': game.player2.playerID}, \
             game.player1.websocket, game.player2.websocket
 
