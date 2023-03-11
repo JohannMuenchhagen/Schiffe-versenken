@@ -38,6 +38,10 @@ watch(shipStore.getSelectedShipLength, () => {
 
 
 function placeShip(event: any, x: number, y: number) {
+  if (isShip (x, y)){
+    snackbarStore.callSnackbar("Soll ein Schiff entfernt werden?");
+    return;
+  }
   if (selectedShipLength === undefined) {
     snackbarStore.callSnackbar("Es wurde noch kein Schiff ausgewählt!");
     return;
@@ -88,6 +92,19 @@ function placeShip(event: any, x: number, y: number) {
   });
   
   console.log(toRaw(shipStore.getPlacedShips));
+}
+
+function isShip (x: number, y: number):boolean {
+  if (document
+          .getElementById("myBoard")
+          ?.getElementsByClassName("v-row")
+          [y-1]?.getElementsByClassName("v-col")
+          [x-1]?.firstElementChild?.firstElementChild?.classList.contains(
+            "mdi-ferry"
+          ) === true){
+            return true;
+          }
+  return false;
 }
 
 function addClassesToTilesHorizontal(x: number, y: number) {
