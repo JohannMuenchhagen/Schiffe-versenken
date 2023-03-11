@@ -45,6 +45,7 @@ import { onMounted } from "vue";
 let snackbarStore = useSnackbarStore();
 
 onMounted(() => {
+  console.log("[websocket] connecting...");
   webSocketService.connect();
 });
 </script>

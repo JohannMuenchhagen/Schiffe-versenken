@@ -38,6 +38,7 @@ function onClose(event: any): void {
 }
 
 function sendMessage(message: Object): void {
+  console.log(message);
   ws.send(JSON.stringify(message, null, 2));
 }
 
@@ -45,10 +46,13 @@ function onMessage(event: any): void {
   const msg = JSON.parse(event.data);
   console.log(msg);
   if (Object.prototype.hasOwnProperty.call(msg, "Error")) {
-    alert(msg.Error);
+    alert(msg.Error + " /// " + msg?.Description);
   }
   if (Object.values(msg).includes("Game successfully initialized")) {
     gameStore.initGame(msg.GameID, msg.PlayerID);
+  }
+  if (Object.values(msg).includes("Join successful")) {
+    gameStore.initGame(undefined, msg.PlayerID);
   } else {
     console.log("456");
   }

@@ -61,8 +61,8 @@ class ConnectionManager:
             case 'initialize Game':
                 return self.initialize_game(websocket)
             case 'Join':
-                if data['GameID'] not in self.current_games:
-                    return {'Error': 'Unable to Join', 'Description': 'Game doesnt exist'}
+                """if data['GameID'] not in self.current_games:
+                    return {'Error': 'Unable to Join', 'Description': 'Game doesnt exist'}, websocket, None """ # TODO Bugfix!
                 return self.join(data, websocket)
             case 'Set':
                 return self.set(data)
@@ -94,6 +94,7 @@ class ConnectionManager:
         if 'Error' in msg:
             return msg, game.player1.websocket, game.player2.websocket
         self.active_player += 1  # increase the number of active players
+        print(game.player1.websocket, game.player2.websocket)
         return {'Message': 'Join successful', 'PlayerID': game.player2.playerID}, \
             game.player1.websocket, game.player2.websocket
 

@@ -18,19 +18,24 @@ export const useGameStore = defineStore("game", () => {
     webSocketService.sendMessage({ Type: "initialize Game" });
   }
 
-  function initGame(inputId: string, inputPlayer: string) {
-    gameId.value = inputId;
+  function initGame(inputId: string | undefined, inputPlayer: string) {
+    if (inputId !== undefined) {
+      gameId.value = inputId;
+    }
     playerID.value = inputPlayer;
     active.value = true;
+    console.log(gameId.value, active.value, playerID.value);
   }
 
   function joinGame(inputId: number | undefined) {
     if (inputId === undefined) {
       return;
     }
+    gameId.value = inputId.toString();
+    console.log("trying to connect...");
     webSocketService.sendMessage({
       Type: "Join",
-      GameID: inputId,
+      GameID: Number(inputId),
     });
   }
 
