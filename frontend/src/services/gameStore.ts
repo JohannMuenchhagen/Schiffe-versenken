@@ -7,11 +7,13 @@ export const useGameStore = defineStore("game", () => {
   const gameId = ref<string>("");
   const active = ref<boolean>();
   const playerID = ref<string>();
+  const gameStarted = ref<boolean>(false);
 
   // getters
   const getGameId = computed(() => gameId);
   const getActive = computed(() => active);
   const getPlayerId = computed(() => playerID);
+  const getGameStarted = computed(() => gameStarted);
 
   // actions
   function startGame() {
@@ -41,6 +43,20 @@ export const useGameStore = defineStore("game", () => {
     });
   }
 
+  function connectionCompleted() {
+    if (
+      gameId.value === undefined ||
+      gameId.value === "" ||
+      active.value === undefined ||
+      active.value === false ||
+      playerID.value === undefined ||
+      playerID.value == ""
+    ) {
+      alert("Fehler beim initialisieren des Spiels, es fehlen Daten!");
+    }
+    gameStarted.value = true;
+  }
+
   function stopGame() {
     active.value = false;
   }
@@ -51,10 +67,12 @@ export const useGameStore = defineStore("game", () => {
     playerID,
     getGameId,
     getActive,
+    getGameStarted,
     startGame,
     initGame,
     joinGame,
     stopGame,
     getPlayerId,
+    connectionCompleted,
   };
 });

@@ -81,7 +81,8 @@
 
 <script setup lang="ts">
 import { useGameStore } from "@/services/gameStore";
-import { ref } from "vue";
+import { useSnackbarStore } from "@/services/snackbarStore";
+import { ref, watch } from "vue";
 
 let gameStore = useGameStore();
 
@@ -90,12 +91,21 @@ let gameID = ref<number>();
 let createGameID = ref(gameStore.getGameId);
 let loading = ref<boolean>(false);
 
+const snackbarStore = useSnackbarStore();
+
 let rules = [
   (value: string) => {
     if (value) return true;
     return "Eingabe darf nicht leer sein!";
   },
 ];
+
+watch(gameStore.getGameStarted, () => {
+  if (gameStore.getGameStarted.value === true) {
+    dialog.value = false;
+    snackbarStore.callSnackbar("Beide Parteien beigetreten. Spiel startet...");
+  }
+});
 
 function createGame() {
   gameStore.startGame();
