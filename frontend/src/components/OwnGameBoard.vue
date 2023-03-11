@@ -29,6 +29,8 @@ let selectedShipLength: undefined | number = undefined;
 let selectedShipDirectionHorizontal: undefined | boolean = undefined;
 let endPosition: undefined | { x: number; y: number } = undefined;
 
+let startDeleteShip: undefined | boolean = undefined;
+
 let remaining5LengthShip = 1;
 let remaining4LengthShip = 2;
 let remaining3LengthShip = 3;
@@ -38,15 +40,19 @@ watch(shipStore.getSelectedShipLength, () => {
   selectedShipLength = shipStore.getSelectedShipLength.value;
 });
 
+watch(popupLayer.getAction, () => {
+  startDeleteShip = popupLayer.getAction.value;
+})
 
 function placeShip(event: any, x: number, y: number) {
   if (isShip (x, y)){
     popupLayer.callPopUp("Soll ein Schiff entfernt werden?");
-    if (popupLayer.getAction) {
-      if (selectedShipDirectionHorizontal) { deleteShipHorizontal(x, y);}  
+    if (popupLayer.getAction.value) {
+      console.log("delete");
+      if (selectedShipDirectionHorizontal) {console.log("deleteShipHorizontal"); deleteShipHorizontal(x, y);}  
       else { deleteShipVertikal(x,y);}
     }
-    return;
+    return; //?
   }
   if (selectedShipLength === undefined) {
     snackbarStore.callSnackbar("Es wurde noch kein Schiff ausgewählt!");
@@ -233,8 +239,28 @@ function calcRemainingShipsToPlace() {
   }
 }
 
+function calcRemainingShipsAfterDelete() {
+
+  for (let i = 0; i < toRaw(shipStore.getPlacedShips).length; i++) {
+    if (shipStore.getPlacedShips[i].length === 5) {
+      remaining5LengthShip++;
+    } else if (shipStore.getPlacedShips[i].length === 4) {
+      remaining4LengthShip++;
+    } else if (shipStore.getPlacedShips[i].length === 3) {
+      remaining3LengthShip++;
+    } else if (shipStore.getPlacedShips[i].length === 2) {
+      remaining2LengthShip++;
+    }
+  }
+}
+
 function deleteShipHorizontal(x: number, y: number){
-  
+  calcRemainingShipsAfterDelete();
+  for (let i = x - 1; i < selectedShipLength! + x - 1; i++) {
+    console.log(i);
+    calcRemainingShipsAfterDelete
+    console.log(remaining5LengthShip, remaining4LengthShip, remaining3LengthShip, remaining2LengthShip);
+  }
 }
 
 function deleteShipVertikal(x: number, y: number){
