@@ -43,7 +43,7 @@
                   ></v-text-field>
                   <v-btn
                     :loading="loading"
-                    :disabled="loading"
+                    :disabled="gameStore.getActive.value"
                     @click="joinGame()"
                     block
                     class="mt-2"
