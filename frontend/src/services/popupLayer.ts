@@ -19,7 +19,6 @@ export const usePopUpLayer = defineStore("popupLayer", () => {
   }
 
   function startAction(){
-    console.log ("action true")
     action.value = true;
   }
 
@@ -32,6 +31,7 @@ export const usePopUpLayer = defineStore("popupLayer", () => {
     active,
     getText,
     getActive,
+    getAction,
     callPopUp,
     startAction,
     deactivePopUp,

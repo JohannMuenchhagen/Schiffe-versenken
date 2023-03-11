@@ -37,11 +37,9 @@
     <template v-slot:actions>
         <v-card
           persistent
-          color="red"
           variant="text"
           height="50" 
           width="150"
-          @click="popupLayer.callPopUp"
           >
           <v-card-actions>
           <v-spacer></v-spacer>
@@ -55,7 +53,7 @@
           <v-btn
             color="red"
             variant="text"
-            @click="popupLayer.startAction; popupLayer.deactivePopUp"
+            @click="popupLayer.startAction(); popupLayer.deactivePopUp();"
           >
             Ja
           </v-btn>
