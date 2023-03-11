@@ -43,6 +43,7 @@ function placeShip(event: any, x: number, y: number) {
   if (isShip (x, y)){
     popupLayer.callPopUp("Soll ein Schiff entfernt werden?");
     if (popupLayer.getAction) {
+      deleteShip(x, y);
     }
     return;
   }
@@ -229,6 +230,10 @@ function calcRemainingShipsToPlace() {
       remaining2LengthShip--;
     }
   }
+}
+
+function deleteShip(x: number, y: number){
+  
 }
 
 function isShipAlreadyPlaced(): boolean {
