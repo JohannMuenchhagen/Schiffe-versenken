@@ -163,4 +163,3 @@ class Game:
             if value >= 1:
                 return {'Message': 'No win'}
         return {'Message': 'Win'}
-
