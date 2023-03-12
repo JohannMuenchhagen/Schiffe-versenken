@@ -16,7 +16,7 @@ async def startup_event():
             manager.saved_games.append(int(item))
         print('Server started')
     except Exception as e:
-        print(e)
+        print(e)  # @TODO reformat
         print('Database not reachable. Server started')
 
 
