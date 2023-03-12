@@ -61,7 +61,7 @@ class ConnectionManager:
             case 'initialize Game':
                 return self.initialize_game(websocket)
             case 'Join':
-                if data['GameID'] not in self.current_games:
+                if data['GameID'] not in self.current_games.keys():
                     return {'Error': 'Unable to Join', 'Description': 'Game doesnt exist'}
                 return self.join(data, websocket)
             case 'Set':
