@@ -15,7 +15,7 @@ async def startup_event():
         for item in res:
             manager.saved_games.append(int(item))
         print('Server started')
-    except:
+    except Exception as e:
         print('Database not reachable. Server started')
 
 
@@ -30,10 +30,14 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while True:
             data = await websocket.receive_json()
-            res, player1, player2 = manager.check_type(data, websocket)
-            await manager.broadcast(message=res, player1=player1, player2=player2)
+            res= manager.check_type(data, websocket)
+            if len(res) > 3:
+                await  manager.broadcast(message_player1=res[1], messagen_player2=res[0], player1=res[2], player2=res[3])
+            else:
+                await manager.broadcast(message_player1=res[0], messagen_player2=res[0], player1=res[1], player2=res[2])
     except WebSocketDisconnect:
         opposite = manager.disconnect(websocket)
         if opposite is not None:
             await manager.send_personal_message('Player left', opposite)
             manager.remove_websocket(opposite)
+

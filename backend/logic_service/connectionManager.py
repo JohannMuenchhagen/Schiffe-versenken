@@ -49,11 +49,11 @@ class ConnectionManager:
     async def send_personal_message(self, message: str, websocket: WebSocket):
         await websocket.send_json({'Message':message})
 
-    async def broadcast(self, message: json, player1: WebSocket, player2: WebSocket = None):
+    async def broadcast(self, message_player1: json, messagen_player2:json, player1: WebSocket, player2: WebSocket = None):
         # send a broadcast to both players
-        await player1.send_json(message)
+        await player1.send_json(message_player1)
         if player2 is not None:
-            await player2.send_json(message)
+            await player2.send_json(messagen_player2)
 
     def check_type(self, data: json, websocket: WebSocket):
         # the entrypoint to this class
@@ -94,7 +94,7 @@ class ConnectionManager:
         if 'Error' in msg:
             return msg, game.player1.websocket, game.player2.websocket
         self.active_player += 1  # increase the number of active players
-        return {'Message': 'Join successful', 'PlayerID': game.player2.playerID}, \
+        return {'Message': 'Join successful', 'PlayerID': game.player2.playerID}, {'Message':'Player 2 joined'},\
             game.player1.websocket, game.player2.websocket
 
     def set(self, data: dict):
