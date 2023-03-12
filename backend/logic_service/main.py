@@ -1,6 +1,6 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 import requests
-from connectionManager import ConnectionManager
+from connectionManager import ConnectionManager, broadcast, send_personal_message
 
 app = FastAPI()
 
@@ -30,14 +30,13 @@ async def websocket_endpoint(websocket: WebSocket):
     try:
         while True:
             data = await websocket.receive_json()
-            res= manager.check_type(data, websocket)
+            res = manager.check_type(data, websocket)
             if len(res) > 3:
-                await  manager.broadcast(message_player1=res[1], message_player2=res[0], player1=res[2], player2=res[3])
+                await broadcast(message_player1=res[1], message_player2=res[0], player1=res[2], player2=res[3])
             else:
-                await manager.broadcast(message_player1=res[0], message_player2=res[0], player1=res[1], player2=res[2])
+                await broadcast(message_player1=res[0], message_player2=res[0], player1=res[1], player2=res[2])
     except WebSocketDisconnect:
         opposite = manager.disconnect(websocket)
         if opposite is not None:
-            await manager.send_personal_message('Player left', opposite)
+            await send_personal_message('Player left', opposite)
             manager.remove_websocket(opposite)
-
