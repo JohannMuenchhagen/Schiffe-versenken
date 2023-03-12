@@ -32,37 +32,7 @@
       </template>
     </v-snackbar>
 
-    <v-snackbar v-model="popupLayer.getActive.value">
-      {{ popupLayer.getText.value }}
-    <template v-slot:actions>
-        <v-card
-          persistent
-          variant="text"
-          height="50" 
-          width="150"
-          >
-          <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="green-darken-1"
-            variant="text"
-            @click="popupLayer.deactivePopUp"
-          >
-            Nein
-          </v-btn>
-          <v-btn
-            color="red"
-            variant="text"
-            @click="popupLayer.startAction(); popupLayer.deactivePopUp();"
-          >
-            Ja
-          </v-btn>
-        </v-card-actions>
-        </v-card>
-        
-
-      </template>
-    </v-snackbar>
+    
   </v-app>
 </template>
 
@@ -74,6 +44,7 @@ import {usePopUpLayer} from "./services/popupLayer";
 
 let snackbarStore = useSnackbarStore();
 let popupLayer = usePopUpLayer();
+
 </script>
 
 <style scoped>

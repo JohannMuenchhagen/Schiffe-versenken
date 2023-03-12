@@ -21,6 +21,7 @@ import { useSnackbarStore } from "@/services/snackbarStore";
 import { computed, toRaw, watch } from "vue";
 import { usePopUpLayer } from "@/services/popupLayer";
 
+
 const shipStore = useShipStore();
 const snackbarStore = useSnackbarStore();
 const popupLayer = usePopUpLayer();
@@ -28,8 +29,6 @@ const popupLayer = usePopUpLayer();
 let selectedShipLength: undefined | number = undefined;
 let selectedShipDirectionHorizontal: undefined | boolean = undefined;
 let endPosition: undefined | { x: number; y: number } = undefined;
-
-let startDeleteShip: undefined | boolean = undefined;
 
 let remaining5LengthShip = 1;
 let remaining4LengthShip = 2;
@@ -40,70 +39,70 @@ watch(shipStore.getSelectedShipLength, () => {
   selectedShipLength = shipStore.getSelectedShipLength.value;
 });
 
-watch(popupLayer.getAction, () => {
-  startDeleteShip = popupLayer.getAction.value;
-})
+function deleteShip(x: number, y: number){
+  
+}
 
 function placeShip(event: any, x: number, y: number) {
+
   if (isShip (x, y)){
-    popupLayer.callPopUp("Soll ein Schiff entfernt werden?");
-    if (popupLayer.getAction.value) {
-      console.log("delete");
-      if (selectedShipDirectionHorizontal) {console.log("deleteShipHorizontal"); deleteShipHorizontal(x, y);}  
-      else { deleteShipVertikal(x,y);}
+    popupLayer.callPopUp("Soll ein Schiff entfernt werden?")
+    if (popupLayer.getDeleteShip){
+      deleteShip(x, y);
     }
-    return; //?
-  }
-  if (selectedShipLength === undefined) {
-    snackbarStore.callSnackbar("Es wurde noch kein Schiff ausgewählt!");
-    return;
-  }
-  if (isShipAlreadyPlaced()) {
-    snackbarStore.callSnackbar("Dieses Schiff wurde bereits platziert!");
-    return;
-  }
-
-  if (isTakenByAnotherShip(x, y)) {
-    return;
-  }
-
-  selectedShipDirectionHorizontal = shipStore.getDirechtionsForShips[selectedShipLength - 2];
-
-  if (isCrossedBorder(x, y, selectedShipDirectionHorizontal)) {
-    return;
-  }
-
-  let xEnd = x;
-  let yEnd = y;
-
-  
-  if(selectedShipDirectionHorizontal) {
-    xEnd = x + selectedShipLength! - 1;
-    if (isTangentToAnotherShip(x, y, xEnd, yEnd)) {
+  } else{
+      if (selectedShipLength === undefined) {
+      snackbarStore.callSnackbar("Es wurde noch kein Schiff ausgewählt!");
       return;
     }
-  } else {
-    yEnd = y + selectedShipLength! - 1;
-    if (isTangentToAnotherShip(x, y, xEnd, yEnd)) {
+    if (isShipAlreadyPlaced()) {
+      snackbarStore.callSnackbar("Dieses Schiff wurde bereits platziert!");
       return;
     }
+
+    if (isTakenByAnotherShip(x, y)) {
+      return;
+    }
+
+    selectedShipDirectionHorizontal = shipStore.getDirechtionsForShips[selectedShipLength - 2];
+
+    if (isCrossedBorder(x, y, selectedShipDirectionHorizontal)) {
+      return;
+    }
+
+    let xEnd = x;
+    let yEnd = y;
+
+    
+    if(selectedShipDirectionHorizontal) {
+      xEnd = x + selectedShipLength! - 1;
+      if (isTangentToAnotherShip(x, y, xEnd, yEnd)) {
+        return;
+      }
+    } else {
+      yEnd = y + selectedShipLength! - 1;
+      if (isTangentToAnotherShip(x, y, xEnd, yEnd)) {
+        return;
+      }
+    }
+    
+    if(selectedShipDirectionHorizontal) {
+      endPosition = { x: x + selectedShipLength! - 1, y: y};
+      addClassesToTilesHorizontal(x, y);
+    } else {
+            endPosition = { x: x, y: y + selectedShipLength! - 1 };
+            addClassesToTilesVertikal(x, y);
+          } 
+          
+    shipStore.addPlacedShip({
+      startPos: { x: x, y: y },
+      endPos: endPosition,
+      length: selectedShipLength!,
+    });
+    
+    console.log(toRaw(shipStore.getPlacedShips));
   }
   
-  if(selectedShipDirectionHorizontal) {
-    endPosition = { x: x + selectedShipLength! - 1, y: y};
-    addClassesToTilesHorizontal(x, y);
-  } else {
-          endPosition = { x: x, y: y + selectedShipLength! - 1 };
-          addClassesToTilesVertikal(x, y);
-        } 
-        
-  shipStore.addPlacedShip({
-    startPos: { x: x, y: y },
-    endPos: endPosition,
-    length: selectedShipLength!,
-  });
-  
-  console.log(toRaw(shipStore.getPlacedShips));
 }
 
 function isShip (x: number, y: number):boolean {
