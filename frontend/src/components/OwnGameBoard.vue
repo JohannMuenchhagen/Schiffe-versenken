@@ -260,9 +260,9 @@ function deleteShipHorizontal(x: number, y: number){
   let xStart = 0
   let yStart = y-1
   let isFound = false
-  let end = 10
+  let endLoop = 10
   let len = 5
-  for (let i = x - len - 1; i <= end; i++) {
+  for (let i = x - len - 1; i <= endLoop; i++) {
 //    console.log("i", i)
     if(i < 0){ continue;}
     if (document
@@ -276,11 +276,12 @@ function deleteShipHorizontal(x: number, y: number){
             if(isFound === false){
               isFound = true;
               xStart = i;
-              let found = shipStore.getPlacedShips.find((value) => value.startPos.x === xStart+1)
+              let lengthShip = shipStore.getPlacedShips.find((value) => value.startPos.x === xStart+1 && value.startPos.y === yStart+1)?.length
               // n.startPos.x === xStart n.startPos.y == y-1
-              console.log("len found", found?.length, "xStart", xStart)
-              end = xStart + len -1;
-              console.log(isFound, "start", xStart, "end", end)
+              console.log("len found", lengthShip, "xStart", xStart)
+              if(lengthShip != null) { len = lengthShip}
+              endLoop = xStart + len - 1;
+              console.log("start", xStart, "end", endLoop, "len", lengthShip)
             }
             document
             .getElementById("myBoard")
