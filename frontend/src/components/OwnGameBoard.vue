@@ -30,6 +30,11 @@ let selectedShipLength: undefined | number = undefined;
 let selectedShipDirectionHorizontal: undefined | boolean = undefined;
 let endPosition: undefined | { x: number; y: number } = undefined;
 
+let startPositionDeletedShip: undefined | { x: number; y: number } = undefined;
+let endPositionDeletedShip: undefined | { x: number; y: number } = undefined;
+let isDeletedShipHorizontal = false;
+let lengthDeletedShip = 0;
+
 let remaining5LengthShip = 1;
 let remaining4LengthShip = 2;
 let remaining3LengthShip = 3;
@@ -42,10 +47,10 @@ watch(shipStore.getSelectedShipLength, () => {
 function placeShip(event: any, x: number, y: number) {
 
   if (isShip (x, y)){
-    popupLayer.callPopUp("Soll ein Schiff entfernt werden?")
+    popupLayer.callPopUp("Soll ein Schiff entfernt werden ?")
     if (popupLayer.getDeleteShip){
-      if (selectedShipDirectionHorizontal){ deleteShipHorizontal(x, y); }
-      
+      findAndDeleteShip(x,y);
+      return;
     }
   } else{
       if (selectedShipLength === undefined) {
@@ -250,44 +255,45 @@ function calcRemainingShipsAfterDelete() {
   }
 }
 
-function findShip (x: number, y: number): number{
-  let len = 0;
+function findAndDeleteShip (x: number, y: number){
+  let shipFounded = shipStore.getPlacedShips.find((value) => (value.startPos.x <= x || (value.startPos.x >= x)) 
+                                                        && ((value.startPos.y <= y) || (value.startPos.y >= y)));
+  
+  let xStart = 0;
+  let yStart = 0;
+  let xEnd = 0;
+  let yEnd = 0;
+  
+  if (shipFounded != undefined) {
+    
+    xStart = shipFounded?.startPos.x;
+    yStart = shipFounded?.startPos.y;
+    xEnd = shipFounded.endPos.x;
+    yEnd = shipFounded.endPos.y;
+      if(yEnd - yStart === 0) { //horizontal
+        isDeletedShipHorizontal = true; 
+        lengthDeletedShip = xEnd - xStart + 1;
+        for(let i = xStart - 1; i < lengthDeletedShip; i++){ deleteShip(i, yStart); } 
+      }
+      else if(xEnd - xStart === 0 ) { 
+        isDeletedShipHorizontal = false; 
+        lengthDeletedShip = yEnd - yStart + 1; 
+        for(let i = yStart - 1; i < lengthDeletedShip; i++){ deleteShip(xStart, i); } 
+      }
+  }                                                      
+  startPositionDeletedShip = {x: xStart, y: yStart};
+  endPositionDeletedShip = {x: xEnd, y: yEnd};
 
-return len;
+ // console.log("len", xEnd - xStart + 1, "x0", xStart, "x1",  xEnd, "y0", yStart, "y1", yEnd)
 }
 
-function deleteShipHorizontal(x: number, y: number){
-  let xStart = 0
-  let yStart = y-1
-  let isFound = false
-  let endLoop = 10
-  let len = 5
-  for (let i = x - len - 1; i <= endLoop; i++) {
-//    console.log("i", i)
-    if(i < 0){ continue;}
-    if (document
-          .getElementById("myBoard")
-          ?.getElementsByClassName("v-row")
-          [y-1]?.getElementsByClassName("v-col")
-          [i]?.firstElementChild?.firstElementChild?.classList.contains(
-            "mdi-ferry"
-          ) === true) 
-          {
-            if(isFound === false){
-              isFound = true;
-              xStart = i;
-              let lengthShip = shipStore.getPlacedShips.find((value) => value.startPos.x === xStart+1 && value.startPos.y === yStart+1)?.length
-              // n.startPos.x === xStart n.startPos.y == y-1
-              console.log("len found", lengthShip, "xStart", xStart)
-              if(lengthShip != null) { len = lengthShip}
-              endLoop = xStart + len - 1;
-              console.log("start", xStart, "end", endLoop, "len", lengthShip)
-            }
-            document
+function deleteShip(x: number, y: number){
+  console.log(x, y);
+  document
             .getElementById("myBoard")
             ?.getElementsByClassName("v-row")
             [y-1]?.getElementsByClassName("v-col")
-            [i]?.firstElementChild
+            [x]?.firstElementChild
             ?.firstElementChild
             ?.classList.remove(
             "mdi-ferry",
@@ -298,13 +304,7 @@ function deleteShipHorizontal(x: number, y: number){
             .getElementById("myBoard")
             ?.getElementsByClassName("v-row")
             [y - 1]?.getElementsByClassName("v-col")
-            [i]?.firstElementChild?.classList.add("tileWrapper");
-          }
-  }
-}
-
-function deleteShipVertikal(x: number, y: number){
-  
+            [x]?.firstElementChild?.classList.add("tileWrapper");
 }
 
 function isShipAlreadyPlaced(): boolean {

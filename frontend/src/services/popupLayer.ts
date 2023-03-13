@@ -18,7 +18,7 @@ export const usePopUpLayer = defineStore("popupLayer", () => {
   function callPopUp(inputText: string){
     text.value = inputText;
     active.value = true;
-    if (confirm("do you want to delete a ship ?") == true){
+    if (confirm(inputText) == true){
         deleteShip = true;
     }else deactivePopUp();
   }
