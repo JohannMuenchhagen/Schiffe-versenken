@@ -39,16 +39,13 @@ watch(shipStore.getSelectedShipLength, () => {
   selectedShipLength = shipStore.getSelectedShipLength.value;
 });
 
-function deleteShip(x: number, y: number){
-  
-}
-
 function placeShip(event: any, x: number, y: number) {
 
   if (isShip (x, y)){
     popupLayer.callPopUp("Soll ein Schiff entfernt werden?")
     if (popupLayer.getDeleteShip){
-      deleteShip(x, y);
+      if (selectedShipDirectionHorizontal){ deleteShipHorizontal(x, y); }
+      
     }
   } else{
       if (selectedShipLength === undefined) {
@@ -61,12 +58,14 @@ function placeShip(event: any, x: number, y: number) {
     }
 
     if (isTakenByAnotherShip(x, y)) {
+      snackbarStore.callSnackbar("Die Schiffe dürfen nicht über Eck gebaut sein oder Ausbuchtungen besitzen!");
       return;
     }
 
     selectedShipDirectionHorizontal = shipStore.getDirechtionsForShips[selectedShipLength - 2];
 
     if (isCrossedBorder(x, y, selectedShipDirectionHorizontal)) {
+      snackbarStore.callSnackbar("Das Schiff überschreitet eine Grenze!");
       return;
     }
 
@@ -161,7 +160,6 @@ function isCrossedBorder(x: number, y: number, directionHorizontal: boolean): bo
   if (((10 - (x - 1) - selectedShipLength!) < 0 && directionHorizontal) 
     || ((10 - (y - 1) - selectedShipLength!) < 0 && !directionHorizontal))
     {
-      snackbarStore.callSnackbar("Das Schiff überschreitet eine Grenze!");
       return true;
     }
   return false;
@@ -180,7 +178,6 @@ for (let i = xStart - 2; i <= xEnd; i++) {
             "mdi-ferry"
           ) === true) 
           {
-            snackbarStore.callSnackbar("Die Schiffe dürfen nicht über Eck gebaut sein oder Ausbuchtungen besitzen!");
             return true;
           }
     }
@@ -254,11 +251,43 @@ function calcRemainingShipsAfterDelete() {
 }
 
 function deleteShipHorizontal(x: number, y: number){
-  calcRemainingShipsAfterDelete();
-  for (let i = x - 1; i < selectedShipLength! + x - 1; i++) {
-    console.log(i);
-    calcRemainingShipsAfterDelete
-    console.log(remaining5LengthShip, remaining4LengthShip, remaining3LengthShip, remaining2LengthShip);
+  let xStart = 0
+  let yStart = y-1
+  let isFound = false
+
+  for (let i = x - selectedShipLength!; i < x; i++) {
+    if(i < 0){ continue;}
+    if (document
+          .getElementById("myBoard")
+          ?.getElementsByClassName("v-row")
+          [y-1]?.getElementsByClassName("v-col")
+          [i]?.firstElementChild?.firstElementChild?.classList.contains(
+            "mdi-ferry"
+          ) === true) 
+          {
+            isFound = true;
+            snackbarStore.callSnackbar("Ein Schiff gefunden");
+            xStart = i;
+            
+            document
+            .getElementById("myBoard")
+            ?.getElementsByClassName("v-row")
+            [y-1]?.getElementsByClassName("v-col")
+            [i]?.firstElementChild
+            ?.firstElementChild
+            ?.classList.remove(
+            "mdi-ferry",
+            "mdi"
+            );
+
+            document
+            .getElementById("myBoard")
+            ?.getElementsByClassName("v-row")
+            [y - 1]?.getElementsByClassName("v-col")
+            [i]?.firstElementChild?.classList.add("tileWrapper");
+            //i-first -> delete ship
+
+          }
   }
 }
 
