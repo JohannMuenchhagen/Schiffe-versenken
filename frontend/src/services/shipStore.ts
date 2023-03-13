@@ -109,7 +109,6 @@ export const useShipStore = defineStore("ship", () => {
 
   function deletePlacedShip(index: number){
     placedShips.splice(index, 1);
-    console.log("placedShips.length", placedShips.length)
   }
 
   return {

@@ -256,10 +256,9 @@ function calcRemainingShipsAfterDelete() {
 }
 
 function findAndDeleteShip (x: number, y: number){
-  let shipFounded = shipStore.getPlacedShips.find((value) => (value.startPos.x <= x || (value.startPos.x >= x)) 
-                                                        && ((value.startPos.y <= y) || (value.startPos.y >= y)));
+  let shipFounded = shipStore.getPlacedShips.find((value) => (x >= value.startPos.x && (value.endPos.x >= x)) 
+  && ((y >= value.startPos.y) && (value.endPos.y >= y)));
   
-                                                        
   let xStart = 0;
   let yStart = 0;
   let xEnd = 0;
@@ -268,7 +267,7 @@ function findAndDeleteShip (x: number, y: number){
   if (shipFounded != undefined) {
     let indexOfShips = shipStore.getPlacedShips.indexOf(shipFounded);
     console.log("indexOfShips", indexOfShips)
-    console.log("len", xEnd - xStart + 1, "x0", xStart, "x1",  xEnd, "y0", yStart, "y1", yEnd)
+   // console.log("len", xEnd - xStart + 1, "x0", xStart, "x1",  xEnd, "y0", yStart, "y1", yEnd)
 
     xStart = shipFounded?.startPos.x;
     yStart = shipFounded?.startPos.y;
