@@ -107,6 +107,11 @@ export const useShipStore = defineStore("ship", () => {
     placedShips.push(ship);
   }
 
+  function deletePlacedShip(index: number){
+    placedShips.splice(index, 1);
+    console.log("placedShips.length", placedShips.length)
+  }
+
   return {
     ships,
     sunkenShips,
@@ -124,5 +129,6 @@ export const useShipStore = defineStore("ship", () => {
     changeDirection,
     getDirechtionsForShips,
     direchtionsForShips,
+    deletePlacedShip,
   };
 });

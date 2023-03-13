@@ -45,7 +45,7 @@ watch(shipStore.getSelectedShipLength, () => {
 });
 
 function placeShip(event: any, x: number, y: number) {
-
+  console.log("len placed", shipStore.getPlacedShips.length);
   if (isShip (x, y)){
     popupLayer.callPopUp("Soll ein Schiff entfernt werden ?")
     if (popupLayer.getDeleteShip){
@@ -259,13 +259,17 @@ function findAndDeleteShip (x: number, y: number){
   let shipFounded = shipStore.getPlacedShips.find((value) => (value.startPos.x <= x || (value.startPos.x >= x)) 
                                                         && ((value.startPos.y <= y) || (value.startPos.y >= y)));
   
+                                                        
   let xStart = 0;
   let yStart = 0;
   let xEnd = 0;
   let yEnd = 0;
-  
+
   if (shipFounded != undefined) {
-    
+    let indexOfShips = shipStore.getPlacedShips.indexOf(shipFounded);
+    console.log("indexOfShips", indexOfShips)
+    console.log("len", xEnd - xStart + 1, "x0", xStart, "x1",  xEnd, "y0", yStart, "y1", yEnd)
+
     xStart = shipFounded?.startPos.x;
     yStart = shipFounded?.startPos.y;
     xEnd = shipFounded.endPos.x;
@@ -280,11 +284,13 @@ function findAndDeleteShip (x: number, y: number){
         lengthDeletedShip = yEnd - yStart + 1; 
         for(let i = yStart - 1; i < lengthDeletedShip; i++){ deleteShip(xStart, i); } 
       }
+      shipStore.deletePlacedShip(indexOfShips);
   }                                                      
   startPositionDeletedShip = {x: xStart, y: yStart};
   endPositionDeletedShip = {x: xEnd, y: yEnd};
 
- // console.log("len", xEnd - xStart + 1, "x0", xStart, "x1",  xEnd, "y0", yStart, "y1", yEnd)
+  
+  
 }
 
 function deleteShip(x: number, y: number){
