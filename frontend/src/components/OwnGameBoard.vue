@@ -276,9 +276,9 @@ function deleteShipHorizontal(x: number, y: number){
             if(isFound === false){
               isFound = true;
               xStart = i;
-              let found = shipStore.getPlacedShips.find(n => n.startPos.x === xStart )
+              let found = shipStore.getPlacedShips.find((value) => value.startPos.x === xStart+1)
               // n.startPos.x === xStart n.startPos.y == y-1
-              console.log("len found", found, "xStart", xStart)
+              console.log("len found", found?.length, "xStart", xStart)
               end = xStart + len -1;
               console.log(isFound, "start", xStart, "end", end)
             }
