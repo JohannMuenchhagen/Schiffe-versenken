@@ -250,12 +250,20 @@ function calcRemainingShipsAfterDelete() {
   }
 }
 
+function findShip (x: number, y: number): number{
+  let len = 0;
+
+return len;
+}
+
 function deleteShipHorizontal(x: number, y: number){
   let xStart = 0
   let yStart = y-1
   let isFound = false
-
-  for (let i = x - selectedShipLength!; i < x; i++) {
+  let end = 10
+  let len = 5
+  for (let i = x - len - 1; i <= end; i++) {
+//    console.log("i", i)
     if(i < 0){ continue;}
     if (document
           .getElementById("myBoard")
@@ -265,10 +273,15 @@ function deleteShipHorizontal(x: number, y: number){
             "mdi-ferry"
           ) === true) 
           {
-            isFound = true;
-            snackbarStore.callSnackbar("Ein Schiff gefunden");
-            xStart = i;
-            
+            if(isFound === false){
+              isFound = true;
+              xStart = i;
+              let found = shipStore.getPlacedShips.find(n => n.startPos.x === xStart )
+              // n.startPos.x === xStart n.startPos.y == y-1
+              console.log("len found", found, "xStart", xStart)
+              end = xStart + len -1;
+              console.log(isFound, "start", xStart, "end", end)
+            }
             document
             .getElementById("myBoard")
             ?.getElementsByClassName("v-row")
@@ -285,8 +298,6 @@ function deleteShipHorizontal(x: number, y: number){
             ?.getElementsByClassName("v-row")
             [y - 1]?.getElementsByClassName("v-col")
             [i]?.firstElementChild?.classList.add("tileWrapper");
-            //i-first -> delete ship
-
           }
   }
 }
