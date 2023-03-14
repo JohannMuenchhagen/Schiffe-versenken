@@ -30,10 +30,8 @@ let selectedShipLength: undefined | number = undefined;
 let selectedShipDirectionHorizontal: undefined | boolean = undefined;
 let endPosition: undefined | { x: number; y: number } = undefined;
 
-let startPositionDeletedShip: undefined | { x: number; y: number } = undefined;
-let endPositionDeletedShip: undefined | { x: number; y: number } = undefined;
-let isDeletedShipHorizontal = false;
-let lengthDeletedShip = 0;
+let lengthDeletedShipX = 0;
+let lengthDeletedShipY = 0;
 
 let remaining5LengthShip = 1;
 let remaining4LengthShip = 2;
@@ -260,46 +258,37 @@ function findAndDeleteShip (x: number, y: number){
 
   if (shipFounded != undefined) {
     let indexOfShips = shipStore.getPlacedShips.indexOf(shipFounded);
-   // console.log("indexOfShips", indexOfShips)
-   
-   //for(let i=0; i < shipStore.getPlacedShips.length; i++)
-   // console.log("index", i, "Obj:", shipStore.getPlacedShips[i].startPos.x, "-", shipStore.getPlacedShips[i].endPos.x, "; len: ", shipStore.getPlacedShips[i].length);
 
     xStart = shipFounded?.startPos.x;
     yStart = shipFounded?.startPos.y;
     xEnd = shipFounded.endPos.x;
     yEnd = shipFounded.endPos.y;
+    lengthDeletedShipX = xEnd - xStart + 1;
+    lengthDeletedShipY = yEnd - yStart + 1; 
 
    // console.log("len", xEnd - xStart + 1, "x0", xStart, "x1",  xEnd, "y0", yStart, "y1", yEnd)
-
-
       if(yEnd - yStart === 0) { //horizontal
-        isDeletedShipHorizontal = true; 
-        lengthDeletedShip = xEnd - xStart + 1;
-        console.log("if horiz", lengthDeletedShip, "x0-x1: ", xStart,"-", xEnd, "y", yStart,"-", yEnd);
+        console.log("if horiz", lengthDeletedShipX, "x0-x1: ", xStart,"-", xEnd, "y", yStart,"-", yEnd);
         deleteShip(xStart, yStart);
+        calcRemainingShipsAfterDelete(lengthDeletedShipX);
       }
       else if(xEnd - xStart === 0 ) { 
-        isDeletedShipHorizontal = false; 
-        lengthDeletedShip = yEnd - yStart + 1; 
-        for(let i = yStart - 1; i < lengthDeletedShip; i++){ 
-          deleteShip(xStart, i); 
-        } 
+        deleteShip(xStart, yStart); 
+        calcRemainingShipsAfterDelete(lengthDeletedShipY);
       }
       shipStore.deletePlacedShip(indexOfShips);
-      calcRemainingShipsAfterDelete(lengthDeletedShip);
-  }                                                      
-  startPositionDeletedShip = {x: xStart, y: yStart};
-  endPositionDeletedShip = {x: xEnd, y: yEnd};
+      
+  } 
 }
 
 function deleteShip(x: number, y: number){
-  console.log("deleteShip", x, y, "len", lengthDeletedShip);
-  for(let i = x - 1; i < x + lengthDeletedShip - 1; i++){ 
-          document
+  console.log("deleteShip", x, y, "len", lengthDeletedShipX, lengthDeletedShipY);
+  for(let i = x - 1; i < x + lengthDeletedShipX - 1; i++){ 
+    for(let j = y - 1; j < y + lengthDeletedShipY - 1; j++){
+      document
             .getElementById("myBoard")
             ?.getElementsByClassName("v-row")
-            [y-1]?.getElementsByClassName("v-col")
+            [j]?.getElementsByClassName("v-col")
             [i]?.firstElementChild
             ?.firstElementChild
             ?.classList.remove(
@@ -310,9 +299,10 @@ function deleteShip(x: number, y: number){
           document
             .getElementById("myBoard")
             ?.getElementsByClassName("v-row")
-            [y - 1]?.getElementsByClassName("v-col")
+            [j]?.getElementsByClassName("v-col")
             [i]?.firstElementChild?.classList.add("tileWrapper");
-        } 
+    }        
+  } 
   
 }
 
