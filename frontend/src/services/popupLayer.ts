@@ -13,7 +13,7 @@ export const usePopUpLayer = defineStore("popupLayer", () => {
   const getAction = computed(() => action);
 
   //actions
-  function callPopUp(inputText: string):boolean{
+  function callAndConfirmPopUp(inputText: string):boolean{
     text.value = inputText;
     active.value = true;
     return confirm(inputText);
@@ -38,7 +38,7 @@ export const usePopUpLayer = defineStore("popupLayer", () => {
     getText,
     getActive,
     getAction,
-    callPopUp,
+    callAndConfirmPopUp,
     startAction,
     stopAction,
     deactivePopUp,

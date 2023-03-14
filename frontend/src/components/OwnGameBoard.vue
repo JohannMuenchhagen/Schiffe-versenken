@@ -46,9 +46,7 @@ function placeShip(event: any, x: number, y: number) {   //vom Platzieren prüfe
   
   if (isShip (x, y)){  //wenn ein Schiff selektiert -> löschen: ja oder nein
     
-    console.log("placeShip", selectedShipToDelete);
-   // makeSelectedShipRedBeforeDelete(x,y);
-    if (popupLayer.callPopUp("Soll ein Schiff entfernt werden ?")){
+    if (popupLayer.callAndConfirmPopUp("Soll ein Schiff entfernt werden ?")){
       findAndDeleteShip(x,y);
       return;
     }
@@ -303,35 +301,6 @@ function makeShipWhiteIfDelete(x: number, y: number){ //Schleife für die Suche 
   
 }
 
-function makeSelectedShipRedBeforeDelete(x: number, y: number){
-  let shipFounded = shipStore.getPlacedShips.find((value) => (x >= value.startPos.x && (value.endPos.x >= x)) 
-  && ((y >= value.startPos.y) && (value.endPos.y >= y)));
-  
-  let xStart = 0;
-  let yStart = 0;
-  let xEnd = 0;
-  let yEnd = 0;
-
-  if (shipFounded != undefined) {   // ein Schiff gefunden
-
-    xStart = shipFounded?.startPos.x;
-    yStart = shipFounded?.startPos.y;
-    xEnd = shipFounded.endPos.x;
-    yEnd = shipFounded.endPos.y;
-    lengthDeletedShipX = xEnd - xStart + 1;
-    lengthDeletedShipY = yEnd - yStart + 1; 
-
-    for(let i = x - 1; i < x + lengthDeletedShipX - 1; i++){ 
-      for(let j = y - 1; j < y + lengthDeletedShipY - 1; j++){
-            document
-              .getElementById("myBoard")
-              ?.getElementsByClassName("v-row")
-              [j]?.getElementsByClassName("v-col")
-              [i]?.firstElementChild?.classList.add("tileWrapperWarning");
-      }      
-  } 
-}
-}
 
 function isShipAlreadyPlaced(): boolean {
   if (selectedShipLength === 5) {
@@ -367,10 +336,5 @@ function isShipAlreadyPlaced(): boolean {
 }
 .tileWrapper:hover {
   background-color: #c0c0c0 !important;
-}
-
-.tileWrapperWarning {
-  cursor: pointer;
-  background: rgb(232, 149, 135);
 }
 </style>
