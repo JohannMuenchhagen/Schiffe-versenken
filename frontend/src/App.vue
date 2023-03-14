@@ -21,7 +21,6 @@
     </v-main>
     <v-snackbar v-model="snackbarStore.getActive.value" timeout="2000">
       {{ snackbarStore.getText.value }}
-
       <template v-slot:actions>
         <v-btn
           color="blue"
@@ -32,6 +31,8 @@
         </v-btn>
       </template>
     </v-snackbar>
+
+    
   </v-app>
 </template>
 
@@ -39,8 +40,11 @@
 import SettingsDialog from "@/components/SettingsDialog.vue";
 import ConnectDialog from "./components/ConnectDialog.vue";
 import { useSnackbarStore } from "./services/snackbarStore";
+import {usePopUpLayer} from "./services/popupLayer";
 
 let snackbarStore = useSnackbarStore();
+let popupLayer = usePopUpLayer();
+
 </script>
 
 <style scoped>
