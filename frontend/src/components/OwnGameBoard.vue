@@ -43,8 +43,8 @@ watch(shipStore.getSelectedShipLength, () => {
 });
 
 function placeShip(event: any, x: number, y: number) {
- // console.log("len placed", shipStore.getPlacedShips.length);
-  if (isShip (x, y)){
+  
+  if (isShip (x, y)){  //wenn ein Schiff selektiert -> löschen: ja oder nein
     popupLayer.callPopUp("Soll ein Schiff entfernt werden ?")
     if (popupLayer.getDeleteShip){
       findAndDeleteShip(x,y);
@@ -107,7 +107,7 @@ function placeShip(event: any, x: number, y: number) {
   
 }
 
-function isShip (x: number, y: number):boolean {
+function isShip (x: number, y: number):boolean {  // prüft, ob es ein Schiff ist
   if (document
           .getElementById("myBoard")
           ?.getElementsByClassName("v-row")
@@ -158,7 +158,7 @@ function addClassesToTilesVertikal(x: number, y: number) {
   }
 }
 
-function isCrossedBorder(x: number, y: number, directionHorizontal: boolean): boolean{
+function isCrossedBorder(x: number, y: number, directionHorizontal: boolean): boolean{  //prüft, ob die Grenzen überschreitet sind
 
   if (((10 - (x - 1) - selectedShipLength!) < 0 && directionHorizontal) 
     || ((10 - (y - 1) - selectedShipLength!) < 0 && !directionHorizontal))
@@ -168,7 +168,7 @@ function isCrossedBorder(x: number, y: number, directionHorizontal: boolean): bo
   return false;
 }
 
-function isTangentToAnotherShip(xStart: number, yStart: number, xEnd: number, yEnd: number): boolean {
+function isTangentToAnotherShip(xStart: number, yStart: number, xEnd: number, yEnd: number): boolean {  //prüft, ob es eine Ecke ist
 
 for (let i = xStart - 2; i <= xEnd; i++) {
   for (let j = yStart - 2; j <= yEnd; j++){    
@@ -188,7 +188,7 @@ for (let i = xStart - 2; i <= xEnd; i++) {
 return false;
 }
 
-function isTakenByAnotherShip(x: number, y: number): boolean {
+function isTakenByAnotherShip(x: number, y: number): boolean {  //prüft, ob ein weiteren Schiff da ist
   for (let i = x - 1; i < selectedShipLength! + x - 1; i++) {
     for (let j = y - 1; j < selectedShipLength! + y - 1; j++){
       if ((document
@@ -219,7 +219,7 @@ watch(shipStore.getPlacedShips, () => {
   calcRemainingShipsToPlace();
 });
 
-function calcRemainingShipsToPlace() {
+function calcRemainingShipsToPlace() {   //aktualisieren die Anzahl von verfügbaren Schiffen nach einem Platzieren
   remaining5LengthShip = 1;
   remaining4LengthShip = 2;
   remaining3LengthShip = 3;
@@ -238,7 +238,7 @@ function calcRemainingShipsToPlace() {
   }
 }
 
-function calcRemainingShipsAfterDelete(len: number) {
+function calcRemainingShipsAfterDelete(len: number) {  //aktualisieren die Anzahl von verfügbaren Schiffen nach einer Entfernung eines Schiffes
   switch(len){
     case 5: remaining5LengthShip++;
     case 4: remaining4LengthShip++;
@@ -247,7 +247,7 @@ function calcRemainingShipsAfterDelete(len: number) {
   }
 }
 
-function findAndDeleteShip (x: number, y: number){
+function findAndDeleteShip (x: number, y: number){  //suchen einen Schiff im array und entfernt ihn (Design und shipStore)
   let shipFounded = shipStore.getPlacedShips.find((value) => (x >= value.startPos.x && (value.endPos.x >= x)) 
   && ((y >= value.startPos.y) && (value.endPos.y >= y)));
   
@@ -266,7 +266,6 @@ function findAndDeleteShip (x: number, y: number){
     lengthDeletedShipX = xEnd - xStart + 1;
     lengthDeletedShipY = yEnd - yStart + 1; 
 
-   // console.log("len", xEnd - xStart + 1, "x0", xStart, "x1",  xEnd, "y0", yStart, "y1", yEnd)
       if(yEnd - yStart === 0) { //horizontal
         console.log("if horiz", lengthDeletedShipX, "x0-x1: ", xStart,"-", xEnd, "y", yStart,"-", yEnd);
         deleteShip(xStart, yStart);
@@ -281,8 +280,7 @@ function findAndDeleteShip (x: number, y: number){
   } 
 }
 
-function deleteShip(x: number, y: number){
-  console.log("deleteShip", x, y, "len", lengthDeletedShipX, lengthDeletedShipY);
+function deleteShip(x: number, y: number){ //Schleife für die Suche eines Schiffes
   for(let i = x - 1; i < x + lengthDeletedShipX - 1; i++){ 
     for(let j = y - 1; j < y + lengthDeletedShipY - 1; j++){
       document
