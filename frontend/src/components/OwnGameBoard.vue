@@ -45,8 +45,10 @@ watch(shipStore.getSelectedShipLength, () => {
 function placeShip(event: any, x: number, y: number) {   //vom Platzieren prüfen die Regeln des Spiels
   
   if (isShip (x, y)){  //wenn ein Schiff selektiert -> löschen: ja oder nein
-    popupLayer.callPopUp("Soll ein Schiff entfernt werden ?")
-    if (popupLayer.getDeleteShip){
+    
+    console.log("placeShip", selectedShipToDelete);
+   // makeSelectedShipRedBeforeDelete(x,y);
+    if (popupLayer.callPopUp("Soll ein Schiff entfernt werden ?")){
       findAndDeleteShip(x,y);
       return;
     }
@@ -249,16 +251,16 @@ function calcRemainingShipsAfterDelete(len: number) {  //aktualisieren die Anzah
 
 function findAndDeleteShip (x: number, y: number){  //suchen einen Schiff im array und entfernt ihn (Design und shipStore)
   let shipFounded = shipStore.getPlacedShips.find((value) => (x >= value.startPos.x && (value.endPos.x >= x)) 
-  && ((y >= value.startPos.y) && (value.endPos.y >= y)));
+                                                          && ((y >= value.startPos.y) && (value.endPos.y >= y)));
   
   let xStart = 0;
   let yStart = 0;
   let xEnd = 0;
   let yEnd = 0;
 
-  if (shipFounded != undefined) {
-    let indexOfShips = shipStore.getPlacedShips.indexOf(shipFounded);
-
+  if (shipFounded != undefined) {   // ein Schiff gefunden
+    let indexOfShips = shipStore.getPlacedShips.indexOf(shipFounded);   //einen Index des Schiffes finden
+    
     xStart = shipFounded?.startPos.x;
     yStart = shipFounded?.startPos.y;
     xEnd = shipFounded.endPos.x;
@@ -267,20 +269,18 @@ function findAndDeleteShip (x: number, y: number){  //suchen einen Schiff im arr
     lengthDeletedShipY = yEnd - yStart + 1; 
 
       if(yEnd - yStart === 0) { //horizontal
-        console.log("if horiz", lengthDeletedShipX, "x0-x1: ", xStart,"-", xEnd, "y", yStart,"-", yEnd);
-        deleteShip(xStart, yStart);
         calcRemainingShipsAfterDelete(lengthDeletedShipX);
       }
       else if(xEnd - xStart === 0 ) { 
-        deleteShip(xStart, yStart); 
         calcRemainingShipsAfterDelete(lengthDeletedShipY);
       }
-      shipStore.deletePlacedShip(indexOfShips);
-      
+
+    makeShipWhiteIfDelete(xStart, yStart);  //design
+    shipStore.deletePlacedShip(indexOfShips);  //shipStore del ship
   } 
 }
 
-function deleteShip(x: number, y: number){ //Schleife für die Suche eines Schiffes
+function makeShipWhiteIfDelete(x: number, y: number){ //Schleife für die Suche eines Schiffes
   for(let i = x - 1; i < x + lengthDeletedShipX - 1; i++){ 
     for(let j = y - 1; j < y + lengthDeletedShipY - 1; j++){
       document
@@ -293,7 +293,6 @@ function deleteShip(x: number, y: number){ //Schleife für die Suche eines Schif
             "mdi-ferry",
             "mdi"
             );
-          console.log("FOR doc", i, y-1);
           document
             .getElementById("myBoard")
             ?.getElementsByClassName("v-row")
@@ -302,6 +301,36 @@ function deleteShip(x: number, y: number){ //Schleife für die Suche eines Schif
     }        
   } 
   
+}
+
+function makeSelectedShipRedBeforeDelete(x: number, y: number){
+  let shipFounded = shipStore.getPlacedShips.find((value) => (x >= value.startPos.x && (value.endPos.x >= x)) 
+  && ((y >= value.startPos.y) && (value.endPos.y >= y)));
+  
+  let xStart = 0;
+  let yStart = 0;
+  let xEnd = 0;
+  let yEnd = 0;
+
+  if (shipFounded != undefined) {   // ein Schiff gefunden
+
+    xStart = shipFounded?.startPos.x;
+    yStart = shipFounded?.startPos.y;
+    xEnd = shipFounded.endPos.x;
+    yEnd = shipFounded.endPos.y;
+    lengthDeletedShipX = xEnd - xStart + 1;
+    lengthDeletedShipY = yEnd - yStart + 1; 
+
+    for(let i = x - 1; i < x + lengthDeletedShipX - 1; i++){ 
+      for(let j = y - 1; j < y + lengthDeletedShipY - 1; j++){
+            document
+              .getElementById("myBoard")
+              ?.getElementsByClassName("v-row")
+              [j]?.getElementsByClassName("v-col")
+              [i]?.firstElementChild?.classList.add("tileWrapperWarning");
+      }      
+  } 
+}
 }
 
 function isShipAlreadyPlaced(): boolean {
@@ -338,5 +367,10 @@ function isShipAlreadyPlaced(): boolean {
 }
 .tileWrapper:hover {
   background-color: #c0c0c0 !important;
+}
+
+.tileWrapperWarning {
+  cursor: pointer;
+  background: rgb(232, 149, 135);
 }
 </style>
