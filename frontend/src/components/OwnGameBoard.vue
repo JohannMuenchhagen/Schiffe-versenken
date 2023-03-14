@@ -42,7 +42,7 @@ watch(shipStore.getSelectedShipLength, () => {
   selectedShipLength = shipStore.getSelectedShipLength.value;
 });
 
-function placeShip(event: any, x: number, y: number) {
+function placeShip(event: any, x: number, y: number) {   //vom Platzieren prüfen die Regeln des Spiels
   
   if (isShip (x, y)){  //wenn ein Schiff selektiert -> löschen: ja oder nein
     popupLayer.callPopUp("Soll ein Schiff entfernt werden ?")
@@ -120,7 +120,7 @@ function isShip (x: number, y: number):boolean {  // prüft, ob es ein Schiff is
   return false;
 }
 
-function addClassesToTilesHorizontal(x: number, y: number) {
+function addClassesToTilesHorizontal(x: number, y: number) {  //einen Schiff platzieren horizontal
   for (let i = x - 1; i < selectedShipLength! + x - 1; i++) {
     document
       .getElementById("myBoard")
@@ -138,7 +138,7 @@ function addClassesToTilesHorizontal(x: number, y: number) {
   }
 }
 
-function addClassesToTilesVertikal(x: number, y: number) {
+function addClassesToTilesVertikal(x: number, y: number) {  //einen Schiff platzieren vertikal
   for (let i = y - 1; i < selectedShipLength! + y - 1; i++) {
     document
         .getElementById("myBoard")
