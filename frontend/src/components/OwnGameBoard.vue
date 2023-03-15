@@ -48,7 +48,7 @@ watch(shipStore.getSelectedShipLength, () => {
 function placeShip(event: any, x: number, y: number) {   //vom Platzieren prüfen die Regeln des Spiels
   
   if (isPlaceOfShip (x, y)){  //wenn ein Schiff selektiert -> löschen: ja oder nein
-    
+
     if (popupLayer.callAndConfirmPopUp("Soll ein Schiff entfernt werden ?")){
       findAndDeleteShip(x,y);
       return;
@@ -57,58 +57,58 @@ function placeShip(event: any, x: number, y: number) {   //vom Platzieren prüfe
       if (selectedShipLength === undefined) {
       snackbarStore.callSnackbar("Es wurde noch kein Schiff ausgewählt!");
       return;
-    }
-    if (isShipAlreadyPlaced()) {
-      snackbarStore.callSnackbar("Dieses Schiff wurde bereits platziert!");
-      return;
-    }
+      }
+      if (isShipAlreadyPlaced()) {
+        snackbarStore.callSnackbar("Dieses Schiff wurde bereits platziert!");
+        return;
+      }
 
-    selectedShipDirectionHorizontal = shipStore.getDirechtionsForShips[selectedShipLength - 2];
-    let xEnd = x;
-    let yEnd = y;
+      selectedShipDirectionHorizontal = shipStore.getDirechtionsForShips[selectedShipLength - 2];
+      let xEnd = x;
+      let yEnd = y;
 
-    if (isCrossedBorder(x, y, selectedShipDirectionHorizontal)) {
-      snackbarStore.callSnackbar("Das Schiff überschreitet eine Grenze!");
-      return;
-    }
+      if (isCrossedBorder(x, y, selectedShipDirectionHorizontal)) {
+        snackbarStore.callSnackbar("Das Schiff überschreitet eine Grenze!");
+        return;
+      }
 
-    if(selectedShipDirectionHorizontal) {
-      xEnd = x + selectedShipLength! - 1;
-      if (isTakenByAnotherShip(x, y, xEnd, yEnd)) {
-        snackbarStore.callSnackbar("Dort befindet sich bereits ein Schiff!");
-        return;
+      if(selectedShipDirectionHorizontal) {
+        xEnd = x + selectedShipLength! - 1;
+        if (isTakenByAnotherShip(x, y, xEnd, yEnd)) {
+          snackbarStore.callSnackbar("Dort befindet sich bereits ein Schiff!");
+          return;
+        }
+        if (isTangentToAnotherShip(x, y, xEnd, yEnd)) {
+          snackbarStore.callSnackbar("Die Schiffe dürfen nicht über Eck gebaut sein oder Ausbuchtungen besitzen!");
+          return;
+        }
+      } else {
+        yEnd = y + selectedShipLength! - 1;
+        if (isTakenByAnotherShip(x, y, xEnd, yEnd)) {
+          snackbarStore.callSnackbar("Dort befindet sich bereits ein Schiff!");
+          return;
+        }
+        if (isTangentToAnotherShip(x, y, xEnd, yEnd)) {
+          snackbarStore.callSnackbar("Die Schiffe dürfen nicht über Eck gebaut sein oder Ausbuchtungen besitzen!");
+          return;
+        }
       }
-      if (isTangentToAnotherShip(x, y, xEnd, yEnd)) {
-        snackbarStore.callSnackbar("Die Schiffe dürfen nicht über Eck gebaut sein oder Ausbuchtungen besitzen!");
-        return;
-      }
-    } else {
-      yEnd = y + selectedShipLength! - 1;
-      if (isTakenByAnotherShip(x, y, xEnd, yEnd)) {
-        snackbarStore.callSnackbar("Dort befindet sich bereits ein Schiff!");
-        return;
-      }
-      if (isTangentToAnotherShip(x, y, xEnd, yEnd)) {
-        snackbarStore.callSnackbar("Die Schiffe dürfen nicht über Eck gebaut sein oder Ausbuchtungen besitzen!");
-        return;
-      }
-    }
-    
-    if(selectedShipDirectionHorizontal) {
-      endPosition = { x: x + selectedShipLength! - 1, y: y};
-      addClassesToTilesHorizontal(x, y);
-    } else {
-            endPosition = { x: x, y: y + selectedShipLength! - 1 };
-            addClassesToTilesVertikal(x, y);
-          } 
-          
-    shipStore.addPlacedShip({
-      startPos: { x: x, y: y },
-      endPos: endPosition,
-      length: selectedShipLength!,
-    });
-    
-    console.log(toRaw(shipStore.getPlacedShips));
+      
+      if(selectedShipDirectionHorizontal) {
+        endPosition = { x: x + selectedShipLength! - 1, y: y};
+        addClassesToTilesHorizontal(x, y);
+      } else {
+              endPosition = { x: x, y: y + selectedShipLength! - 1 };
+              addClassesToTilesVertikal(x, y);
+            } 
+            
+      shipStore.addPlacedShip({
+        startPos: { x: x, y: y },
+        endPos: endPosition,
+        length: selectedShipLength!,
+      });
+      
+      console.log(toRaw(shipStore.getPlacedShips));
   }
   
 }
