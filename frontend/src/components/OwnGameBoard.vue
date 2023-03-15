@@ -5,7 +5,8 @@
         <v-sheet
           color="grey-lighten-2"
           class="tileWrapper"
-          @click="placeShip($event, x, y)"
+          @select="findShipAndChangeColor($event, x,y);"
+          @click=" placeShip($event, x, y);"
           ref="tile"
         >
           <v-icon icon=""></v-icon>
@@ -41,18 +42,54 @@ let remaining4LengthShip = 2;
 let remaining3LengthShip = 3;
 let remaining2LengthShip = 4;
 
+let popup = false;
+
 watch(shipStore.getSelectedShipLength, () => {
   selectedShipLength = shipStore.getSelectedShipLength.value;
 });
 
+function findShipAndChangeColor(event: any, x: number, y: number, warning: boolean){
+  
+  if(shipStore.getDirechtionsForShips[selectedShipLength! - 2]){
+    lengthSelectedShipX = selectedShipLength!
+    lengthSelectedShipY = 1
+    console.log(lengthSelectedShipY)
+  }else{
+    lengthSelectedShipX = 1
+    lengthSelectedShipY = selectedShipLength!
+  }
+  if (warning){ changeColor(x, y, "bg-grey-lighten-2", "bg-red")
+  }else{ changeColor(x, y, "bg-red", "bg-grey-lighten-2")}
+}
+
+function changeColor(x: number, y: number, removedColor: string, addedColor: string){
+  for (let i = x - 1; i < lengthSelectedShipX + x - 1; i++) {
+      for (let j = y - 1; j < lengthSelectedShipY + y - 1; j++){   
+        document
+          .getElementById("myBoard")
+          ?.getElementsByClassName("v-row")
+          [j]?.getElementsByClassName("v-col")
+          [i]?.firstElementChild?.classList.remove(removedColor);
+        document
+          .getElementById("myBoard")
+          ?.getElementsByClassName("v-row")
+          [j]?.getElementsByClassName("v-col")
+          [i]?.firstElementChild?.classList.add(addedColor);
+      }
+    }
+}   
+
 function placeShip(event: any, x: number, y: number) {   //vom Platzieren prüfen die Regeln des Spiels
   
   if (isPlaceOfShip (x, y)){  //wenn ein Schiff selektiert -> löschen: ja oder nein
-
-    if (popupLayer.callAndConfirmPopUp("Soll ein Schiff entfernt werden ?")){
+    findShipAndChangeColor(event, x,y, true);
+    setTimeout(()=> popup = popupLayer.callAndConfirmPopUp("Soll ein Schiff entfernt werden ?"), 200)
+    if (popup){
       findAndDeleteShip(x,y);
       return;
-    }
+    } else { 
+      //  changeColor(event, x,y, false);
+      }
   } else{
       if (selectedShipLength === undefined) {
       snackbarStore.callSnackbar("Es wurde noch kein Schiff ausgewählt!");
