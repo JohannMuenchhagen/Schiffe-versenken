@@ -5,7 +5,6 @@
         <v-sheet
           color="grey-lighten-2"
           class="tileWrapper"
-          @select="findShipAndChangeColor($event, x,y);"
           @click=" placeShip($event, x, y);"
           ref="tile"
         >
@@ -42,13 +41,16 @@ let remaining4LengthShip = 2;
 let remaining3LengthShip = 3;
 let remaining2LengthShip = 4;
 
+const colorShip = "bg-grey-lighten-2"
+const colorShipWarning = "bg-deep-orange-lighten-2"
+
 let popup = false;
 
 watch(shipStore.getSelectedShipLength, () => {
   selectedShipLength = shipStore.getSelectedShipLength.value;
 });
 
-function findShipAndChangeColor(event: any, x: number, y: number, warning: boolean){
+function findShipAndChangeColor( x: number, y: number, warning: boolean){
   
   if(shipStore.getDirechtionsForShips[selectedShipLength! - 2]){
     lengthSelectedShipX = selectedShipLength!
@@ -57,8 +59,8 @@ function findShipAndChangeColor(event: any, x: number, y: number, warning: boole
     lengthSelectedShipX = 1
     lengthSelectedShipY = selectedShipLength!
   }
-  if (warning){ changeColor(x, y, "bg-grey-lighten-2", "bg-red")
-  }else{ changeColor(x, y, "bg-red", "bg-grey-lighten-2")}
+  if (warning){ changeColor(x, y, colorShip, colorShipWarning)
+  }else{ changeColor(x, y, colorShipWarning, colorShip)}
 }
 
 function changeColor(x: number, y: number, removedColor: string, addedColor: string){
@@ -80,23 +82,22 @@ function changeColor(x: number, y: number, removedColor: string, addedColor: str
 
 function placeShip(event: any, x: number, y: number) {   //vom Platzieren prüfen die Regeln des Spiels
   
-  if (isPlaceOfShip (x, y)){  //wenn ein Schiff selektiert -> löschen: ja oder nein
-    findShipAndChangeColor(event, x,y, true);
+  if (isPlaceOfShip (x, y)){  //wenn ein Schiff selektiert -> löschen: ja oder nein; color change davor
+    findShipAndChangeColor(x,y, true);
     setTimeout(function() {
       if(popupLayer.callAndConfirmPopUp("Soll ein Schiff entfernt werden ?")){
-        changeColor(x, y, "bg-red", "bg-grey-lighten-2");
+        findShipAndChangeColor(x,y, false);
         findAndDeleteShip(x,y);
         return;
       }
       else {
-        // findShipAndChangeColor(event, x,y, false);
-        changeColor(x, y, "bg-red", "bg-grey-lighten-2");
+        findShipAndChangeColor(x,y, false);
       }
     }, 50); 
     } else{
       if (selectedShipLength === undefined) {
-      snackbarStore.callSnackbar("Es wurde noch kein Schiff ausgewählt!");
-      return;
+        snackbarStore.callSnackbar("Es wurde noch kein Schiff ausgewählt!");
+        return;
       }
       if (isShipAlreadyPlaced()) {
         snackbarStore.callSnackbar("Dieses Schiff wurde bereits platziert!");
