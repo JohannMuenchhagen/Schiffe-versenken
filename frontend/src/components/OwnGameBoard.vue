@@ -47,7 +47,7 @@ watch(shipStore.getSelectedShipLength, () => {
 
 function placeShip(event: any, x: number, y: number) {   //vom Platzieren prüfen die Regeln des Spiels
   
-  if (isShip (x, y)){  //wenn ein Schiff selektiert -> löschen: ja oder nein
+  if (isPlaceOfShip (x, y)){  //wenn ein Schiff selektiert -> löschen: ja oder nein
     
     if (popupLayer.callAndConfirmPopUp("Soll ein Schiff entfernt werden ?")){
       findAndDeleteShip(x,y);
@@ -75,8 +75,8 @@ function placeShip(event: any, x: number, y: number) {   //vom Platzieren prüfe
     if(selectedShipDirectionHorizontal) {
       xEnd = x + selectedShipLength! - 1;
       if (isTakenByAnotherShip(x, y, xEnd, yEnd)) {
-      snackbarStore.callSnackbar("Dort befindet sich bereits ein Schiff!");
-      return;
+        snackbarStore.callSnackbar("Dort befindet sich bereits ein Schiff!");
+        return;
       }
       if (isTangentToAnotherShip(x, y, xEnd, yEnd)) {
         snackbarStore.callSnackbar("Die Schiffe dürfen nicht über Eck gebaut sein oder Ausbuchtungen besitzen!");
@@ -85,8 +85,8 @@ function placeShip(event: any, x: number, y: number) {   //vom Platzieren prüfe
     } else {
       yEnd = y + selectedShipLength! - 1;
       if (isTakenByAnotherShip(x, y, xEnd, yEnd)) {
-      snackbarStore.callSnackbar("Dort befindet sich bereits ein Schiff!");
-      return;
+        snackbarStore.callSnackbar("Dort befindet sich bereits ein Schiff!");
+        return;
       }
       if (isTangentToAnotherShip(x, y, xEnd, yEnd)) {
         snackbarStore.callSnackbar("Die Schiffe dürfen nicht über Eck gebaut sein oder Ausbuchtungen besitzen!");
@@ -114,16 +114,9 @@ function placeShip(event: any, x: number, y: number) {   //vom Platzieren prüfe
 }
 
 function isPlaceOfShip(x: number, y: number):boolean{
-  if (shipStore.getPlacedShips.find((value) => (x >= value.startPos.x && (value.endPos.x >= x)) 
-                                          && ((y >= value.startPos.y) && (value.endPos.y >= y))) != undefined)
-                                                { 
-                                                  return true;
-                                                }
-  return false;
-}
-
-function isShip (x: number, y: number):boolean {  // prüft, ob es ein Schiff ist
-  return isPlaceOfShip(x,y);
+  return shipStore.getPlacedShips.find((value) => (x >= value.startPos.x && (value.endPos.x >= x)) 
+                                          && ((y >= value.startPos.y) && (value.endPos.y >= y))) != undefined
+                                               
 }
 
 function addClassesToTilesHorizontal(x: number, y: number) {  //einen Schiff platzieren horizontal
@@ -167,7 +160,7 @@ function addClassesToTilesVertikal(x: number, y: number) {  //einen Schiff platz
 function isCrossedBorder(x: number, y: number, directionHorizontal: boolean): boolean{  //prüft, ob die Grenzen überschreitet sind
 
   if (((10 - (x - 1) - selectedShipLength!) < 0 && directionHorizontal) 
-    || ((10 - (y - 1) - selectedShipLength!) < 0 && !directionHorizontal))
+   || ((10 - (y - 1) - selectedShipLength!) < 0 && !directionHorizontal))
     {
       return true;
     }
@@ -177,7 +170,7 @@ function isCrossedBorder(x: number, y: number, directionHorizontal: boolean): bo
 function isTangentToAnotherShip(xStart: number, yStart: number, xEnd: number, yEnd: number): boolean { 
 for (let i = xStart - 1; i <= xEnd + 1; i++) {
   for (let j = yStart - 1; j <= yEnd + 1; j++){    
-          if (i < 0 || j < 0) { continue; } 
+          if (i < 0 || j < 0)    { continue; } 
           if(isPlaceOfShip(i, j)){ return true; }
     }
   }
@@ -188,7 +181,7 @@ function isTakenByAnotherShip(xStart: number, yStart: number, xEnd: number, yEnd
   
   for (let i = xStart; i <= xEnd; i++) {
     for (let j = yStart; j <= yEnd; j++){
-      if (i < 0 || j < 0) { continue; } 
+      if (i < 0 || j < 0)    { continue; } 
       if(isPlaceOfShip(i, j)){ return true; }
       }
     }
@@ -280,7 +273,6 @@ function makeShipWhiteIfDelete(x: number, y: number){ //Schleife für die Suche 
   } 
   
 }
-
 
 function isShipAlreadyPlaced(): boolean {
   if (selectedShipLength === 5) {
