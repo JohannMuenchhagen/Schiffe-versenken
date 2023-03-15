@@ -113,17 +113,17 @@ function placeShip(event: any, x: number, y: number) {   //vom Platzieren prüfe
   
 }
 
-function isShip (x: number, y: number):boolean {  // prüft, ob es ein Schiff ist
-  if (document
-          .getElementById("myBoard")
-          ?.getElementsByClassName("v-row")
-          [y-1]?.getElementsByClassName("v-col")
-          [x-1]?.firstElementChild?.firstElementChild?.classList.contains(
-            "mdi-ferry"
-          ) === true){
-            return true;
-          }
+function isPlaceOfShip(x: number, y: number):boolean{
+  if (shipStore.getPlacedShips.find((value) => (x >= value.startPos.x && (value.endPos.x >= x)) 
+                                          && ((y >= value.startPos.y) && (value.endPos.y >= y))) != undefined)
+                                                { 
+                                                  return true;
+                                                }
   return false;
+}
+
+function isShip (x: number, y: number):boolean {  // prüft, ob es ein Schiff ist
+  return isPlaceOfShip(x,y);
 }
 
 function addClassesToTilesHorizontal(x: number, y: number) {  //einen Schiff platzieren horizontal
@@ -178,10 +178,7 @@ function isTangentToAnotherShip(xStart: number, yStart: number, xEnd: number, yE
 for (let i = xStart - 1; i <= xEnd + 1; i++) {
   for (let j = yStart - 1; j <= yEnd + 1; j++){    
           if (i < 0 || j < 0) { continue; } 
-          if(shipStore.getPlacedShips.find((value) => (i >= value.startPos.x && (value.endPos.x >= i)) 
-                                                 && ((j >= value.startPos.y) && (value.endPos.y >= j))) != undefined){
-                                                            return true;
-                                                          }
+          if(isPlaceOfShip(i, j)){ return true; }
     }
   }
 return false;
@@ -192,10 +189,7 @@ function isTakenByAnotherShip(xStart: number, yStart: number, xEnd: number, yEnd
   for (let i = xStart; i <= xEnd; i++) {
     for (let j = yStart; j <= yEnd; j++){
       if (i < 0 || j < 0) { continue; } 
-          if(shipStore.getPlacedShips.find((value) => (i >= value.startPos.x && (value.endPos.x >= i)) 
-                                                 && ((j >= value.startPos.y) && (value.endPos.y >= j))) != undefined){
-                                                            return true;
-                                                          }
+      if(isPlaceOfShip(i, j)){ return true; }
       }
     }
   return false;
