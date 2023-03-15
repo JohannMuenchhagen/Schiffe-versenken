@@ -53,7 +53,6 @@ function findShipAndChangeColor(event: any, x: number, y: number, warning: boole
   if(shipStore.getDirechtionsForShips[selectedShipLength! - 2]){
     lengthSelectedShipX = selectedShipLength!
     lengthSelectedShipY = 1
-    console.log(lengthSelectedShipY)
   }else{
     lengthSelectedShipX = 1
     lengthSelectedShipY = selectedShipLength!
@@ -83,14 +82,18 @@ function placeShip(event: any, x: number, y: number) {   //vom Platzieren prüfe
   
   if (isPlaceOfShip (x, y)){  //wenn ein Schiff selektiert -> löschen: ja oder nein
     findShipAndChangeColor(event, x,y, true);
-    setTimeout(()=> popup = popupLayer.callAndConfirmPopUp("Soll ein Schiff entfernt werden ?"), 200)
-    if (popup){
-      findAndDeleteShip(x,y);
-      return;
-    } else { 
-      //  changeColor(event, x,y, false);
+    setTimeout(function() {
+      if(popupLayer.callAndConfirmPopUp("Soll ein Schiff entfernt werden ?")){
+        changeColor(x, y, "bg-red", "bg-grey-lighten-2");
+        findAndDeleteShip(x,y);
+        return;
       }
-  } else{
+      else {
+        // findShipAndChangeColor(event, x,y, false);
+        changeColor(x, y, "bg-red", "bg-grey-lighten-2");
+      }
+    }, 50); 
+    } else{
       if (selectedShipLength === undefined) {
       snackbarStore.callSnackbar("Es wurde noch kein Schiff ausgewählt!");
       return;
