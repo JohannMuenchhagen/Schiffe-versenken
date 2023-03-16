@@ -51,21 +51,25 @@ watch(shipStore.getSelectedShipLength, () => {
 });
 
 function findShipAndChangeColor( x: number, y: number, warning: boolean){
+
+  let shipFounded = shipStore.getPlacedShips.find((value) => (x >= value.startPos.x && (value.endPos.x >= x)) 
+                                                          && ((y >= value.startPos.y) && (value.endPos.y >= y)));
   
-  if(shipStore.getDirechtionsForShips[selectedShipLength! - 2]){
-    lengthSelectedShipX = selectedShipLength!
-    lengthSelectedShipY = 1
-  }else{
-    lengthSelectedShipX = 1
-    lengthSelectedShipY = selectedShipLength!
-  }
-  if (warning){ changeColor(x, y, colorShip, colorShipWarning)
-  }else{ changeColor(x, y, colorShipWarning, colorShip)}
+  let xStart = shipFounded?.startPos.x!;;
+  let yStart = shipFounded?.startPos.y!;
+  let xEnd = shipFounded?.endPos.x!;
+  let yEnd = shipFounded?.endPos.y!;
+    
+  lengthSelectedShipX= xEnd - xStart + 1;
+  lengthSelectedShipY = yEnd - yStart + 1; 
+
+  if (warning){ changeColor(xStart, yStart, lengthSelectedShipX, lengthSelectedShipY, colorShip, colorShipWarning)
+  }else{ changeColor(xStart, yStart, lengthSelectedShipX, lengthSelectedShipY, colorShipWarning, colorShip)}
 }
 
-function changeColor(x: number, y: number, removedColor: string, addedColor: string){
-  for (let i = x - 1; i < lengthSelectedShipX + x - 1; i++) {
-      for (let j = y - 1; j < lengthSelectedShipY + y - 1; j++){   
+function changeColor(xStart: number, yStart: number, lenX: number, lenY: number, removedColor: string, addedColor: string){
+  for (let i = xStart - 1; i < lenX + xStart - 1; i++) {
+      for (let j = yStart - 1; j < lenY + yStart - 1; j++){   
         document
           .getElementById("myBoard")
           ?.getElementsByClassName("v-row")
@@ -93,7 +97,7 @@ function placeShip(event: any, x: number, y: number) {   //vom Platzieren prüfe
       else {
         findShipAndChangeColor(x,y, false);
       }
-    }, 50); 
+    }, 300); 
     } else{
       if (selectedShipLength === undefined) {
         snackbarStore.callSnackbar("Es wurde noch kein Schiff ausgewählt!");
