@@ -3,6 +3,9 @@
     <v-row dense v-for="y in 10" :key="y">
       <v-col v-for="x in 10" :key="x">
         <v-sheet
+          :class="
+            gameStore.getActionsState.value !== 'attack' ? 'disableClick' : ''
+          "
           color="grey-lighten-2"
           class="tileWrapper"
           @click="clickTile(x, y, $event)"
@@ -15,9 +18,11 @@
 </template>
 
 <script setup lang="ts">
+import { useGameStore } from "@/services/gameStore";
 import { useShipStore } from "@/services/shipStore";
 
 const shipStore = useShipStore();
+const gameStore = useGameStore();
 
 function clickTile(x: number, y: number, event: any) {
   if (shipStore.isShipHit({ x: x, y: y }) !== false) {
@@ -47,5 +52,9 @@ function clickTile(x: number, y: number, event: any) {
 }
 .tileWrapper:hover {
   background-color: #c0c0c0 !important;
+}
+
+.disableClick {
+  pointer-events: none;
 }
 </style>
