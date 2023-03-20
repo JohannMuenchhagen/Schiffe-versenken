@@ -57,6 +57,9 @@ function onMessage(event: any): void {
   }
   if (Object.values(msg).includes("Player 2 joined")) {
     gameStore.connectionCompleted();
+  }
+  if (Object.values(msg).includes("Player left")) {
+    gameStore.stopGame();
   } else {
     console.log("456");
   }

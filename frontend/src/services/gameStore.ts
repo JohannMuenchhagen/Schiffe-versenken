@@ -57,6 +57,7 @@ export const useGameStore = defineStore("game", () => {
 
   function stopGame() {
     active.value = false;
+    gameStarted.value = false;
   }
 
   return {
