@@ -7,11 +7,13 @@ export const useGameStore = defineStore("game", () => {
   const gameId = ref<string>("");
   const gameState = ref<string>("no game");
   const playerID = ref<string>();
+  const actionsState = ref<string>();
 
   // getters
   const getGameId = computed(() => gameId);
   const getGameState = computed(() => gameState);
   const getPlayerId = computed(() => playerID);
+  const getActionsState = computed(() => actionsState);
 
   // actions
   function startGame() {
@@ -49,6 +51,7 @@ export const useGameStore = defineStore("game", () => {
       alert("Fehler beim initialisieren des Spiels, es fehlen Daten!");
     }
     gameState.value = "started";
+    actionsState.value = "placeShips";
   }
 
   function stopGame() {
@@ -66,5 +69,6 @@ export const useGameStore = defineStore("game", () => {
     getPlayerId,
     getGameState,
     connectionCompleted,
+    getActionsState,
   };
 });

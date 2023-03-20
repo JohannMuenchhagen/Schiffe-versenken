@@ -3,6 +3,11 @@
     <v-row dense v-for="y in 10" :key="y">
       <v-col v-for="x in 10" :key="x">
         <v-sheet
+          :class="
+            gameStore.getActionsState.value !== 'place ships'
+              ? 'disableClick'
+              : ''
+          "
           color="grey-lighten-2"
           class="tileWrapper"
           @click="placeShip($event, x, y)"
@@ -20,6 +25,7 @@ import { useShipStore } from "@/services/shipStore";
 import { useSnackbarStore } from "@/services/snackbarStore";
 import { computed, toRaw, watch } from "vue";
 import { usePopUpLayer } from "@/services/popupLayer";
+import { useGameStore } from "@/services/gameStore";
 
 const shipStore = useShipStore();
 const snackbarStore = useSnackbarStore();
@@ -42,6 +48,7 @@ let remaining2LengthShip = 4;
 
 const colorShip = "bg-grey-lighten-2";
 const colorShipWarning = "bg-deep-orange-lighten-2";
+const gameStore = useGameStore();
 
 let popup = false;
 
@@ -427,5 +434,9 @@ function isShipAlreadyPlaced(): boolean {
 }
 .tileWrapper:hover {
   background-color: #c0c0c0 !important;
+}
+
+.disableClick {
+  pointer-events: none;
 }
 </style>
