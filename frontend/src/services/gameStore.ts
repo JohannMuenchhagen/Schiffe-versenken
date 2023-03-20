@@ -51,7 +51,7 @@ export const useGameStore = defineStore("game", () => {
       alert("Fehler beim initialisieren des Spiels, es fehlen Daten!");
     }
     gameState.value = "started";
-    actionsState.value = "placeShips";
+    actionsState.value = "place ships";
   }
 
   function stopGame() {
