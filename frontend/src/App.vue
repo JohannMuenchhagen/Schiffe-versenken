@@ -21,7 +21,6 @@
     </v-main>
     <v-snackbar v-model="snackbarStore.getActive.value" timeout="2000">
       {{ snackbarStore.getText.value }}
-
       <template v-slot:actions>
         <v-btn
           color="blue"
@@ -41,8 +40,10 @@ import ConnectDialog from "./components/ConnectDialog.vue";
 import { useSnackbarStore } from "./services/snackbarStore";
 import webSocketService from "@/services/websocket.service";
 import { onMounted } from "vue";
+import { usePopUpLayer } from "./services/popupLayer";
 
 let snackbarStore = useSnackbarStore();
+let popupLayer = usePopUpLayer();
 
 onMounted(() => {
   console.log("[websocket] connecting...");

@@ -12,6 +12,17 @@ def load_game(gameID: int):  # load a game from database
     return requests.get(url, params={"gameId": gameID}).json()
 
 
+async def broadcast(message_player1: json, message_player2: json, player1: WebSocket, player2: WebSocket = None):
+    # send a broadcast to both players
+    await player1.send_json(message_player1)
+    if player2 is not None:
+        await player2.send_json(message_player2)
+
+
+async def send_personal_message(message: str, websocket: WebSocket):
+    await websocket.send_json({'Message': message})
+
+
 class ConnectionManager:
 
     def __init__(self):
@@ -46,23 +57,14 @@ class ConnectionManager:
         self.map_websocket_game.pop(websocket)  # remove the websocket
         self.active_connections.remove(websocket)  # remove an active connection
 
-    async def send_personal_message(self, message: str, websocket: WebSocket):
-        await websocket.send_json({'Message':message})
-
-    async def broadcast(self, message: json, player1: WebSocket, player2: WebSocket = None):
-        # send a broadcast to both players
-        await player1.send_json(message)
-        if player2 is not None:
-            await player2.send_json(message)
-
     def check_type(self, data: json, websocket: WebSocket):
         # the entrypoint to this class
         match data['Type']:
             case 'initialize Game':
                 return self.initialize_game(websocket)
             case 'Join':
-                """if data['GameID'] not in self.current_games:
-                    return {'Error': 'Unable to Join', 'Description': 'Game doesnt exist'}, websocket, None """ # TODO Bugfix!
+                if data['GameID'] not in self.current_games.keys():
+                    return {'Error': 'Unable to Join', 'Description': 'Game doesnt exist'}
                 return self.join(data, websocket)
             case 'Set':
                 return self.set(data)
@@ -94,7 +96,7 @@ class ConnectionManager:
         if 'Error' in msg:
             return msg, game.player1.websocket, game.player2.websocket
         self.active_player += 1  # increase the number of active players
-        return {'Message': 'Join successful', 'PlayerID': game.player2.playerID}, \
+        return {'Message': 'Join successful', 'PlayerID': game.player2.playerID}, {'Message': 'Player 2 joined'}, \
             game.player1.websocket, game.player2.websocket
 
     def set(self, data: dict):
