@@ -5,15 +5,13 @@ import webSocketService from "@/services/websocket.service";
 export const useGameStore = defineStore("game", () => {
   // state
   const gameId = ref<string>("");
-  const active = ref<boolean>();
+  const gameState = ref<string>("no game");
   const playerID = ref<string>();
-  const gameStarted = ref<boolean>(false);
 
   // getters
   const getGameId = computed(() => gameId);
-  const getActive = computed(() => active);
+  const getGameState = computed(() => gameState);
   const getPlayerId = computed(() => playerID);
-  const getGameStarted = computed(() => gameStarted);
 
   // actions
   function startGame() {
@@ -25,8 +23,8 @@ export const useGameStore = defineStore("game", () => {
       gameId.value = inputId;
     }
     playerID.value = inputPlayer;
-    active.value = true;
-    console.log(gameId.value, active.value, playerID.value);
+    gameState.value = "init";
+    console.log(gameId.value, gameState.value, playerID.value);
   }
 
   function joinGame(inputId: number | undefined) {
@@ -45,33 +43,28 @@ export const useGameStore = defineStore("game", () => {
     if (
       gameId.value === undefined ||
       gameId.value === "" ||
-      active.value === undefined ||
-      active.value === false ||
       playerID.value === undefined ||
       playerID.value == ""
     ) {
       alert("Fehler beim initialisieren des Spiels, es fehlen Daten!");
     }
-    gameStarted.value = true;
+    gameState.value = "started";
   }
 
   function stopGame() {
-    active.value = false;
-    gameStarted.value = false;
+    gameState.value = "no game";
   }
 
   return {
     gameId,
-    active,
     playerID,
     getGameId,
-    getActive,
-    getGameStarted,
     startGame,
     initGame,
     joinGame,
     stopGame,
     getPlayerId,
+    getGameState,
     connectionCompleted,
   };
 });

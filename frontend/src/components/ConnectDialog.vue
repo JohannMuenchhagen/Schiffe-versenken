@@ -20,7 +20,7 @@
                   ></v-text-field>
                   <v-btn
                     :loading="loading"
-                    :disabled="gameStore.getActive.value"
+                    :disabled="gameStarted"
                     @click="createGame()"
                     block
                     class="mt-2"
@@ -43,7 +43,7 @@
                   ></v-text-field>
                   <v-btn
                     :loading="loading"
-                    :disabled="gameStore.getActive.value"
+                    :disabled="gameStarted"
                     @click="joinGame()"
                     block
                     class="mt-2"
@@ -90,6 +90,7 @@ let dialog = ref<boolean>(false);
 let gameID = ref<number>();
 let createGameID = ref(gameStore.getGameId);
 let loading = ref<boolean>(false);
+let gameStarted = ref<boolean>(false);
 
 const snackbarStore = useSnackbarStore();
 
@@ -100,8 +101,11 @@ let rules = [
   },
 ];
 
-watch(gameStore.getGameStarted, () => {
-  if (gameStore.getGameStarted.value === true) {
+watch(gameStore.getGameState, () => {
+  if (gameStore.getGameState.value !== "no game") {
+    gameStarted.value = true;
+  }
+  if (gameStore.getGameState.value === "started") {
     dialog.value = false;
     snackbarStore.callSnackbar("Beide Parteien beigetreten. Spiel startet...");
   }
