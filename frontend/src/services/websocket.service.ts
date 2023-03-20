@@ -59,7 +59,10 @@ function onMessage(event: any): void {
     gameStore.connectionCompleted();
   }
   if (Object.values(msg).includes("Player left")) {
+    console.log("Test123");
     gameStore.stopGame();
+    console.log(gameStore.getActive);
+    console.log(gameStore.getGameStarted);
   } else {
     console.log("456");
   }
