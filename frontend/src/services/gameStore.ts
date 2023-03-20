@@ -24,9 +24,7 @@ export const useGameStore = defineStore("game", () => {
     if (inputId !== undefined) {
       gameId.value = inputId;
     }
-    if (playerID.value === undefined) {
-      playerID.value = inputPlayer; // TODO Muss geändert werden! Wir bekommen unerwarteterweise die ID des Gegners vom Backend...
-    }
+    playerID.value = inputPlayer;
     active.value = true;
     console.log(gameId.value, active.value, playerID.value);
   }

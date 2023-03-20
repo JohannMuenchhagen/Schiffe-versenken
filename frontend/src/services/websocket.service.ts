@@ -5,7 +5,7 @@ const prod = import.meta.env.MODE === "production";
 /* Hier wird die baseURL gesetzt, Port und URL ist anzupassen !!! */
 const baseUrl: string = prod
   ? "ws://ich-bin-das-backend.de/game"
-  : "ws://127.0.0.1:8000/game";
+  : "ws://192.168.178.51:8000/game";
 
 let ws: WebSocket;
 
@@ -53,6 +53,10 @@ function onMessage(event: any): void {
   }
   if (Object.values(msg).includes("Join successful")) {
     gameStore.initGame(undefined, msg.PlayerID);
+    gameStore.connectionCompleted();
+  }
+  if (Object.values(msg).includes("Player 2 joined")) {
+    gameStore.connectionCompleted();
   } else {
     console.log("456");
   }
