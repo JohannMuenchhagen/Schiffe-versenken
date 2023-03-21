@@ -127,7 +127,7 @@ class ConnectionManager:
                 else:
                     success[item + str(i)] = res['Message']
                     i += 1
-        return {'GameID': game_id, 'Success': success, 'Error': error}, \
+        return {'GameID': game_id, 'Success': success, 'Fail': error}, \
             game.player1.websocket, game.player2.websocket
 
     def move(self, data: dict):
