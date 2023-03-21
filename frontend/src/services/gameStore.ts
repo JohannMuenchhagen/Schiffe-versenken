@@ -68,6 +68,7 @@ export const useGameStore = defineStore("game", () => {
   }
 
   function startToSinkShips() {
+    console.log("Ändere Actions State zu attack oder wait");
     if (firstMove.value === true) {
       actionsState.value === "attack";
     } else {
