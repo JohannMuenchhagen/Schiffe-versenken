@@ -77,8 +77,6 @@ function onMessage(event: any): void {
     )
   ) {
     gameStore.placedShips();
-  } else {
-    console.log("ungeplante Rückmeldung...");
   }
 }
 

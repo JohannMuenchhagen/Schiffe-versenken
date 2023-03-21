@@ -8,12 +8,14 @@ export const useGameStore = defineStore("game", () => {
   const gameState = ref<string>("no game");
   const playerID = ref<string>();
   const actionsState = ref<string>();
+  const opponentHasPlacedShips = ref<boolean>(false);
 
   // getters
   const getGameId = computed(() => gameId);
   const getGameState = computed(() => gameState);
   const getPlayerId = computed(() => playerID);
   const getActionsState = computed(() => actionsState);
+  const getOpponentHasPlacedShips = computed(() => opponentHasPlacedShips);
 
   // actions
   function startGame() {
@@ -55,6 +57,9 @@ export const useGameStore = defineStore("game", () => {
   }
 
   function placedShips() {
+    if (opponentHasPlacedShips.value === true) {
+      actionsState.value = "attack";
+    }
     actionsState.value = "done placing ships";
   }
 
@@ -75,5 +80,6 @@ export const useGameStore = defineStore("game", () => {
     connectionCompleted,
     getActionsState,
     placedShips,
+    getOpponentHasPlacedShips,
   };
 });
