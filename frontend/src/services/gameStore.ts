@@ -108,6 +108,10 @@ export const useGameStore = defineStore("game", () => {
       }
       lastClickedTile.value.target.firstChild.classList.add("mdi");
       lastClickedTile.value.target.classList.remove("tileWrapper");
+    } else {
+      if (event === "Miss") {
+        switchActionRole();
+      }
     }
   }
 
