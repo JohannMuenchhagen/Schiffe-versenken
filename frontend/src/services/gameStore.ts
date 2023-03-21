@@ -1,20 +1,25 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import webSocketService from "@/services/websocket.service";
+import { useSnackbarStore } from "./snackbarStore";
 
 export const useGameStore = defineStore("game", () => {
+  const snackbarStore = useSnackbarStore();
+
   // state
   const gameId = ref<string>("");
   const gameState = ref<string>("no game");
   const playerID = ref<string>();
   const actionsState = ref<string>();
   const firstMove = ref<boolean>(false);
+  const lastClickedTile = ref<any>();
 
   // getters
   const getGameId = computed(() => gameId);
   const getGameState = computed(() => gameState);
   const getPlayerId = computed(() => playerID);
   const getActionsState = computed(() => actionsState);
+  const getLastClickedTile = computed(() => lastClickedTile);
 
   // actions
   function startGame() {
@@ -76,6 +81,43 @@ export const useGameStore = defineStore("game", () => {
     }
   }
 
+  function setLastClickedTile(event: any) {
+    lastClickedTile.value = event;
+  }
+
+  function switchActionRole() {
+    if (actionsState.value === "attack") {
+      actionsState.value = "wait";
+    } else {
+      actionsState.value = "attack";
+    }
+  }
+
+  function hitShip(event: string) {
+    if (actionsState.value === "attack") {
+      if (event === "Hit") {
+        lastClickedTile.value.target.firstChild.classList.add("mdi-ferry");
+      }
+      if (event === "Miss") {
+        lastClickedTile.value.target.firstChild.classList.add("mdi-waves");
+        switchActionRole();
+      }
+      if (event === "Destroyed") {
+        lastClickedTile.value.target.firstChild.classList.add("mdi-ferry");
+        snackbarStore.callSnackbar("Schiff wurde versenkt!");
+      }
+      lastClickedTile.value.target.firstChild.classList.add("mdi");
+      lastClickedTile.value.target.classList.remove("tileWrapper");
+    }
+  }
+
+  function markShipOnMyBoard(event: string, coords: number[]) {
+    if (actionsState.value === "wait") {
+      console.log("Dieses Feld soll markiert werden!", event, coords);
+      // Hier sollen die Schüsse des Gegners auf dem eigenen Board angegeben werden!
+    }
+  }
+
   return {
     gameId,
     playerID,
@@ -91,5 +133,9 @@ export const useGameStore = defineStore("game", () => {
     placedShips,
     setFirstPlayer,
     startToSinkShips,
+    getLastClickedTile,
+    setLastClickedTile,
+    hitShip,
+    markShipOnMyBoard,
   };
 });

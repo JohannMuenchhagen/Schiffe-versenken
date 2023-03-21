@@ -95,11 +95,11 @@ class Game:
                         ships.remove(shooting_coordinate)
                         if len(ships) == 0:
                             self.remove_ship(player_id, index)
-                            return {'Message': 'Destroyed'}
+                            return {'Message': 'Destroyed', 'Coordinates': shooting_coordinate}
                         else:
-                            return {'Message': 'Hit'}
+                            return {'Message': 'Hit', 'Coordinates': shooting_coordinate}
             self.current_player = self.player2.playerID
-            return {'Message': 'Miss'}
+            return {'Message': 'Miss', 'Coordinates': shooting_coordinate}
         else:
             for index, ship in enumerate(self.player1_ships):
                 for ships in ship:
@@ -107,11 +107,11 @@ class Game:
                         ships.remove(shooting_coordinate)
                         if len(ships) == 0:
                             self.remove_ship(player_id, index)
-                            return {'Message': 'Destroyed'}
+                            return {'Message': 'Destroyed', 'Coordinates': shooting_coordinate}
                         else:
-                            return {'Message': 'Hit'}
+                            return {'Message': 'Hit', 'Coordinates': shooting_coordinate}
             self.current_player = self.player1.playerID
-            return {'Message': 'Miss'}
+            return {'Message': 'Miss', 'Coordinates': shooting_coordinate}
 
     def set_ships(self, player_id: int, ship_type: str, ship_start_pos: tuple, ship_end_pos: tuple) -> dict:
         if not self.check_placed_ship(player_id=player_id,

@@ -25,10 +25,8 @@ import webSocketService from "@/services/websocket.service";
 const shipStore = useShipStore();
 const gameStore = useGameStore();
 
-let lastClickedTile: any;
-
 function clickTile(x: number, y: number, event: any) {
-  lastClickedTile = event;
+  gameStore.setLastClickedTile(event);
   const message = {
     Type: "Move",
     GameID: Number(gameStore.getGameId.value),

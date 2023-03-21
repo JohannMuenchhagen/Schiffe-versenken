@@ -80,9 +80,16 @@ function onMessage(event: any): void {
     gameStore.placedShips();
   }
   if (Object.values(msg).includes("Game ready")) {
-    console.log("Test123")
     gameStore.startToSinkShips();
     console.log(gameStore.getActionsState.value);
+  }
+  if (
+    Object.values(msg).includes("Hit") ||
+    Object.values(msg).includes("Miss") ||
+    Object.values(msg).includes("Destroyed")
+  ) {
+    gameStore.hitShip(msg.Message);
+    gameStore.markShipOnMyBoard(msg.Message, msg.Coordinates);
   }
 }
 
