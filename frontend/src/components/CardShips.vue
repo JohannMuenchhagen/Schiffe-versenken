@@ -1,5 +1,13 @@
 <template>
-  <v-card class="card" loading title="Es ist dein Zug!">
+  <v-card class="card" loading>
+    <template v-slot:title>
+      <div v-if="gameStore.getActionsState.value === 'attack'">
+        Es ist dein Zug!
+      </div>
+      <div v-if="gameStore.getActionsState.value === 'wait'">
+        Warten auf Gegner...
+      </div>
+    </template>
     <v-card-text class="cardContent">
       <v-list>
         <div>Übrige Schiffe des Gegners:</div>
@@ -47,12 +55,14 @@
 </template>
 
 <script setup lang="ts">
+import { useGameStore } from "@/services/gameStore";
 import { useShipStore } from "@/services/shipStore";
 import { useSnackbarStore } from "@/services/snackbarStore";
 import { ref, watch } from "vue";
 
 const shipStore = useShipStore();
 const snackbarStore = useSnackbarStore();
+const gameStore = useGameStore();
 
 let ship5length = ref();
 let ship4length = ref();
