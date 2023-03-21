@@ -44,7 +44,7 @@ function sendMessage(message: Object): void {
 
 function onMessage(event: any): void {
   const msg = JSON.parse(event.data);
-  console.log("values:::", Object.values(msg));
+  console.log(msg);
   if (Object.prototype.hasOwnProperty.call(msg, "Error")) {
     console.log("Error", msg);
   }
