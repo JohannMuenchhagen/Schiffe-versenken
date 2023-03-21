@@ -20,11 +20,25 @@
 <script setup lang="ts">
 import { useGameStore } from "@/services/gameStore";
 import { useShipStore } from "@/services/shipStore";
+import webSocketService from "@/services/websocket.service";
 
 const shipStore = useShipStore();
 const gameStore = useGameStore();
 
+let lastClickedTile: any;
+
 function clickTile(x: number, y: number, event: any) {
+  lastClickedTile = event;
+  const message = {
+    Type: "Move",
+    GameID: Number(gameStore.getGameId.value),
+    PlayerID: gameStore.getPlayerId.value,
+    Coordinates: [x - 1, y - 1],
+  };
+  webSocketService.sendMessage(message);
+}
+
+/* function clickTileLegacy(x: number, y: number, event: any) {
   if (shipStore.isShipHit({ x: x, y: y }) !== false) {
     event.target.firstChild.classList.add("mdi-ferry");
   } else {
@@ -32,7 +46,7 @@ function clickTile(x: number, y: number, event: any) {
   }
   event.target.firstChild.classList.add("mdi");
   event.target.classList.remove("tileWrapper");
-}
+} */
 </script>
 
 <style scoped>
