@@ -82,6 +82,7 @@ function onMessage(event: any): void {
   if (Object.values(msg).includes("Game ready")) {
     console.log("Test123")
     gameStore.startToSinkShips();
+    console.log(gameStore.getActionsState.value);
   }
 }
 
