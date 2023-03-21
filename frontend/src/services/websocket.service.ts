@@ -80,6 +80,7 @@ function onMessage(event: any): void {
     gameStore.placedShips();
   }
   if (Object.values(msg).includes("Game ready")) {
+    console.log("Test123")
     gameStore.startToSinkShips();
   }
 }
