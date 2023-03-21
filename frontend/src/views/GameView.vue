@@ -10,10 +10,18 @@
         </v-col>
         <div class="cardWrapper">
           <CardPlacement
-            v-if="gameStore.getGameState.value === 'started'"
+            v-if="
+              gameStore.getGameState.value === 'started' &&
+              (gameStore.getActionsState.value === 'place ships' ||
+                gameStore.getActionsState.value === 'done placing ships')
+            "
           ></CardPlacement>
           <CardShips
-            v-if="gameStore.getGameState.value === 'started'"
+            v-if="
+              gameStore.getGameState.value === 'started' &&
+              (gameStore.getActionsState.value === 'attack' ||
+                gameStore.getActionsState.value === 'wait')
+            "
           ></CardShips>
           <CardWaiting
             v-if="

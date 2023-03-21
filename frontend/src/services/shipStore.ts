@@ -13,7 +13,7 @@ export const useShipStore = defineStore("ship", () => {
   const sunkenShips = reactive([] as IShip[]);
   const selectedShipLength = ref<number>();
   const placedShips = reactive([] as IShip[]);
-  let direchtionsForShips = [true, true, true, true];  // 0 - len 2; 1 - len 3; 2 - len 4; 3 - len 5 
+  let direchtionsForShips = [true, true, true, true]; // 0 - len 2; 1 - len 3; 2 - len 4; 3 - len 5
 
   // getters
   const getShips = computed(() => ships);
@@ -24,11 +24,11 @@ export const useShipStore = defineStore("ship", () => {
 
   // actions
   function loadDummyData() {
-    ships.push({ startPos: { x: 1, y: 1 }, endPos: { x: 1, y: 5 }, length: 5}); // 5 length
-    ships.push({ startPos: { x: 3, y: 1 }, endPos: { x: 6, y: 1 }, length: 4}); // 4 length
-    ships.push({ startPos: { x: 3, y: 4 }, endPos: { x: 6, y: 4 }, length: 4}); // 4 length
-    ships.push({ startPos: { x: 4, y: 7 }, endPos: { x: 6, y: 7 }, length: 3}); // 3 length
-    ships.push({ startPos: { x: 9, y: 6 }, endPos: { x: 9, y: 8 }, length: 3}); // 3 length
+    ships.push({ startPos: { x: 1, y: 1 }, endPos: { x: 1, y: 5 }, length: 5 }); // 5 length
+    ships.push({ startPos: { x: 3, y: 1 }, endPos: { x: 6, y: 1 }, length: 4 }); // 4 length
+    ships.push({ startPos: { x: 3, y: 4 }, endPos: { x: 6, y: 4 }, length: 4 }); // 4 length
+    ships.push({ startPos: { x: 4, y: 7 }, endPos: { x: 6, y: 7 }, length: 3 }); // 3 length
+    ships.push({ startPos: { x: 9, y: 6 }, endPos: { x: 9, y: 8 }, length: 3 }); // 3 length
     ships.push({
       startPos: { x: 8, y: 10 },
       endPos: { x: 10, y: 10 },
@@ -100,15 +100,127 @@ export const useShipStore = defineStore("ship", () => {
 
   function updateSelectedShip(length: number): void {
     selectedShipLength.value = length;
-    
   }
 
   function addPlacedShip(ship: IShip) {
     placedShips.push(ship);
   }
 
-  function deletePlacedShip(index: number){
+  function deletePlacedShip(index: number) {
     placedShips.splice(index, 1);
+  }
+
+  function getShipsByType() {
+    return {
+      Battleship: [
+        [
+          [
+            placedShips.filter((x) => x.length === 5)[0].startPos.x - 1,
+            placedShips.filter((x) => x.length === 5)[0].startPos.y - 1,
+          ],
+          [
+            placedShips.filter((x) => x.length === 5)[0].endPos.x - 1,
+            placedShips.filter((x) => x.length === 5)[0].endPos.y - 1,
+          ],
+        ],
+      ],
+      Corvettes: [
+        [
+          [
+            placedShips.filter((x) => x.length === 4)[0].startPos.x - 1,
+            placedShips.filter((x) => x.length === 4)[0].startPos.y - 1,
+          ],
+          [
+            placedShips.filter((x) => x.length === 4)[0].endPos.x - 1,
+            placedShips.filter((x) => x.length === 4)[0].endPos.y - 1,
+          ],
+        ],
+        [
+          [
+            placedShips.filter((x) => x.length === 4)[1].startPos.x - 1,
+            placedShips.filter((x) => x.length === 4)[1].startPos.y - 1,
+          ],
+          [
+            placedShips.filter((x) => x.length === 4)[1].endPos.x - 1,
+            placedShips.filter((x) => x.length === 4)[1].endPos.y - 1,
+          ],
+        ],
+      ],
+      Destroyer: [
+        [
+          [
+            placedShips.filter((x) => x.length === 3)[0].startPos.x - 1,
+            placedShips.filter((x) => x.length === 3)[0].startPos.y - 1,
+          ],
+          [
+            placedShips.filter((x) => x.length === 3)[0].endPos.x - 1,
+            placedShips.filter((x) => x.length === 3)[0].endPos.y - 1,
+          ],
+        ],
+        [
+          [
+            placedShips.filter((x) => x.length === 3)[1].startPos.x - 1,
+            placedShips.filter((x) => x.length === 3)[1].startPos.y - 1,
+          ],
+          [
+            placedShips.filter((x) => x.length === 3)[1].endPos.x - 1,
+            placedShips.filter((x) => x.length === 3)[1].endPos.y - 1,
+          ],
+        ],
+        [
+          [
+            placedShips.filter((x) => x.length === 3)[2].startPos.x - 1,
+            placedShips.filter((x) => x.length === 3)[2].startPos.y - 1,
+          ],
+          [
+            placedShips.filter((x) => x.length === 3)[2].endPos.x - 1,
+            placedShips.filter((x) => x.length === 3)[2].endPos.y - 1,
+          ],
+        ],
+      ],
+      Submarine: [
+        [
+          [
+            placedShips.filter((x) => x.length === 2)[0].startPos.x - 1,
+            placedShips.filter((x) => x.length === 2)[0].startPos.y - 1,
+          ],
+          [
+            placedShips.filter((x) => x.length === 2)[0].endPos.x - 1,
+            placedShips.filter((x) => x.length === 2)[0].endPos.y - 1,
+          ],
+        ],
+        [
+          [
+            placedShips.filter((x) => x.length === 2)[1].startPos.x - 1,
+            placedShips.filter((x) => x.length === 2)[1].startPos.y - 1,
+          ],
+          [
+            placedShips.filter((x) => x.length === 2)[1].endPos.x - 1,
+            placedShips.filter((x) => x.length === 2)[1].endPos.y - 1,
+          ],
+        ],
+        [
+          [
+            placedShips.filter((x) => x.length === 2)[2].startPos.x - 1,
+            placedShips.filter((x) => x.length === 2)[2].startPos.y - 1,
+          ],
+          [
+            placedShips.filter((x) => x.length === 2)[2].endPos.x - 1,
+            placedShips.filter((x) => x.length === 2)[2].endPos.y - 1,
+          ],
+        ],
+        [
+          [
+            placedShips.filter((x) => x.length === 2)[3].startPos.x - 1,
+            placedShips.filter((x) => x.length === 2)[3].startPos.y - 1,
+          ],
+          [
+            placedShips.filter((x) => x.length === 2)[3].endPos.x - 1,
+            placedShips.filter((x) => x.length === 2)[3].endPos.y - 1,
+          ],
+        ],
+      ],
+    };
   }
 
   return {
@@ -129,5 +241,6 @@ export const useShipStore = defineStore("ship", () => {
     getDirechtionsForShips,
     direchtionsForShips,
     deletePlacedShip,
+    getShipsByType,
   };
 });

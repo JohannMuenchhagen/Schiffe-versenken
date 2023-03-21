@@ -54,6 +54,10 @@ export const useGameStore = defineStore("game", () => {
     actionsState.value = "place ships";
   }
 
+  function placedShips() {
+    actionsState.value = "done placing ships";
+  }
+
   function stopGame() {
     gameState.value = "no game";
   }
@@ -70,5 +74,6 @@ export const useGameStore = defineStore("game", () => {
     getGameState,
     connectionCompleted,
     getActionsState,
+    placedShips,
   };
 });

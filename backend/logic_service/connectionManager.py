@@ -38,6 +38,9 @@ class ConnectionManager:
         self.active_connections.append(websocket)
 
     def disconnect(self, websocket: WebSocket):
+        if websocket not in self.map_websocket_game.keys():
+            self.active_connections.remove(websocket)
+            return None
         game = self.map_websocket_game[websocket]  # find the game
         gameID = game.game_id  # get the game id
         # get both players websockets
@@ -124,7 +127,7 @@ class ConnectionManager:
                 else:
                     success[item + str(i)] = res['Message']
                     i += 1
-        return {'GameID': game_id, 'Success': success, 'Error': error}, \
+        return {'GameID': game_id, 'Success': success, 'Fail': error}, \
             game.player1.websocket, game.player2.websocket
 
     def move(self, data: dict):

@@ -44,9 +44,9 @@ function sendMessage(message: Object): void {
 
 function onMessage(event: any): void {
   const msg = JSON.parse(event.data);
-  console.log(msg);
+  console.log("values:::", Object.values(msg));
   if (Object.prototype.hasOwnProperty.call(msg, "Error")) {
-    alert(msg.Error + " /// " + msg?.Description);
+    console.log("Error", msg);
   }
   if (Object.values(msg).includes("Game successfully initialized")) {
     gameStore.initGame(msg.GameID, msg.PlayerID);
@@ -60,8 +60,25 @@ function onMessage(event: any): void {
   }
   if (Object.values(msg).includes("Player left")) {
     gameStore.stopGame();
+  }
+  if (
+    Object.values(msg).some(
+      (item: any) =>
+        item.Battleship1 === "Battleship successfully placed" &&
+        item.Corvettes1 === "Corvettes successfully placed" &&
+        item.Corvettes2 === "Corvettes successfully placed" &&
+        item.Destroyer1 === "Destroyer successfully placed" &&
+        item.Destroyer2 === "Destroyer successfully placed" &&
+        item.Destroyer3 === "Destroyer successfully placed" &&
+        item.Submarine1 === "Submarine successfully placed" &&
+        item.Submarine2 === "Submarine successfully placed" &&
+        item.Submarine3 === "Submarine successfully placed" &&
+        item.Submarine4 === "Submarine successfully placed"
+    )
+  ) {
+    gameStore.placedShips();
   } else {
-    console.log("456");
+    console.log("ungeplante Rückmeldung...");
   }
 }
 

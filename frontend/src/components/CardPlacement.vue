@@ -1,5 +1,10 @@
 <template>
-  <v-card class="card" loading title="Platziere deine Schiffe!">
+  <v-card
+    class="card"
+    loading
+    title="Platziere deine Schiffe!"
+    v-if="gameStore.getActionsState.value === 'place ships'"
+  >
     <v-card-text class="cardContent">
       <v-list>
         <div>Übrige Schiffe:</div>
@@ -105,6 +110,9 @@
           </v-switch>
         </v-list-item>
       </v-list>
+      <v-btn @click="sendShips()" block class="mt-2" variant="tonal"
+        >Schiffe absenden</v-btn
+      >
       <div class="hintTitle">Hinweis:</div>
       <div>
         Wähle das zu platzierende Schiff mit einem Klick aus, dann wähle eine
@@ -113,19 +121,46 @@
       </div>
     </v-card-text>
   </v-card>
+  <v-card
+    class="card"
+    loading
+    title="Warten auf Gegner..."
+    v-if="gameStore.getActionsState.value === 'done placing ships'"
+  >
+    <v-card-text class="cardContent">
+      <v-list>
+        <div>Hinweis:</div>
+
+        <v-list-item active-color="primary">
+          <template v-slot:prepend>
+            <v-icon icon="mdi-ferry"></v-icon>
+          </template>
+
+          <v-list-item-title class="noWrap"
+            >Dein Gegner platziert aktuell seine Schiffe.</v-list-item-title
+          >
+        </v-list-item>
+      </v-list>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script setup lang="ts">
 import { useShipStore } from "@/services/shipStore";
+import { useSnackbarStore } from "@/services/snackbarStore";
 import { toRaw, watch } from "vue";
 import { ref } from "vue";
+import webSocketService from "@/services/websocket.service";
+import { useGameStore } from "@/services/gameStore";
 
 const remaining5LengthShip = ref<number>(0);
 const remaining4LengthShip = ref<number>(0);
 const remaining3LengthShip = ref<number>(0);
 const remaining2LengthShip = ref<number>(0);
 
+const gameStore = useGameStore();
 const shipStore = useShipStore();
+const snackbarStore = useSnackbarStore();
 
 let direction5LengthShip = ref<string>("horizontal");
 let direction4LengthShip = ref<string>("horizontal");
@@ -168,12 +203,28 @@ function calcRemainingShipsToPlace() {
     }
   }
 }
+
+function sendShips() {
+  if (shipStore.getPlacedShips.length < 10) {
+    snackbarStore.callSnackbar("Es wurden noch nicht alle Schiffe platziert!");
+    return;
+  }
+  const messagge = {
+    Type: "Set",
+    GameID: gameStore.getGameId.value,
+    PlayerID: gameStore.getPlayerId.value,
+    Ships: shipStore.getShipsByType(),
+  };
+  console.log(messagge);
+  webSocketService.sendMessage(messagge);
+}
 </script>
 
 <style scoped>
 .hintTitle {
   font-size: large;
   margin-bottom: 5px;
+  margin-top: 10px;
 }
 
 i.v-icon:hover {
@@ -192,5 +243,9 @@ i.v-icon:hover {
   border-spacing: 10px;
   filter: brightness(85%);
   cursor: pointer;
+}
+
+.noWrap {
+  white-space: break-spaces;
 }
 </style>
