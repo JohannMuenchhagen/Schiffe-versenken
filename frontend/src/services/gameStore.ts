@@ -94,26 +94,19 @@ export const useGameStore = defineStore("game", () => {
   }
 
   function hitShip(event: string) {
-    let switchAc: boolean = false;
     if (actionsState.value === "attack") {
       if (event === "Hit") {
         lastClickedTile.value.target.firstChild.classList.add("mdi-ferry");
       }
       if (event === "Miss") {
         lastClickedTile.value.target.firstChild.classList.add("mdi-waves");
-        switchAc = true;
+        switchActionRole();
       }
       if (event === "Destroyed") {
         lastClickedTile.value.target.firstChild.classList.add("mdi-ferry");
         snackbarStore.callSnackbar("Schiff wurde versenkt!");
       }
       lastClickedTile.value.target.firstChild.classList.add("mdi");
-      console.log(lastClickedTile.value.target);
-      lastClickedTile.value.target.classList.add("disableClick");
-      lastClickedTile.value.target.classList.remove("tileWrapper");
-      if (switchAc) {
-        switchActionRole();
-      }
     } else {
       if (event === "Miss") {
         switchActionRole();

@@ -21,6 +21,7 @@
 import { useGameStore } from "@/services/gameStore";
 import { useShipStore } from "@/services/shipStore";
 import webSocketService from "@/services/websocket.service";
+import { nextTick, watch } from "vue";
 
 const shipStore = useShipStore();
 const gameStore = useGameStore();
@@ -35,6 +36,19 @@ function clickTile(x: number, y: number, event: any) {
   };
   webSocketService.sendMessage(message);
 }
+
+watch(gameStore.getActionsState, () => {
+  nextTick(() => {
+    document.querySelectorAll(".v-sheet").forEach((el) => {
+      el.querySelector(".mdi")?.parentElement?.classList.add(
+        "disableClickOnTile"
+      );
+    });
+    document.querySelectorAll(".v-sheet").forEach((el) => {
+      el.querySelector(".mdi")?.parentElement?.classList.remove("tileWrapper");
+    });
+  });
+});
 
 /* function clickTileLegacy(x: number, y: number, event: any) {
   if (shipStore.isShipHit({ x: x, y: y }) !== false) {
@@ -67,6 +81,9 @@ function clickTile(x: number, y: number, event: any) {
 }
 
 .disableClick {
+  pointer-events: none;
+}
+.disableClickOnTile {
   pointer-events: none !important;
 }
 </style>
