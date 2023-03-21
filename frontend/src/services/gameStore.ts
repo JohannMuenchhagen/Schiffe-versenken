@@ -107,6 +107,7 @@ export const useGameStore = defineStore("game", () => {
         snackbarStore.callSnackbar("Schiff wurde versenkt!");
       }
       lastClickedTile.value.target.firstChild.classList.add("mdi");
+      lastClickedTile.value.target.firstChild.classList.add("disableClick");
       lastClickedTile.value.target.classList.remove("tileWrapper");
     } else {
       if (event === "Miss") {
