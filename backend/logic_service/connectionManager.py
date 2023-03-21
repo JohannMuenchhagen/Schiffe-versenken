@@ -127,8 +127,12 @@ class ConnectionManager:
                 else:
                     success[item + str(i)] = res['Message']
                     i += 1
-        return {'GameID': game_id, 'Success': success, 'Fail': error}, \
-            game.player1.websocket, game.player2.websocket
+        if player_id == game.player1.playerID:
+            return {'Message': 'Player 1 ships placed'}, {'GameID': game_id, 'Success': success, 'Fail': error}, \
+                game.player1.websocket, game.player2.websocket
+        else:
+            return {'GameID': game_id, 'Success': success, 'Fail': error}, {'Message': 'Player 2 ships placed'}, \
+                game.player1.websocket, game.player2.websocket
 
     def move(self, data: dict):
         game_id = data['GameID']  # read the game id from json
