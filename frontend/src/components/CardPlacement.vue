@@ -211,7 +211,7 @@ function sendShips() {
   }
   const messagge = {
     Type: "Set",
-    GameID: gameStore.getGameId.value,
+    GameID: Number(gameStore.getGameId.value),
     PlayerID: gameStore.getPlayerId.value,
     Ships: shipStore.getShipsByType(),
   };
