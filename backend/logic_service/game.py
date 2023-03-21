@@ -13,6 +13,8 @@ class Game:
         # Number of placed ships
         self.player1_ships_set = {'Battleship': 0, 'Corvettes': 0, 'Destroyer': 0, 'Submarine': 0}
         self.player2_ships_set = {'Battleship': 0, 'Corvettes': 0, 'Destroyer': 0, 'Submarine': 0}
+        self.player1_flag = 0  # flag if all ships are placed
+        self.player2_flag = 0  # flag if all ships are placed
         #######################
         self.player1_moves = []  # Game history of player 1
         self.player2_moves = []  # Game history of player 2
@@ -143,10 +145,12 @@ class Game:
         if player_id == self.player1.playerID:
             self.player1_ships_set[ship_type] += 1  # increase the number of a specific ship type
             self.player1_ships[index].append(ship.get_positions())  # get coordinates of a ship and save it
+            self.player1_flag = 1
             return {'Message': f'{ship_type} successfully placed'}
         elif player_id == self.player2.playerID:
             self.player2_ships_set[ship_type] += 1
             self.player2_ships[index].append(ship.get_positions())
+            self.player2_flag = 1
             return {'Message': f'{ship_type} successfully placed'}
         else:
             return {'Error': 'Wrong player id'}
