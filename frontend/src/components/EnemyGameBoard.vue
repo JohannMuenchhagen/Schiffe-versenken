@@ -67,6 +67,6 @@ function clickTile(x: number, y: number, event: any) {
 }
 
 .disableClick {
-  pointer-events: none;
+  pointer-events: none !important;
 }
 </style>
