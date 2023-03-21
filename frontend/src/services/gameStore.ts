@@ -8,18 +8,21 @@ export const useGameStore = defineStore("game", () => {
   const gameState = ref<string>("no game");
   const playerID = ref<string>();
   const actionsState = ref<string>();
-  const opponentHasPlacedShips = ref<boolean>(false);
+  const firstMove = ref<boolean>(false);
 
   // getters
   const getGameId = computed(() => gameId);
   const getGameState = computed(() => gameState);
   const getPlayerId = computed(() => playerID);
   const getActionsState = computed(() => actionsState);
-  const getOpponentHasPlacedShips = computed(() => opponentHasPlacedShips);
 
   // actions
   function startGame() {
     webSocketService.sendMessage({ Type: "initialize Game" });
+  }
+
+  function setFirstPlayer() {
+    firstMove.value = true;
   }
 
   function initGame(inputId: string | undefined, inputPlayer: string) {
@@ -57,14 +60,19 @@ export const useGameStore = defineStore("game", () => {
   }
 
   function placedShips() {
-    if (opponentHasPlacedShips.value === true) {
-      actionsState.value = "attack";
-    }
     actionsState.value = "done placing ships";
   }
 
   function stopGame() {
     gameState.value = "no game";
+  }
+
+  function startToSinkShips() {
+    if (firstMove.value === true) {
+      actionsState.value === "attack";
+    } else {
+      actionsState.value === "wait";
+    }
   }
 
   return {
@@ -80,6 +88,7 @@ export const useGameStore = defineStore("game", () => {
     connectionCompleted,
     getActionsState,
     placedShips,
-    getOpponentHasPlacedShips,
+    setFirstPlayer,
+    startToSinkShips,
   };
 });

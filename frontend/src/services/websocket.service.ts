@@ -49,6 +49,7 @@ function onMessage(event: any): void {
     console.log("Error", msg);
   }
   if (Object.values(msg).includes("Game successfully initialized")) {
+    gameStore.setFirstPlayer();
     gameStore.initGame(msg.GameID, msg.PlayerID);
   }
   if (Object.values(msg).includes("Join successful")) {
@@ -77,6 +78,9 @@ function onMessage(event: any): void {
     )
   ) {
     gameStore.placedShips();
+  }
+  if (Object.values(msg).includes("Game ready")) {
+    gameStore.startToSinkShips();
   }
 }
 
