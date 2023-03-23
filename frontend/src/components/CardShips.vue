@@ -1,10 +1,22 @@
 <template>
   <v-card class="card" loading>
     <template v-slot:title>
-      <div v-if="gameStore.getActionsState.value === 'attack' && won === false">
+      <div
+        v-if="
+          gameStore.getActionsState.value === 'attack' &&
+          won === false &&
+          lost === false
+        "
+      >
         Es ist dein Zug!
       </div>
-      <div v-if="gameStore.getActionsState.value === 'wait' && won === false">
+      <div
+        v-if="
+          gameStore.getActionsState.value === 'wait' &&
+          won === false &&
+          lost === false
+        "
+      >
         Warten auf Gegner...
       </div>
       <div v-if="won === true">
