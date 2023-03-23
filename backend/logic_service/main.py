@@ -32,7 +32,7 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
             data = await websocket.receive_json()
             res = manager.check_type(data, websocket)
-            if len(res) > 3 and res[0].type is list:
+            if len(res) > 3 and res[0].type() is list:
                 await test(res)
             elif len(res) > 3:
                 await broadcast(message_player1=res[1], message_player2=res[0], player1=res[2], player2=res[3])
