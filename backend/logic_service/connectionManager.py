@@ -19,8 +19,8 @@ async def broadcast(message_player1: json, message_player2: json, player1: WebSo
         await player2.send_json(message_player2)
 
 
-async def send_personal_message(message: str, websocket: WebSocket):
-    await websocket.send_json({'Message': message})
+async def send_personal_message(message: dict, websocket: WebSocket):
+    await websocket.send_json(message)
 
 
 class ConnectionManager:
@@ -169,8 +169,10 @@ class ConnectionManager:
         res = game.check_shot(player_id=player_id, shooting_coordinate=(y, x), current_player=player_id,
                               enemy_ships=enemy_ships)
         if 'Win' in game.check_win(game.player2_ships_set).values() and player_id == game.player1.playerID:
+            send_personal_message(res, game.player1.websocket)
             return {'Message': 'Player 1 wins'}, game.player1.websocket, game.player2.websocket
         elif 'Win' in game.check_win(game.player1_ships_set).values() and player_id == game.player2.playerID:
+            send_personal_message(res, game.player2.websocket)
             return {'Message': 'Player 2 wins'}, game.player1.websocket, game.player2.websocket
         else:
             return res, game.player1.websocket, game.player2.websocket
