@@ -15,6 +15,7 @@ export const useGameStore = defineStore("game", () => {
   const actionsState = ref<string>();
   const firstMove = ref<boolean>(false);
   const lastClickedTile = ref<any>();
+  const clickedTile = ref<boolean>();
 
   // getters
   const getGameId = computed(() => gameId);
@@ -22,6 +23,7 @@ export const useGameStore = defineStore("game", () => {
   const getPlayerId = computed(() => playerID);
   const getActionsState = computed(() => actionsState);
   const getLastClickedTile = computed(() => lastClickedTile);
+  const getClickedTile = computed(() => clickedTile);
 
   // actions
   function startGame() {
@@ -110,6 +112,7 @@ export const useGameStore = defineStore("game", () => {
         snackbarStore.callSnackbar("Schiff wurde versenkt!");
       }
       lastClickedTile.value.target.firstChild.classList.add("mdi");
+      clickedTile.value = true;
     } else {
       if (event === "Hit") {
         markHitsOnBoard(coords[0], coords[1], true);
@@ -122,6 +125,10 @@ export const useGameStore = defineStore("game", () => {
         switchActionRole();
       }
     }
+  }
+
+  function setClickedTile(val: boolean) {
+    clickedTile.value = val;
   }
 
   function markHitsOnBoard(x: number, y: number, hit: boolean) {
@@ -164,5 +171,7 @@ export const useGameStore = defineStore("game", () => {
     getLastClickedTile,
     setLastClickedTile,
     hitShip,
+    getClickedTile,
+    setClickedTile,
   };
 });

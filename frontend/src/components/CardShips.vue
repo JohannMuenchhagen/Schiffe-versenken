@@ -1,11 +1,14 @@
 <template>
   <v-card class="card" loading>
     <template v-slot:title>
-      <div v-if="gameStore.getActionsState.value === 'attack'">
+      <div v-if="gameStore.getActionsState.value === 'attack' && won === false">
         Es ist dein Zug!
       </div>
-      <div v-if="gameStore.getActionsState.value === 'wait'">
+      <div v-if="gameStore.getActionsState.value === 'wait' && won === false">
         Warten auf Gegner...
+      </div>
+      <div v-if="won === true">
+        Du hast gewonnen <v-icon icon="mdi-party-popper"></v-icon>
       </div>
     </template>
     <v-card-text class="cardContent">
@@ -64,6 +67,7 @@ const shipStore = useShipStore();
 const snackbarStore = useSnackbarStore();
 const gameStore = useGameStore();
 
+let won = false;
 let ship5length = ref();
 let ship4length = ref();
 let ship3length = ref();
@@ -74,9 +78,26 @@ watch(shipStore.getSunkenShips, () => {
   getShipLength();
 });
 
+watch(shipStore.getSunkenShips, () => {
+  checkIfWon();
+});
+
 onMounted(() => {
   shipStore.initSunkenShips();
 });
+
+function checkIfWon() {
+  let result = 0;
+  for (let i = 0; i < shipStore.getSunkenShips.length; i++) {
+    if (shipStore.getSunkenShips[i].amount === 0) {
+      result++;
+    }
+  }
+  if (result === 4) {
+    won = true;
+    snackbarStore.callSnackbar("Du hast gewonnen!");
+  }
+}
 
 function getShipLength() {
   ship5length.value = shipStore.getAmountOfShipsOnBoard(5);

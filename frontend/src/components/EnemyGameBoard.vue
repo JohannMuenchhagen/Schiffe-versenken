@@ -27,6 +27,7 @@ const shipStore = useShipStore();
 const gameStore = useGameStore();
 
 function clickTile(x: number, y: number, event: any) {
+  gameStore.setClickedTile(false);
   gameStore.setLastClickedTile(event);
   const message = {
     Type: "Move",
@@ -37,7 +38,7 @@ function clickTile(x: number, y: number, event: any) {
   webSocketService.sendMessage(message);
 }
 
-watch(gameStore.getLastClickedTile, () => {
+watch(gameStore.getClickedTile, () => {
   nextTick(() => {
     document.querySelectorAll(".v-sheet").forEach((el) => {
       el.querySelector(".mdi")?.parentElement?.classList.add(
