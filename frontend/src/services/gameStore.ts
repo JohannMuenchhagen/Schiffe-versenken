@@ -156,6 +156,7 @@ export const useGameStore = defineStore("game", () => {
   }
 
   function setWon(msg: string) {
+    console.log(firstMove.value);
     if (firstMove.value === true && msg === "Player 1 wins") {
       won.value = true;
     }

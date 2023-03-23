@@ -3,9 +3,10 @@
     <v-row dense v-for="y in 10" :key="y">
       <v-col v-for="x in 10" :key="x">
         <v-sheet
-          :class="
-            gameStore.getActionsState.value !== 'attack' ? 'disableClick' : ''
-          "
+          :class="[
+            gameStore.getActionsState.value !== 'attack' ? 'disableClick' : '',
+            gameStore.getWon.value !== undefined ? 'disableClick' : '',
+          ]"
           color="grey-lighten-2"
           class="tileWrapper"
           @click="clickTile(x, y, $event)"
