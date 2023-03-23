@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { computed, reactive, ref } from "vue";
+import { useGameStore } from "./gameStore";
 
 interface IShip {
   startPos: { x: number; y: number };
@@ -8,19 +9,23 @@ interface IShip {
 }
 
 export const useShipStore = defineStore("ship", () => {
+  const gameStore = useGameStore();
+
   // state
   const ships = reactive([] as IShip[]);
-  const sunkenShips = reactive([] as IShip[]);
+  const sunkenShipsLegacy = reactive([] as IShip[]);
   const selectedShipLength = ref<number>();
   const placedShips = reactive([] as IShip[]);
-  let direchtionsForShips = [true, true, true, true]; // 0 - len 2; 1 - len 3; 2 - len 4; 3 - len 5
+  const direchtionsForShips = [true, true, true, true]; // 0 - len 2; 1 - len 3; 2 - len 4; 3 - len 5
+  const sunkenShips = ref([] as { length: number; amount: number }[]);
 
   // getters
   const getShips = computed(() => ships);
-  const getSunkenShips = computed(() => sunkenShips);
+  const getSunkenShipsLegacy = computed(() => sunkenShipsLegacy);
   const getSelectedShipLength = computed(() => selectedShipLength);
   const getPlacedShips = computed(() => placedShips);
-  let getDirechtionsForShips = computed(() => direchtionsForShips);
+  const getDirechtionsForShips = computed(() => direchtionsForShips);
+  const getSunkenShips = computed(() => sunkenShips);
 
   // actions
   function loadDummyData() {
@@ -76,25 +81,35 @@ export const useShipStore = defineStore("ship", () => {
     }
   }
 
+  function initSunkenShips() {
+    sunkenShips.value.push({ length: 5, amount: 1 });
+    sunkenShips.value.push({ length: 4, amount: 2 });
+    sunkenShips.value.push({ length: 3, amount: 3 });
+    sunkenShips.value.push({ length: 2, amount: 4 });
+  }
+
   function getAmountOfShipsOnBoard(length: number): number {
     let result = 0;
-    for (let i = 0; i < ships.length; i++) {
-      if (ships[i].length === length) {
-        result++;
-      }
-    }
-    for (let j = 0; j < sunkenShips.length; j++) {
-      if (sunkenShips[j].length === length) {
-        result--;
+    for (let i = 0; i < sunkenShips.value.length; i++) {
+      if (sunkenShips.value[i].length === length) {
+        result = sunkenShips.value[i].amount;
       }
     }
     return result;
   }
 
+  function ownShipIsSunk(shipType: string) {
+    if (gameStore.getActionsState.value === "wait") {
+      if (shipType === "Battleship") {
+        // TODO hier dann abziehen!
+      }
+    }
+  }
+
   function isShipSunk(ship: IShip): void {
     if (ship.length === 0) {
       ship.length = getShipLength(ship);
-      sunkenShips.push(ship);
+      sunkenShipsLegacy.push(ship);
     }
   }
 
@@ -225,11 +240,11 @@ export const useShipStore = defineStore("ship", () => {
 
   return {
     ships,
-    sunkenShips,
+    sunkenShipsLegacy,
     selectedShipLength,
     placedShips,
     getShips,
-    getSunkenShips,
+    getSunkenShipsLegacy,
     getSelectedShipLength,
     getPlacedShips,
     getAmountOfShipsOnBoard,
@@ -242,5 +257,7 @@ export const useShipStore = defineStore("ship", () => {
     direchtionsForShips,
     deletePlacedShip,
     getShipsByType,
+    getSunkenShips,
+    initSunkenShips,
   };
 });

@@ -58,7 +58,7 @@
 import { useGameStore } from "@/services/gameStore";
 import { useShipStore } from "@/services/shipStore";
 import { useSnackbarStore } from "@/services/snackbarStore";
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 const shipStore = useShipStore();
 const snackbarStore = useSnackbarStore();
@@ -70,8 +70,12 @@ let ship3length = ref();
 let ship2length = ref();
 getShipLength();
 
-watch(shipStore.getSunkenShips, () => {
+watch(shipStore.getSunkenShipsLegacy, () => {
   getShipLength();
+});
+
+onMounted(() => {
+  shipStore.initSunkenShips();
 });
 
 function getShipLength() {
