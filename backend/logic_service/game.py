@@ -88,6 +88,7 @@ class Game:
 
     # TODO find an opportunity to remove the duplicate
     def check_shot(self, player_id: int, shooting_coordinate: tuple) -> dict:  # check if a ship gets a hit
+        mapper = ['Battleship', 'Corvettes', 'Destroyer', 'Submarine']
         if player_id == self.player1.playerID:
             for index, ship in enumerate(self.player2_ships):
                 for ships in ship:
@@ -95,7 +96,7 @@ class Game:
                         ships.remove(shooting_coordinate)
                         if len(ships) == 0:
                             self.remove_ship(player_id, index)
-                            return {'Message': 'Destroyed'}
+                            return {'Message': 'Destroyed', 'Type': mapper[index]}
                         else:
                             return {'Message': 'Hit'}
             self.current_player = self.player2.playerID
@@ -107,7 +108,7 @@ class Game:
                         ships.remove(shooting_coordinate)
                         if len(ships) == 0:
                             self.remove_ship(player_id, index)
-                            return {'Message': 'Destroyed'}
+                            return {'Message': 'Destroyed', 'Type': mapper[index]}
                         else:
                             return {'Message': 'Hit'}
             self.current_player = self.player1.playerID
