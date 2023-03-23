@@ -26,7 +26,7 @@ function onOpen(): void {
 }
 
 function onError(event: any): void {
-  alert("Fehler! " + JSON.stringify(event.data));
+  if (event.data !== undefined) alert("Fehler! " + JSON.stringify(event.data));
 }
 
 function onClose(event: any): void {
