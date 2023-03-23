@@ -37,7 +37,7 @@ function clickTile(x: number, y: number, event: any) {
   webSocketService.sendMessage(message);
 }
 
-watch(gameStore.getActionsState, () => {
+watch(gameStore.getLastClickedTile, () => {
   nextTick(() => {
     document.querySelectorAll(".v-sheet").forEach((el) => {
       el.querySelector(".mdi")?.parentElement?.classList.add(

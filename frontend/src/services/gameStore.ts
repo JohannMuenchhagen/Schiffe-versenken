@@ -98,14 +98,14 @@ export const useGameStore = defineStore("game", () => {
   function hitShip(event: string, coords: number[], shipType: string) {
     if (actionsState.value === "attack") {
       if (event === "Hit") {
-        lastClickedTile.value.target.firstChild.classList.add("mdi-ferry");
+        lastClickedTile.value.target.firstChild.classList.add("mdi-target");
       }
       if (event === "Miss") {
         lastClickedTile.value.target.firstChild.classList.add("mdi-waves");
         switchActionRole();
       }
       if (event === "Destroyed") {
-        lastClickedTile.value.target.firstChild.classList.add("mdi-ferry");
+        lastClickedTile.value.target.firstChild.classList.add("mdi-target");
         shipStore.ownShipIsSunk(shipType);
         snackbarStore.callSnackbar("Schiff wurde versenkt!");
       }
