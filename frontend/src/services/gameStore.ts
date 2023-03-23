@@ -114,10 +114,39 @@ export const useGameStore = defineStore("game", () => {
     }
   }
 
+  function markHitsOnBoard(x: number, y: number, hit: boolean) {
+    if (hit) {
+      document
+        .getElementById("myBoard")
+        ?.getElementsByClassName("v-row")
+        [y]?.getElementsByClassName("v-col")
+        [x]?.firstElementChild?.firstElementChild?.classList.add(
+          "mdi-target",
+          "mdi"
+        );
+    } else {
+      document
+        .getElementById("myBoard")
+        ?.getElementsByClassName("v-row")
+        [y]?.getElementsByClassName("v-col")
+        [x]?.firstElementChild?.firstElementChild?.classList.add(
+          "mdi-waves",
+          "mdi"
+        );
+    }
+  }
+
   function markShipOnMyBoard(event: string, coords: number[]) {
     if (actionsState.value === "wait") {
-      console.log("Dieses Feld soll markiert werden!", event, coords);
-      // Hier sollen die Schüsse des Gegners auf dem eigenen Board angegeben werden!
+      if (event === "Hit") {
+        markHitsOnBoard(coords[0], coords[1], true);
+      }
+      if (event === "Miss") {
+        markHitsOnBoard(coords[0], coords[1], false);
+      }
+      if (event === "Destroyed") {
+        markHitsOnBoard(coords[0], coords[1], true);
+      }
     }
   }
 
