@@ -133,10 +133,11 @@ class ConnectionManager:
                       message_player2={'Message': 'Player 1 ships placed'}, player1=game.player1.websocket,
                       player2=game.player2.websocket)
             return {'Message': 'Game ready'}, game.player1.websocket, game.player2.websocket
-        
+
         elif player_id == game.player2.playerID and game.player1_flag == 1 and len(error) == 0:
             broadcast(message_player1={'Message': 'Player 2 ships placed'},
-                      message_player2={'GameID': game_id, 'Success': success, 'Fail': error}, player1=game.player1.websocket,
+                      message_player2={'GameID': game_id, 'Success': success, 'Fail': error},
+                      player1=game.player1.websocket,
                       player2=game.player2.websocket)
             return {'Message': 'Game ready'}, game.player1.websocket, game.player2.websocket
         elif player_id == game.player1.playerID:
@@ -157,8 +158,16 @@ class ConnectionManager:
         res = game.check_move(player_id=player_id, move=(y, x))
         if not res:  # if the move was already played return an error
             return res, game.player1.websocket, game.player2.websocket
+
+        # get enemy ship list from current player id
+        if player_id == game.player1.playerID:
+            enemy_ships = game.player2_ships
+        else:
+            enemy_ships = game.player1_ships
+
         # check if the shot was a miss, a hit or a kill
-        res = game.check_shot(player_id=player_id, shooting_coordinate=(y, x))
+        res = game.check_shot(player_id=player_id, shooting_coordinate=(y, x), current_player=player_id,
+                              enemy_ships=enemy_ships)
         if 'Win' in game.check_win(game.player2_ships_set).values() and player_id == 1:
             return {'Message': 'Player 1 wins'}, game.player1.websocket, game.player2.websocket
         elif 'Win' in game.check_win(game.player1_ships_set).values() and player_id == 2:
