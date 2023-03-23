@@ -133,6 +133,7 @@ class ConnectionManager:
                       message_player2={'Message': 'Player 1 ships placed'}, player1=game.player1.websocket,
                       player2=game.player2.websocket)
             return {'Message': 'Game ready'}, game.player1.websocket, game.player2.websocket
+        
         elif player_id == game.player2.playerID and game.player1_flag == 1 and len(error) == 0:
             broadcast(message_player1={'Message': 'Player 2 ships placed'},
                       message_player2={'GameID': game_id, 'Success': success, 'Fail': error}, player1=game.player1.websocket,
