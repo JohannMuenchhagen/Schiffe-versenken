@@ -95,7 +95,6 @@ watch(shipStore.getSunkenShips, () => {
 });
 
 watch(gameStore.getWon, () => {
-  console.log(gameStore.getWon.value);
   if (gameStore.getWon.value === true) {
     won.value = true;
   }

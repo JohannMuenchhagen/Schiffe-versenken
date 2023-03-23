@@ -42,7 +42,6 @@ export const useGameStore = defineStore("game", () => {
     }
     playerID.value = inputPlayer;
     gameState.value = "init";
-    console.log(gameId.value, gameState.value, playerID.value);
   }
 
   function joinGame(inputId: number | undefined) {
@@ -79,7 +78,6 @@ export const useGameStore = defineStore("game", () => {
   }
 
   function startToSinkShips() {
-    console.log("Ändere Actions State zu attack oder wait");
     if (firstMove.value === true) {
       actionsState.value = "attack";
     } else {
@@ -156,7 +154,6 @@ export const useGameStore = defineStore("game", () => {
   }
 
   function setWon(msg: string) {
-    console.log(firstMove.value);
     if (firstMove.value === true && msg === "Player 1 wins") {
       won.value = true;
     }

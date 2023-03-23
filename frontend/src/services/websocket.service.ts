@@ -44,7 +44,6 @@ function sendMessage(message: Object): void {
 
 function onMessage(event: any): void {
   const msg = JSON.parse(event.data);
-  console.log(msg);
   if (Object.prototype.hasOwnProperty.call(msg, "Error")) {
     console.log("Error", msg);
   }
@@ -81,7 +80,6 @@ function onMessage(event: any): void {
   }
   if (Object.values(msg).includes("Game ready")) {
     gameStore.startToSinkShips();
-    console.log(gameStore.getActionsState.value);
   }
   if (
     Object.values(msg).includes("Hit") ||
