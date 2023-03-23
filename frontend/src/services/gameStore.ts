@@ -106,6 +106,7 @@ export const useGameStore = defineStore("game", () => {
       }
       if (event === "Destroyed") {
         lastClickedTile.value.target.firstChild.classList.add("mdi-ferry");
+        shipStore.ownShipIsSunk(shipType);
         snackbarStore.callSnackbar("Schiff wurde versenkt!");
       }
       lastClickedTile.value.target.firstChild.classList.add("mdi");
@@ -115,7 +116,6 @@ export const useGameStore = defineStore("game", () => {
       }
       if (event === "Destroyed") {
         markHitsOnBoard(coords[0], coords[1], true);
-        shipStore.ownShipIsSunk(shipType);
       }
       if (event === "Miss") {
         markHitsOnBoard(coords[0], coords[1], false);
