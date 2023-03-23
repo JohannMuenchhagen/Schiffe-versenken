@@ -1,6 +1,6 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 import requests
-from connectionManager import ConnectionManager, broadcast, send_personal_message
+from connectionManager import ConnectionManager, broadcast, send_personal_message,test
 
 app = FastAPI()
 
@@ -32,7 +32,9 @@ async def websocket_endpoint(websocket: WebSocket):
         while True:
             data = await websocket.receive_json()
             res = manager.check_type(data, websocket)
-            if len(res) > 3:
+            if len(res) > 3 and res[0].type == list:
+                await test(res)
+            elif len(res) > 3:
                 await broadcast(message_player1=res[1], message_player2=res[0], player1=res[2], player2=res[3])
             else:
                 await broadcast(message_player1=res[0], message_player2=res[0], player1=res[1], player2=res[2])
