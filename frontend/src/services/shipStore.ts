@@ -17,7 +17,7 @@ export const useShipStore = defineStore("ship", () => {
   const selectedShipLength = ref<number>();
   const placedShips = reactive([] as IShip[]);
   const direchtionsForShips = [true, true, true, true]; // 0 - len 2; 1 - len 3; 2 - len 4; 3 - len 5
-  const sunkenShips = ref([] as { length: number; amount: number }[]);
+  const sunkenShips = reactive([] as { length: number; amount: number }[]);
 
   // getters
   const getShips = computed(() => ships);
@@ -82,17 +82,17 @@ export const useShipStore = defineStore("ship", () => {
   }
 
   function initSunkenShips() {
-    sunkenShips.value.push({ length: 5, amount: 1 });
-    sunkenShips.value.push({ length: 4, amount: 2 });
-    sunkenShips.value.push({ length: 3, amount: 3 });
-    sunkenShips.value.push({ length: 2, amount: 4 });
+    sunkenShips.push({ length: 5, amount: 1 });
+    sunkenShips.push({ length: 4, amount: 2 });
+    sunkenShips.push({ length: 3, amount: 3 });
+    sunkenShips.push({ length: 2, amount: 4 });
   }
 
   function getAmountOfShipsOnBoard(length: number): number {
     let result = 0;
-    for (let i = 0; i < sunkenShips.value.length; i++) {
-      if (sunkenShips.value[i].length === length) {
-        result = sunkenShips.value[i].amount;
+    for (let i = 0; i < sunkenShips.length; i++) {
+      if (sunkenShips[i].length === length) {
+        result = sunkenShips[i].amount;
       }
     }
     return result;

@@ -70,7 +70,7 @@ let ship3length = ref();
 let ship2length = ref();
 getShipLength();
 
-watch(shipStore.getSunkenShipsLegacy, () => {
+watch(shipStore.getSunkenShips, () => {
   getShipLength();
 });
 
