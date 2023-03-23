@@ -21,8 +21,8 @@ async def broadcast(message_player1: json, message_player2: json, player1: WebSo
 
 async def test(message: list, player1: WebSocket, player2: WebSocket):
     for msg in message:
-        player1.send_json(msg)
-        player2.send_json(msg)
+        await player1.send_json(msg)
+        await player2.send_json(msg)
 
 
 async def send_personal_message(message: dict, websocket: WebSocket):
