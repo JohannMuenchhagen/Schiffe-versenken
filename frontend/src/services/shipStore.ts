@@ -99,9 +99,32 @@ export const useShipStore = defineStore("ship", () => {
   }
 
   function ownShipIsSunk(shipType: string) {
-    if (gameStore.getActionsState.value === "wait") {
-      if (shipType === "Battleship") {
-        // TODO hier dann abziehen!
+    if (shipType === "Battleship") {
+      for (let i = 0; i < sunkenShips.length; i++) {
+        if (sunkenShips[i].length === 5) {
+          sunkenShips[i].amount--;
+        }
+      }
+    }
+    if (shipType === "Corvettes") {
+      for (let i = 0; i < sunkenShips.length; i++) {
+        if (sunkenShips[i].length === 4) {
+          sunkenShips[i].amount--;
+        }
+      }
+    }
+    if (shipType === "Destroyer") {
+      for (let i = 0; i < sunkenShips.length; i++) {
+        if (sunkenShips[i].length === 3) {
+          sunkenShips[i].amount--;
+        }
+      }
+    }
+    if (shipType === "Submarine") {
+      for (let i = 0; i < sunkenShips.length; i++) {
+        if (sunkenShips[i].length === 2) {
+          sunkenShips[i].amount--;
+        }
       }
     }
   }
@@ -259,5 +282,6 @@ export const useShipStore = defineStore("ship", () => {
     getShipsByType,
     getSunkenShips,
     initSunkenShips,
+    ownShipIsSunk,
   };
 });

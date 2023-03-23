@@ -192,8 +192,6 @@ function placeShip(event: any, x: number, y: number) {
       endPos: endPosition,
       length: selectedShipLength!,
     });
-
-    console.log(toRaw(shipStore.getPlacedShips));
   }
 }
 

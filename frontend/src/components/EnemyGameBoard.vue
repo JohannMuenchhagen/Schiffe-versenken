@@ -3,9 +3,10 @@
     <v-row dense v-for="y in 10" :key="y">
       <v-col v-for="x in 10" :key="x">
         <v-sheet
-          :class="
-            gameStore.getActionsState.value !== 'attack' ? 'disableClick' : ''
-          "
+          :class="[
+            gameStore.getActionsState.value !== 'attack' ? 'disableClick' : '',
+            gameStore.getWon.value !== undefined ? 'disableClick' : '',
+          ]"
           color="grey-lighten-2"
           class="tileWrapper"
           @click="clickTile(x, y, $event)"
@@ -27,6 +28,7 @@ const shipStore = useShipStore();
 const gameStore = useGameStore();
 
 function clickTile(x: number, y: number, event: any) {
+  gameStore.setClickedTile(false);
   gameStore.setLastClickedTile(event);
   const message = {
     Type: "Move",
@@ -37,7 +39,7 @@ function clickTile(x: number, y: number, event: any) {
   webSocketService.sendMessage(message);
 }
 
-watch(gameStore.getActionsState, () => {
+watch(gameStore.getClickedTile, () => {
   nextTick(() => {
     document.querySelectorAll(".v-sheet").forEach((el) => {
       el.querySelector(".mdi")?.parentElement?.classList.add(

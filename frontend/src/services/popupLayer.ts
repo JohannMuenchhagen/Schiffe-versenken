@@ -13,18 +13,17 @@ export const usePopUpLayer = defineStore("popupLayer", () => {
   const getAction = computed(() => action);
 
   //actions
-  function callAndConfirmPopUp(inputText: string):boolean{
+  function callAndConfirmPopUp(inputText: string): boolean {
     text.value = inputText;
     active.value = true;
     return confirm(inputText);
   }
 
-  function startAction(){
-    action.value = true
-    console.log("startAction", action.value)
+  function startAction() {
+    action.value = true;
   }
 
-  function stopAction(){
+  function stopAction() {
     action.value = false;
   }
 

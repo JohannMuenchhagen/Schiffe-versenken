@@ -2,8 +2,10 @@ import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import webSocketService from "@/services/websocket.service";
 import { useSnackbarStore } from "./snackbarStore";
+import { useShipStore } from "./shipStore";
 
 export const useGameStore = defineStore("game", () => {
+  const shipStore = useShipStore();
   const snackbarStore = useSnackbarStore();
 
   // state
@@ -13,6 +15,8 @@ export const useGameStore = defineStore("game", () => {
   const actionsState = ref<string>();
   const firstMove = ref<boolean>(false);
   const lastClickedTile = ref<any>();
+  const clickedTile = ref<boolean>();
+  const won = ref<boolean>();
 
   // getters
   const getGameId = computed(() => gameId);
@@ -20,6 +24,8 @@ export const useGameStore = defineStore("game", () => {
   const getPlayerId = computed(() => playerID);
   const getActionsState = computed(() => actionsState);
   const getLastClickedTile = computed(() => lastClickedTile);
+  const getClickedTile = computed(() => clickedTile);
+  const getWon = computed(() => won);
 
   // actions
   function startGame() {
@@ -36,7 +42,6 @@ export const useGameStore = defineStore("game", () => {
     }
     playerID.value = inputPlayer;
     gameState.value = "init";
-    console.log(gameId.value, gameState.value, playerID.value);
   }
 
   function joinGame(inputId: number | undefined) {
@@ -73,7 +78,6 @@ export const useGameStore = defineStore("game", () => {
   }
 
   function startToSinkShips() {
-    console.log("Ändere Actions State zu attack oder wait");
     if (firstMove.value === true) {
       actionsState.value = "attack";
     } else {
@@ -93,20 +97,22 @@ export const useGameStore = defineStore("game", () => {
     }
   }
 
-  function hitShip(event: string, coords: number[]) {
+  function hitShip(event: string, coords: number[], shipType: string) {
     if (actionsState.value === "attack") {
       if (event === "Hit") {
-        lastClickedTile.value.target.firstChild.classList.add("mdi-ferry");
+        lastClickedTile.value.target.firstChild.classList.add("mdi-target");
       }
       if (event === "Miss") {
         lastClickedTile.value.target.firstChild.classList.add("mdi-waves");
         switchActionRole();
       }
       if (event === "Destroyed") {
-        lastClickedTile.value.target.firstChild.classList.add("mdi-ferry");
+        lastClickedTile.value.target.firstChild.classList.add("mdi-target");
+        shipStore.ownShipIsSunk(shipType);
         snackbarStore.callSnackbar("Schiff wurde versenkt!");
       }
       lastClickedTile.value.target.firstChild.classList.add("mdi");
+      clickedTile.value = true;
     } else {
       if (event === "Hit") {
         markHitsOnBoard(coords[0], coords[1], true);
@@ -119,6 +125,10 @@ export const useGameStore = defineStore("game", () => {
         switchActionRole();
       }
     }
+  }
+
+  function setClickedTile(val: boolean) {
+    clickedTile.value = val;
   }
 
   function markHitsOnBoard(x: number, y: number, hit: boolean) {
@@ -143,6 +153,21 @@ export const useGameStore = defineStore("game", () => {
     }
   }
 
+  function setWon(msg: string) {
+    if (firstMove.value === true && msg === "Player 1 wins") {
+      won.value = true;
+    }
+    if (firstMove.value === false && msg === "Player 2 wins") {
+      won.value = true;
+    }
+    if (firstMove.value === true && msg === "Player 2 wins") {
+      won.value = false;
+    }
+    if (firstMove.value === false && msg === "Player 1 wins") {
+      won.value = false;
+    }
+  }
+
   return {
     gameId,
     playerID,
@@ -161,5 +186,9 @@ export const useGameStore = defineStore("game", () => {
     getLastClickedTile,
     setLastClickedTile,
     hitShip,
+    getClickedTile,
+    setClickedTile,
+    getWon,
+    setWon,
   };
 });

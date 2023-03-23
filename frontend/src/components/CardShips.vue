@@ -1,11 +1,29 @@
 <template>
   <v-card class="card" loading>
     <template v-slot:title>
-      <div v-if="gameStore.getActionsState.value === 'attack'">
+      <div
+        v-if="
+          gameStore.getActionsState.value === 'attack' &&
+          won === false &&
+          lost === false
+        "
+      >
         Es ist dein Zug!
       </div>
-      <div v-if="gameStore.getActionsState.value === 'wait'">
+      <div
+        v-if="
+          gameStore.getActionsState.value === 'wait' &&
+          won === false &&
+          lost === false
+        "
+      >
         Warten auf Gegner...
+      </div>
+      <div v-if="won === true">
+        Du hast gewonnen <v-icon icon="mdi-party-popper"></v-icon>
+      </div>
+      <div v-if="lost === true">
+        Du hast verloren <v-icon icon="mdi-emoticon-sad-outline"></v-icon>
       </div>
     </template>
     <v-card-text class="cardContent">
@@ -64,6 +82,8 @@ const shipStore = useShipStore();
 const snackbarStore = useSnackbarStore();
 const gameStore = useGameStore();
 
+let won = ref(false);
+let lost = ref(false);
 let ship5length = ref();
 let ship4length = ref();
 let ship3length = ref();
@@ -72,6 +92,15 @@ getShipLength();
 
 watch(shipStore.getSunkenShips, () => {
   getShipLength();
+});
+
+watch(gameStore.getWon, () => {
+  if (gameStore.getWon.value === true) {
+    won.value = true;
+  }
+  if (gameStore.getWon.value === false) {
+    lost.value = true;
+  }
 });
 
 onMounted(() => {

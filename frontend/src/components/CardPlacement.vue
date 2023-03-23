@@ -215,7 +215,6 @@ function sendShips() {
     PlayerID: gameStore.getPlayerId.value,
     Ships: shipStore.getShipsByType(),
   };
-  console.log(messagge);
   webSocketService.sendMessage(messagge);
 }
 </script>

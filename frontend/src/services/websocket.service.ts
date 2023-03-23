@@ -26,7 +26,7 @@ function onOpen(): void {
 }
 
 function onError(event: any): void {
-  alert("Fehler! " + JSON.stringify(event.data));
+  if (event.data !== undefined) alert("Fehler! " + JSON.stringify(event.data));
 }
 
 function onClose(event: any): void {
@@ -44,7 +44,6 @@ function sendMessage(message: Object): void {
 
 function onMessage(event: any): void {
   const msg = JSON.parse(event.data);
-  console.log(msg);
   if (Object.prototype.hasOwnProperty.call(msg, "Error")) {
     console.log("Error", msg);
   }
@@ -81,14 +80,19 @@ function onMessage(event: any): void {
   }
   if (Object.values(msg).includes("Game ready")) {
     gameStore.startToSinkShips();
-    console.log(gameStore.getActionsState.value);
   }
   if (
     Object.values(msg).includes("Hit") ||
     Object.values(msg).includes("Miss") ||
     Object.values(msg).includes("Destroyed")
   ) {
-    gameStore.hitShip(msg.Message, msg.Coordinates);
+    gameStore.hitShip(msg.Message, msg.Coordinates, msg.Type);
+  }
+  if (
+    Object.values(msg).includes("Player 1 wins") ||
+    Object.values(msg).includes("Player 2 wins")
+  ) {
+    gameStore.setWon(msg.Message);
   }
 }
 
