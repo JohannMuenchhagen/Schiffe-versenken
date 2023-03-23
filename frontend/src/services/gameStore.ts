@@ -93,7 +93,7 @@ export const useGameStore = defineStore("game", () => {
     }
   }
 
-  function hitShip(event: string) {
+  function hitShip(event: string, coords: number[]) {
     if (actionsState.value === "attack") {
       if (event === "Hit") {
         lastClickedTile.value.target.firstChild.classList.add("mdi-ferry");
@@ -108,7 +108,14 @@ export const useGameStore = defineStore("game", () => {
       }
       lastClickedTile.value.target.firstChild.classList.add("mdi");
     } else {
+      if (event === "Hit") {
+        markHitsOnBoard(coords[0], coords[1], true);
+      }
+      if (event === "Destroyed") {
+        markHitsOnBoard(coords[0], coords[1], true);
+      }
       if (event === "Miss") {
+        markHitsOnBoard(coords[0], coords[1], false);
         switchActionRole();
       }
     }
@@ -136,20 +143,6 @@ export const useGameStore = defineStore("game", () => {
     }
   }
 
-  function markShipOnMyBoard(event: string, coords: number[]) {
-    if (actionsState.value === "wait") {
-      if (event === "Hit") {
-        markHitsOnBoard(coords[0], coords[1], true);
-      }
-      if (event === "Miss") {
-        markHitsOnBoard(coords[0], coords[1], false);
-      }
-      if (event === "Destroyed") {
-        markHitsOnBoard(coords[0], coords[1], true);
-      }
-    }
-  }
-
   return {
     gameId,
     playerID,
@@ -168,6 +161,5 @@ export const useGameStore = defineStore("game", () => {
     getLastClickedTile,
     setLastClickedTile,
     hitShip,
-    markShipOnMyBoard,
   };
 });
