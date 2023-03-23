@@ -168,9 +168,9 @@ class ConnectionManager:
         # check if the shot was a miss, a hit or a kill
         res = game.check_shot(player_id=player_id, shooting_coordinate=(y, x), current_player=player_id,
                               enemy_ships=enemy_ships)
-        if 'Win' in game.check_win(game.player2_ships_set).values() and player_id == 1:
+        if 'Win' in game.check_win(game.player2_ships_set).values() and player_id == game.player1.playerID:
             return {'Message': 'Player 1 wins'}, game.player1.websocket, game.player2.websocket
-        elif 'Win' in game.check_win(game.player1_ships_set).values() and player_id == 2:
+        elif 'Win' in game.check_win(game.player1_ships_set).values() and player_id == game.player2.playerID:
             return {'Message': 'Player 2 wins'}, game.player1.websocket, game.player2.websocket
         else:
             return res, game.player1.websocket, game.player2.websocket
