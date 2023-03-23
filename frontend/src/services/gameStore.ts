@@ -2,8 +2,10 @@ import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import webSocketService from "@/services/websocket.service";
 import { useSnackbarStore } from "./snackbarStore";
+import { useShipStore } from "./shipStore";
 
 export const useGameStore = defineStore("game", () => {
+  const shipStore = useShipStore();
   const snackbarStore = useSnackbarStore();
 
   // state
@@ -93,7 +95,7 @@ export const useGameStore = defineStore("game", () => {
     }
   }
 
-  function hitShip(event: string, coords: number[]) {
+  function hitShip(event: string, coords: number[], shipType: string) {
     if (actionsState.value === "attack") {
       if (event === "Hit") {
         lastClickedTile.value.target.firstChild.classList.add("mdi-ferry");
@@ -113,6 +115,7 @@ export const useGameStore = defineStore("game", () => {
       }
       if (event === "Destroyed") {
         markHitsOnBoard(coords[0], coords[1], true);
+        shipStore.ownShipIsSunk(shipType);
       }
       if (event === "Miss") {
         markHitsOnBoard(coords[0], coords[1], false);

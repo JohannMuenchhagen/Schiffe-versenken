@@ -88,7 +88,7 @@ function onMessage(event: any): void {
     Object.values(msg).includes("Miss") ||
     Object.values(msg).includes("Destroyed")
   ) {
-    gameStore.hitShip(msg.Message, msg.Coordinates);
+    gameStore.hitShip(msg.Message, msg.Coordinates, msg.Type);
   }
 }
 
