@@ -39,5 +39,5 @@ async def websocket_endpoint(websocket: WebSocket):
     except WebSocketDisconnect:
         opposite = manager.disconnect(websocket)
         if opposite is not None:
-            await send_personal_message('Player left', opposite)
+            await send_personal_message({'Message':'Player left'}, opposite)
             manager.remove_websocket(opposite)
