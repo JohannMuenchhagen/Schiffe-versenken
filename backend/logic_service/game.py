@@ -86,33 +86,26 @@ class Game:
         else:
             return {'Error': 'Wrong player'}  # if a move joins the else statement, it means there is a wrong playerID
 
-    # TODO find an opportunity to remove the duplicate
-    def check_shot(self, player_id: int, shooting_coordinate: tuple) -> dict:  # check if a ship gets a hit
+    def check_shot(self, player_id: int, shooting_coordinate: tuple,
+                   current_player:str,
+                   enemy_ships: list ) -> dict:  # check if a
+        # ship gets a hit
         mapper = ['Battleship', 'Corvettes', 'Destroyer', 'Submarine']
-        if player_id == self.player1.playerID:
-            for index, ship in enumerate(self.player2_ships):
-                for ships in ship:
-                    if shooting_coordinate in ships:
-                        ships.remove(shooting_coordinate)
-                        if len(ships) == 0:
-                            self.remove_ship(player_id, index)
-                            return {'Message': 'Destroyed', 'Coordinates': shooting_coordinate, 'Type': mapper[index]}
-                        else:
-                            return {'Message': 'Hit', 'Coordinates': shooting_coordinate}
-            self.current_player = self.player2.playerID
-            return {'Message': 'Miss', 'Coordinates': shooting_coordinate}
-        else:
-            for index, ship in enumerate(self.player1_ships):
-                for ships in ship:
-                    if shooting_coordinate in ships:
-                        ships.remove(shooting_coordinate)
-                        if len(ships) == 0:
-                            self.remove_ship(player_id, index)
-                            return {'Message': 'Destroyed', 'Coordinates': shooting_coordinate, 'Type': mapper[index]}
-                        else:
-                            return {'Message': 'Hit', 'Coordinates': shooting_coordinate}
+        for index, ship in enumerate(enemy_ships):
+            for ships in ship:
+                if shooting_coordinate in ships:
+                    ships.remove(shooting_coordinate)
+                    if len(ships) == 0:
+                        self.remove_ship(player_id, index)
+                        return {'Message': 'Destroyed', 'Type': mapper[index]}
+                    else:
+                        return {'Message': 'Hit'}
+
+        if current_player == self.player2.playerID:
             self.current_player = self.player1.playerID
-            return {'Message': 'Miss', 'Coordinates': shooting_coordinate}
+        else:
+            self.current_player = self.player2.playerID
+        return {'Message': 'Miss'}
 
     def set_ships(self, player_id: int, ship_type: str, ship_start_pos: tuple, ship_end_pos: tuple) -> dict:
         if not self.check_placed_ship(player_id=player_id,
@@ -168,3 +161,4 @@ class Game:
             if value >= 1:
                 return {'Message': 'No win'}
         return {'Message': 'Win'}
+
