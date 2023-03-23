@@ -165,7 +165,7 @@ export const useGameStore = defineStore("game", () => {
     if (firstMove.value === true && msg === "Player 2 wins") {
       won.value = false;
     }
-    if (firstMove.value === false && msg === "Player 2 wins") {
+    if (firstMove.value === false && msg === "Player 1 wins") {
       won.value = false;
     }
   }
