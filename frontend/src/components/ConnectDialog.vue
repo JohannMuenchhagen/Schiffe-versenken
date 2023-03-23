@@ -13,14 +13,14 @@
                 Nach dem Erstellen kann die Nummer geteilt werden.
               </v-card-text>
               <v-card-text>
-                <v-form @submit.prevent="submit">
+                <v-form>
                   <v-text-field
                     :readonly="true"
                     :model-value="createGameID"
                   ></v-text-field>
                   <v-btn
                     :loading="loading"
-                    :disabled="loading"
+                    :disabled="gameStarted"
                     @click="createGame()"
                     block
                     class="mt-2"
@@ -34,7 +34,7 @@
             <v-card title="Spiel beitreten">
               <v-card-text>Spiel ID des Spielerstellers eingeben. </v-card-text>
               <v-card-text>
-                <v-form @submit.prevent="submit">
+                <v-form>
                   <v-text-field
                     v-model="gameID"
                     :rules="rules"
@@ -43,8 +43,8 @@
                   ></v-text-field>
                   <v-btn
                     :loading="loading"
-                    :disabled="loading"
-                    type="submit"
+                    :disabled="gameStarted"
+                    @click="joinGame()"
                     block
                     class="mt-2"
                     >Beitreten</v-btn
@@ -81,14 +81,18 @@
 
 <script setup lang="ts">
 import { useGameStore } from "@/services/gameStore";
-import { ref } from "vue";
+import { useSnackbarStore } from "@/services/snackbarStore";
+import { ref, watch } from "vue";
 
 let gameStore = useGameStore();
 
 let dialog = ref<boolean>(false);
-let gameID = ref<string>();
-let createGameID = ref<string>();
+let gameID = ref<number>();
+let createGameID = ref(gameStore.getGameId);
 let loading = ref<boolean>(false);
+let gameStarted = ref<boolean>(false);
+
+const snackbarStore = useSnackbarStore();
 
 let rules = [
   (value: string) => {
@@ -97,22 +101,22 @@ let rules = [
   },
 ];
 
-async function submit(event: any) {
-  const result = await event;
-  if (result.valid === true) {
-    loading.value = true;
-    console.log(gameID);
-    setTimeout(() => {
-      alert("Es konnte nicht zu dem Spiel verbunden werden!");
-      loading.value = false;
-      return;
-    }, 3000);
+watch(gameStore.getGameState, () => {
+  if (gameStore.getGameState.value !== "no game") {
+    gameStarted.value = true;
   }
-}
+  if (gameStore.getGameState.value === "started") {
+    dialog.value = false;
+    snackbarStore.callSnackbar("Beide Parteien beigetreten. Spiel startet...");
+  }
+});
 
 function createGame() {
-  gameStore.startGame("Test123");
-  createGameID.value = "Test123";
+  gameStore.startGame();
+}
+
+function joinGame() {
+  gameStore.joinGame(gameID.value);
 }
 </script>
 

@@ -3,6 +3,9 @@
     <v-row dense v-for="y in 10" :key="y">
       <v-col v-for="x in 10" :key="x">
         <v-sheet
+          :class="
+            gameStore.getActionsState.value !== 'attack' ? 'disableClick' : ''
+          "
           color="grey-lighten-2"
           class="tileWrapper"
           @click="clickTile(x, y, $event)"
@@ -15,11 +18,39 @@
 </template>
 
 <script setup lang="ts">
+import { useGameStore } from "@/services/gameStore";
 import { useShipStore } from "@/services/shipStore";
+import webSocketService from "@/services/websocket.service";
+import { nextTick, watch } from "vue";
 
 const shipStore = useShipStore();
+const gameStore = useGameStore();
 
 function clickTile(x: number, y: number, event: any) {
+  gameStore.setLastClickedTile(event);
+  const message = {
+    Type: "Move",
+    GameID: Number(gameStore.getGameId.value),
+    PlayerID: gameStore.getPlayerId.value,
+    Coordinates: [x - 1, y - 1],
+  };
+  webSocketService.sendMessage(message);
+}
+
+watch(gameStore.getActionsState, () => {
+  nextTick(() => {
+    document.querySelectorAll(".v-sheet").forEach((el) => {
+      el.querySelector(".mdi")?.parentElement?.classList.add(
+        "disableClickOnTile"
+      );
+    });
+    document.querySelectorAll(".v-sheet").forEach((el) => {
+      el.querySelector(".mdi")?.parentElement?.classList.remove("tileWrapper");
+    });
+  });
+});
+
+/* function clickTileLegacy(x: number, y: number, event: any) {
   if (shipStore.isShipHit({ x: x, y: y }) !== false) {
     event.target.firstChild.classList.add("mdi-ferry");
   } else {
@@ -27,7 +58,7 @@ function clickTile(x: number, y: number, event: any) {
   }
   event.target.firstChild.classList.add("mdi");
   event.target.classList.remove("tileWrapper");
-}
+} */
 </script>
 
 <style scoped>
@@ -47,5 +78,12 @@ function clickTile(x: number, y: number, event: any) {
 }
 .tileWrapper:hover {
   background-color: #c0c0c0 !important;
+}
+
+.disableClick {
+  pointer-events: none;
+}
+.disableClickOnTile {
+  pointer-events: none !important;
 }
 </style>

@@ -31,8 +31,6 @@
         </v-btn>
       </template>
     </v-snackbar>
-
-    
   </v-app>
 </template>
 
@@ -40,11 +38,17 @@
 import SettingsDialog from "@/components/SettingsDialog.vue";
 import ConnectDialog from "./components/ConnectDialog.vue";
 import { useSnackbarStore } from "./services/snackbarStore";
-import {usePopUpLayer} from "./services/popupLayer";
+import webSocketService from "@/services/websocket.service";
+import { onMounted } from "vue";
+import { usePopUpLayer } from "./services/popupLayer";
 
 let snackbarStore = useSnackbarStore();
 let popupLayer = usePopUpLayer();
 
+onMounted(() => {
+  console.log("[websocket] connecting...");
+  webSocketService.connect();
+});
 </script>
 
 <style scoped>

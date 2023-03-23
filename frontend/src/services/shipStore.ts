@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { computed, reactive, ref } from "vue";
+import { useGameStore } from "./gameStore";
 
 interface IShip {
   startPos: { x: number; y: number };
@@ -8,27 +9,31 @@ interface IShip {
 }
 
 export const useShipStore = defineStore("ship", () => {
+  const gameStore = useGameStore();
+
   // state
   const ships = reactive([] as IShip[]);
-  const sunkenShips = reactive([] as IShip[]);
+  const sunkenShipsLegacy = reactive([] as IShip[]);
   const selectedShipLength = ref<number>();
   const placedShips = reactive([] as IShip[]);
-  let direchtionsForShips = [true, true, true, true];  // 0 - len 2; 1 - len 3; 2 - len 4; 3 - len 5 
+  const direchtionsForShips = [true, true, true, true]; // 0 - len 2; 1 - len 3; 2 - len 4; 3 - len 5
+  const sunkenShips = reactive([] as { length: number; amount: number }[]);
 
   // getters
   const getShips = computed(() => ships);
-  const getSunkenShips = computed(() => sunkenShips);
+  const getSunkenShipsLegacy = computed(() => sunkenShipsLegacy);
   const getSelectedShipLength = computed(() => selectedShipLength);
   const getPlacedShips = computed(() => placedShips);
-  let getDirechtionsForShips = computed(() => direchtionsForShips);
+  const getDirechtionsForShips = computed(() => direchtionsForShips);
+  const getSunkenShips = computed(() => sunkenShips);
 
   // actions
   function loadDummyData() {
-    ships.push({ startPos: { x: 1, y: 1 }, endPos: { x: 1, y: 5 }, length: 5}); // 5 length
-    ships.push({ startPos: { x: 3, y: 1 }, endPos: { x: 6, y: 1 }, length: 4}); // 4 length
-    ships.push({ startPos: { x: 3, y: 4 }, endPos: { x: 6, y: 4 }, length: 4}); // 4 length
-    ships.push({ startPos: { x: 4, y: 7 }, endPos: { x: 6, y: 7 }, length: 3}); // 3 length
-    ships.push({ startPos: { x: 9, y: 6 }, endPos: { x: 9, y: 8 }, length: 3}); // 3 length
+    ships.push({ startPos: { x: 1, y: 1 }, endPos: { x: 1, y: 5 }, length: 5 }); // 5 length
+    ships.push({ startPos: { x: 3, y: 1 }, endPos: { x: 6, y: 1 }, length: 4 }); // 4 length
+    ships.push({ startPos: { x: 3, y: 4 }, endPos: { x: 6, y: 4 }, length: 4 }); // 4 length
+    ships.push({ startPos: { x: 4, y: 7 }, endPos: { x: 6, y: 7 }, length: 3 }); // 3 length
+    ships.push({ startPos: { x: 9, y: 6 }, endPos: { x: 9, y: 8 }, length: 3 }); // 3 length
     ships.push({
       startPos: { x: 8, y: 10 },
       endPos: { x: 10, y: 10 },
@@ -76,48 +81,170 @@ export const useShipStore = defineStore("ship", () => {
     }
   }
 
+  function initSunkenShips() {
+    sunkenShips.push({ length: 5, amount: 1 });
+    sunkenShips.push({ length: 4, amount: 2 });
+    sunkenShips.push({ length: 3, amount: 3 });
+    sunkenShips.push({ length: 2, amount: 4 });
+  }
+
   function getAmountOfShipsOnBoard(length: number): number {
     let result = 0;
-    for (let i = 0; i < ships.length; i++) {
-      if (ships[i].length === length) {
-        result++;
-      }
-    }
-    for (let j = 0; j < sunkenShips.length; j++) {
-      if (sunkenShips[j].length === length) {
-        result--;
+    for (let i = 0; i < sunkenShips.length; i++) {
+      if (sunkenShips[i].length === length) {
+        result = sunkenShips[i].amount;
       }
     }
     return result;
   }
 
+  function ownShipIsSunk(shipType: string) {
+    if (gameStore.getActionsState.value === "wait") {
+      if (shipType === "Battleship") {
+        // TODO hier dann abziehen!
+      }
+    }
+  }
+
   function isShipSunk(ship: IShip): void {
     if (ship.length === 0) {
       ship.length = getShipLength(ship);
-      sunkenShips.push(ship);
+      sunkenShipsLegacy.push(ship);
     }
   }
 
   function updateSelectedShip(length: number): void {
     selectedShipLength.value = length;
-    
   }
 
   function addPlacedShip(ship: IShip) {
     placedShips.push(ship);
   }
 
-  function deletePlacedShip(index: number){
+  function deletePlacedShip(index: number) {
     placedShips.splice(index, 1);
+  }
+
+  function getShipsByType() {
+    return {
+      Battleship: [
+        [
+          [
+            placedShips.filter((x) => x.length === 5)[0].startPos.x - 1,
+            placedShips.filter((x) => x.length === 5)[0].startPos.y - 1,
+          ],
+          [
+            placedShips.filter((x) => x.length === 5)[0].endPos.x - 1,
+            placedShips.filter((x) => x.length === 5)[0].endPos.y - 1,
+          ],
+        ],
+      ],
+      Corvettes: [
+        [
+          [
+            placedShips.filter((x) => x.length === 4)[0].startPos.x - 1,
+            placedShips.filter((x) => x.length === 4)[0].startPos.y - 1,
+          ],
+          [
+            placedShips.filter((x) => x.length === 4)[0].endPos.x - 1,
+            placedShips.filter((x) => x.length === 4)[0].endPos.y - 1,
+          ],
+        ],
+        [
+          [
+            placedShips.filter((x) => x.length === 4)[1].startPos.x - 1,
+            placedShips.filter((x) => x.length === 4)[1].startPos.y - 1,
+          ],
+          [
+            placedShips.filter((x) => x.length === 4)[1].endPos.x - 1,
+            placedShips.filter((x) => x.length === 4)[1].endPos.y - 1,
+          ],
+        ],
+      ],
+      Destroyer: [
+        [
+          [
+            placedShips.filter((x) => x.length === 3)[0].startPos.x - 1,
+            placedShips.filter((x) => x.length === 3)[0].startPos.y - 1,
+          ],
+          [
+            placedShips.filter((x) => x.length === 3)[0].endPos.x - 1,
+            placedShips.filter((x) => x.length === 3)[0].endPos.y - 1,
+          ],
+        ],
+        [
+          [
+            placedShips.filter((x) => x.length === 3)[1].startPos.x - 1,
+            placedShips.filter((x) => x.length === 3)[1].startPos.y - 1,
+          ],
+          [
+            placedShips.filter((x) => x.length === 3)[1].endPos.x - 1,
+            placedShips.filter((x) => x.length === 3)[1].endPos.y - 1,
+          ],
+        ],
+        [
+          [
+            placedShips.filter((x) => x.length === 3)[2].startPos.x - 1,
+            placedShips.filter((x) => x.length === 3)[2].startPos.y - 1,
+          ],
+          [
+            placedShips.filter((x) => x.length === 3)[2].endPos.x - 1,
+            placedShips.filter((x) => x.length === 3)[2].endPos.y - 1,
+          ],
+        ],
+      ],
+      Submarine: [
+        [
+          [
+            placedShips.filter((x) => x.length === 2)[0].startPos.x - 1,
+            placedShips.filter((x) => x.length === 2)[0].startPos.y - 1,
+          ],
+          [
+            placedShips.filter((x) => x.length === 2)[0].endPos.x - 1,
+            placedShips.filter((x) => x.length === 2)[0].endPos.y - 1,
+          ],
+        ],
+        [
+          [
+            placedShips.filter((x) => x.length === 2)[1].startPos.x - 1,
+            placedShips.filter((x) => x.length === 2)[1].startPos.y - 1,
+          ],
+          [
+            placedShips.filter((x) => x.length === 2)[1].endPos.x - 1,
+            placedShips.filter((x) => x.length === 2)[1].endPos.y - 1,
+          ],
+        ],
+        [
+          [
+            placedShips.filter((x) => x.length === 2)[2].startPos.x - 1,
+            placedShips.filter((x) => x.length === 2)[2].startPos.y - 1,
+          ],
+          [
+            placedShips.filter((x) => x.length === 2)[2].endPos.x - 1,
+            placedShips.filter((x) => x.length === 2)[2].endPos.y - 1,
+          ],
+        ],
+        [
+          [
+            placedShips.filter((x) => x.length === 2)[3].startPos.x - 1,
+            placedShips.filter((x) => x.length === 2)[3].startPos.y - 1,
+          ],
+          [
+            placedShips.filter((x) => x.length === 2)[3].endPos.x - 1,
+            placedShips.filter((x) => x.length === 2)[3].endPos.y - 1,
+          ],
+        ],
+      ],
+    };
   }
 
   return {
     ships,
-    sunkenShips,
+    sunkenShipsLegacy,
     selectedShipLength,
     placedShips,
     getShips,
-    getSunkenShips,
+    getSunkenShipsLegacy,
     getSelectedShipLength,
     getPlacedShips,
     getAmountOfShipsOnBoard,
@@ -129,5 +256,8 @@ export const useShipStore = defineStore("ship", () => {
     getDirechtionsForShips,
     direchtionsForShips,
     deletePlacedShip,
+    getShipsByType,
+    getSunkenShips,
+    initSunkenShips,
   };
 });
