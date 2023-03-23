@@ -10,6 +10,9 @@
       <div v-if="won === true">
         Du hast gewonnen <v-icon icon="mdi-party-popper"></v-icon>
       </div>
+      <div v-if="lost === true">
+        Du hast verloren <v-icon icon="mdi-emoticon-sad-outline"></v-icon>
+      </div>
     </template>
     <v-card-text class="cardContent">
       <v-list>
@@ -67,7 +70,8 @@ const shipStore = useShipStore();
 const snackbarStore = useSnackbarStore();
 const gameStore = useGameStore();
 
-let won = false;
+let won = ref(false);
+let lost = ref(false);
 let ship5length = ref();
 let ship4length = ref();
 let ship3length = ref();
@@ -78,26 +82,18 @@ watch(shipStore.getSunkenShips, () => {
   getShipLength();
 });
 
-watch(shipStore.getSunkenShips, () => {
-  checkIfWon();
+watch(gameStore.getWon, () => {
+  if (gameStore.getWon.value === true) {
+    won.value = true;
+  }
+  if (gameStore.getWon.value === false) {
+    lost.value = true;
+  }
 });
 
 onMounted(() => {
   shipStore.initSunkenShips();
 });
-
-function checkIfWon() {
-  let result = 0;
-  for (let i = 0; i < shipStore.getSunkenShips.length; i++) {
-    if (shipStore.getSunkenShips[i].amount === 0) {
-      result++;
-    }
-  }
-  if (result === 4) {
-    won = true;
-    snackbarStore.callSnackbar("Du hast gewonnen!");
-  }
-}
 
 function getShipLength() {
   ship5length.value = shipStore.getAmountOfShipsOnBoard(5);

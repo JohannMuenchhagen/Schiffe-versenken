@@ -90,6 +90,12 @@ function onMessage(event: any): void {
   ) {
     gameStore.hitShip(msg.Message, msg.Coordinates, msg.Type);
   }
+  if (
+    Object.values(msg).includes("Player 1 wins") ||
+    Object.values(msg).includes("Player 2 wins")
+  ) {
+    gameStore.setWon(msg.Message);
+  }
 }
 
 export default {

@@ -16,6 +16,7 @@ export const useGameStore = defineStore("game", () => {
   const firstMove = ref<boolean>(false);
   const lastClickedTile = ref<any>();
   const clickedTile = ref<boolean>();
+  const won = ref<boolean>();
 
   // getters
   const getGameId = computed(() => gameId);
@@ -24,6 +25,7 @@ export const useGameStore = defineStore("game", () => {
   const getActionsState = computed(() => actionsState);
   const getLastClickedTile = computed(() => lastClickedTile);
   const getClickedTile = computed(() => clickedTile);
+  const getWon = computed(() => won);
 
   // actions
   function startGame() {
@@ -153,6 +155,21 @@ export const useGameStore = defineStore("game", () => {
     }
   }
 
+  function setWon(msg: string) {
+    if (firstMove.value === true && msg === "Player 1 wins") {
+      won.value = true;
+    }
+    if (firstMove.value === false && msg === "Player 2 wins") {
+      won.value = true;
+    }
+    if (firstMove.value === true && msg === "Player 2 wins") {
+      won.value = false;
+    }
+    if (firstMove.value === false && msg === "Player 2 wins") {
+      won.value = false;
+    }
+  }
+
   return {
     gameId,
     playerID,
@@ -173,5 +190,7 @@ export const useGameStore = defineStore("game", () => {
     hitShip,
     getClickedTile,
     setClickedTile,
+    getWon,
+    setWon,
   };
 });
