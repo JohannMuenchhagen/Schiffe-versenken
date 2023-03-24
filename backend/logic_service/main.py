@@ -1,6 +1,6 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 import requests
-from connectionManager import ConnectionManager, broadcast, send_personal_message, win
+from .connectionManager import ConnectionManager, broadcast, send_personal_message, win
 
 app = FastAPI()
 

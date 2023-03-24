@@ -4,7 +4,7 @@ import requests
 from fastapi import WebSocket
 from pydantic import json
 
-from game import Game
+from .game import Game
 
 
 def load_game(gameID: int):  # load a game from database
