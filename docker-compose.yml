@@ -2,6 +2,8 @@ version: "3.9"
 services:
   web:
     build: ./frontend
+    container_name: "web"
+    restart: always
     ports:
       - "80:80"
     networks:
@@ -9,6 +11,8 @@ services:
 
   game_logic:
     build: ./backend/logic_service
+    container_name: "logic"
+    restart: always
     ports:
       - "8008:8008"
     networks:
@@ -19,6 +23,7 @@ services:
 
   db_service:
     build: ./backend/datastorage
+    container_name: "dbservice"
     restart: unless-stopped
     ports:
       - "8080:8080"
@@ -29,6 +34,7 @@ services:
 
   mongodb:
     image: mongo:latest
+    container_name: "mongo"
     restart: unless-stopped
     ports:
       - "8081:8081"
@@ -41,7 +47,6 @@ services:
 networks:
   frontend:
     name: frontend
-    external: true
   backend:
     name: backend
 
