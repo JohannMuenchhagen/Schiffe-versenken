@@ -133,7 +133,7 @@ watch(ship3length, () => {
 });
 
 watch(ship2length, () => {
-  if (shipStore.getAmountOfShipsOnBoard(4) !== 4) {
+  if (shipStore.getAmountOfShipsOnBoard(2) !== 4) {
     snackbarStore.callSnackbar("Du hast ein U-Boot versenkt!");
   }
 });
