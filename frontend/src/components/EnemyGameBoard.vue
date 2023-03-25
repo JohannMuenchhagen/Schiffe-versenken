@@ -40,17 +40,29 @@ function clickTile(x: number, y: number, event: any) {
 }
 
 watch(gameStore.getClickedTile, () => {
+  disableClickTile();
   nextTick(() => {
-    document.querySelectorAll(".v-sheet").forEach((el) => {
-      el.querySelector(".mdi")?.parentElement?.classList.add(
-        "disableClickOnTile"
-      );
-    });
-    document.querySelectorAll(".v-sheet").forEach((el) => {
-      el.querySelector(".mdi")?.parentElement?.classList.remove("tileWrapper");
-    });
+    disableClickTile();
   });
 });
+
+watch(gameStore.getActionsState, () => {
+  disableClickTile();
+  nextTick(() => {
+    disableClickTile();
+  });
+});
+
+function disableClickTile() {
+  document.querySelectorAll(".v-sheet").forEach((el) => {
+    el.querySelector(".mdi")?.parentElement?.classList.add(
+      "disableClickOnTile"
+    );
+  });
+  document.querySelectorAll(".v-sheet").forEach((el) => {
+    el.querySelector(".mdi")?.parentElement?.classList.remove("tileWrapper");
+  });
+}
 
 /* function clickTileLegacy(x: number, y: number, event: any) {
   if (shipStore.isShipHit({ x: x, y: y }) !== false) {
