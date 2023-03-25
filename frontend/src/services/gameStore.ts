@@ -109,7 +109,6 @@ export const useGameStore = defineStore("game", () => {
       if (event === "Destroyed") {
         lastClickedTile.value.target.firstChild.classList.add("mdi-target");
         shipStore.ownShipIsSunk(shipType);
-        snackbarStore.callSnackbar("Schiff wurde versenkt!");
       }
       lastClickedTile.value.target.firstChild.classList.add("mdi");
       clickedTile.value = true;

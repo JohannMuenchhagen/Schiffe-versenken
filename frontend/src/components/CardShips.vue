@@ -115,19 +115,27 @@ function getShipLength() {
 }
 
 watch(ship5length, () => {
-  snackbarStore.callSnackbar("Du hast ein Schlachtschiff versenkt!");
+  if (shipStore.getAmountOfShipsOnBoard(5) !== 1) {
+    snackbarStore.callSnackbar("Du hast ein Schlachtschiff versenkt!");
+  }
 });
 
 watch(ship4length, () => {
-  snackbarStore.callSnackbar("Du hast ein Kreuzer versenkt!");
+  if (shipStore.getAmountOfShipsOnBoard(4) !== 2) {
+    snackbarStore.callSnackbar("Du hast ein Kreuzer versenkt!");
+  }
 });
 
 watch(ship3length, () => {
-  snackbarStore.callSnackbar("Du hast ein Zerstörer versenkt!");
+  if (shipStore.getAmountOfShipsOnBoard(3) !== 3) {
+    snackbarStore.callSnackbar("Du hast ein Zerstörer versenkt!");
+  }
 });
 
 watch(ship2length, () => {
-  snackbarStore.callSnackbar("Du hast ein U-Boot versenkt!");
+  if (shipStore.getAmountOfShipsOnBoard(4) !== 4) {
+    snackbarStore.callSnackbar("Du hast ein U-Boot versenkt!");
+  }
 });
 </script>
 
