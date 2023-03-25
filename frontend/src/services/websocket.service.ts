@@ -4,7 +4,7 @@ const prod = import.meta.env.MODE === "production";
 
 /* Hier wird die baseURL gesetzt, Port und URL ist anzupassen !!! */
 const baseUrl: string = prod
-  ? "ws://ich-bin-das-backend.de/game"
+  ? "ws://ich-bin-das-backend.de:8008/game"
   : "ws://192.168.178.51:8000/game";
 
 let ws: WebSocket;
