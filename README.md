@@ -1,5 +1,8 @@
 # Schiffe versenken
 
+This application was build in context of the subject Programmieren von Webanwendungen. This subject is part of the undergraduate program of the Berlin School of Economics and Laws. 
+
+
 <details>
     <summary>Click me for a frontend guide</summary>
 
@@ -57,11 +60,19 @@ npm run lint
 
 # backend
 
-This backend is build with python 3.11.0.
+This backend is build with python 3.11.0 and java 17. Python is used to handle the messages and game logic. Java takes a part if a connection is refused and save the game into a mongodb.
 
 ## Recommended IDE setup
-[VSCode](https://code.visualstudio.com/) + [Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
+[VSCode](https://code.visualstudio.com/) + [Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python) + [Java extension](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack) + [Maven extension](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-maven)
 
 ## Required modules
-Latest version of [FastAPI](https://fastapi.tiangolo.com)
+Latest version of [FastAPI](https://fastapi.tiangolo.com) <br>
+Latest version of [MongoDB](https://www.mongodb.com)
+
+## Project setup
+
+```
+uvicorn run app:main
+```
 </details>
+
