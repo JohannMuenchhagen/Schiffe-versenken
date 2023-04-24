@@ -52,7 +52,7 @@ class ConnectionManager:
         # get both players websockets
         player1 = game.player1.websocket
         player2 = game.player2.websocket
-        # self.save_game(gameID)  # save game
+        self.save_game(gameID)  # save game
         self.current_games.pop(gameID)  # remove game
         if player1 is not websocket:
             self.remove_websocket(websocket)
